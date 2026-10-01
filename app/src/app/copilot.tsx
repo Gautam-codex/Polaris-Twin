@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Muted } from "@/components/ui";
 import { useLanguage } from "@/context/language";
 import { useStation } from "@/context/station";
 import { useCopilot, type ChatMessage } from "@/hooks/useCopilot";
-import { colors, radius, space, tint } from "@/lib/theme";
+import { radius, space, tint } from "@/lib/theme";
 import type { CopilotLanguage } from "@shared/types";
+import { useColors, themedStyles } from "@/context/theme";
 
 function suggestions(site: string, language: CopilotLanguage): string[] {
   return language === "hi"
@@ -20,6 +21,8 @@ function plain(text: string): string {
 }
 
 function Bubble({ m }: { m: ChatMessage }) {
+  const colors = useColors();
+  const styles = useStyles();
   const user = m.role === "user";
   return (
     <View style={[styles.bubble, user ? styles.user : styles.assistant, m.status === "error" && { borderColor: colors.danger, backgroundColor: tint(colors.danger, 0.06) }]}>
@@ -30,6 +33,8 @@ function Bubble({ m }: { m: ChatMessage }) {
 }
 
 export default function CopilotScreen() {
+  const colors = useColors();
+  const styles = useStyles();
   const { language: appLanguage } = useLanguage();
   const [language, setLanguage] = useState<CopilotLanguage>(appLanguage);
   const { stationId } = useStation();
@@ -97,7 +102,7 @@ export default function CopilotScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = themedStyles((colors) => ({
   screen: { flex: 1, backgroundColor: colors.background },
   top: { flexDirection: "row", alignItems: "center", gap: space.sm, padding: space.md, borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.card },
   toggle: { flexDirection: "row", borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, padding: 2 },
@@ -115,4 +120,4 @@ const styles = StyleSheet.create({
   inputRow: { flexDirection: "row", gap: space.sm, padding: space.md, borderTopWidth: 1, borderTopColor: colors.border, backgroundColor: colors.card },
   input: { flex: 1, minHeight: 44, borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: space.md, fontSize: 15, color: colors.text },
   send: { width: 44, height: 44, borderRadius: radius.md, backgroundColor: colors.primary, alignItems: "center", justifyContent: "center" },
-});
+}));

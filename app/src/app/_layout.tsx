@@ -7,11 +7,18 @@ import { SessionProvider, useSession } from "@/context/session";
 import { StationProvider } from "@/context/station";
 import { SyncProvider } from "@/context/sync";
 import { initNotifications } from "@/lib/notifications";
-import { colors } from "@/lib/theme";
+import { ThemeProvider, useColors, useTheme } from "@/context/theme";
+
 
 void SplashScreen.preventAutoHideAsync();
 
+function ThemedStatusBar() {
+  const { dark } = useTheme();
+  return <StatusBar style={dark ? "light" : "dark"} />;
+}
+
 function RootStack() {
+  const colors = useColors();
   const { loading } = useSession();
   const t = useT();
 
@@ -27,7 +34,16 @@ function RootStack() {
   if (loading) return null;
 
   return (
-    <Stack screenOptions={{ headerTintColor: colors.primary, contentStyle: { backgroundColor: colors.background } }}>
+    <Stack
+      screenOptions={{
+        headerTintColor: colors.primary,
+        headerStyle: { backgroundColor: colors.card },
+        headerTitleStyle: { color: colors.text },
+        contentStyle: { backgroundColor: colors.background },
+        headerShadowVisible: false,
+        animation: "slide_from_right",
+      }}
+    >
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen name="scan" options={{ presentation: "modal", title: t("Scan item") }} />
@@ -41,15 +57,17 @@ function RootStack() {
 
 export default function RootLayout() {
   return (
+    <ThemeProvider>
     <LanguageProvider>
       <SessionProvider>
         <SyncProvider>
           <StationProvider>
-            <StatusBar style="dark" />
+            <ThemedStatusBar />
             <RootStack />
           </StationProvider>
         </SyncProvider>
       </SessionProvider>
     </LanguageProvider>
+    </ThemeProvider>
   );
 }

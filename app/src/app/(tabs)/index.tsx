@@ -11,12 +11,14 @@ import { useStation } from "@/context/station";
 import { useFuelRunway } from "@/hooks/useDerived";
 import { useAlerts } from "@/hooks/useRecords";
 import { useStationSnapshot } from "@/hooks/useStationSnapshot";
-import { colors, space } from "@/lib/theme";
+import { space } from "@/lib/theme";
 import { nextResupplyDate } from "@shared/predictions";
+import { useColors } from "@/context/theme";
 
 const DAY = 86_400_000;
 
 export default function HomeScreen() {
+  const colors = useColors();
   const { stationId } = useStation();
   const { snapshot, refresh } = useStationSnapshot(stationId);
   const runway = useFuelRunway(snapshot);

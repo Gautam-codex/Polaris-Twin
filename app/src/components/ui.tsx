@@ -1,13 +1,16 @@
 import type { ReactNode } from "react";
-import { ActivityIndicator, Pressable, StyleSheet, Text, View, type StyleProp, type TextStyle, type ViewStyle } from "react-native";
+import { ActivityIndicator, Pressable, Text, View, type StyleProp, type TextStyle, type ViewStyle } from "react-native";
 import { useT } from "@/context/language";
-import { colors, radius, space, tint } from "@/lib/theme";
+import { radius, space, tint } from "@/lib/theme";
+import { useColors, themedStyles } from "@/context/theme";
 
 export function Card({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
+  const styles = useStyles();
   return <View style={[styles.card, style]}>{children}</View>;
 }
 
 export function CardTitle({ children, right }: { children: ReactNode; right?: ReactNode }) {
+  const styles = useStyles();
   const t = useT();
   return (
     <View style={styles.cardTitleRow}>
@@ -18,10 +21,12 @@ export function CardTitle({ children, right }: { children: ReactNode; right?: Re
 }
 
 export function Big({ children, style }: { children: ReactNode; style?: StyleProp<TextStyle> }) {
+  const styles = useStyles();
   return <Text style={[styles.big, style]}>{children}</Text>;
 }
 
 export function Muted({ children, style, numberOfLines }: { children: ReactNode; style?: StyleProp<TextStyle>; numberOfLines?: number }) {
+  const styles = useStyles();
   return (
     <Text style={[styles.muted, style]} numberOfLines={numberOfLines}>
       {children}
@@ -30,11 +35,13 @@ export function Muted({ children, style, numberOfLines }: { children: ReactNode;
 }
 
 export function Body({ children, style }: { children: ReactNode; style?: StyleProp<TextStyle> }) {
+  const styles = useStyles();
   return <Text style={[styles.body, style]}>{children}</Text>;
 }
 
 /** Small status tag in a status colour. */
 export function Tag({ label, color }: { label: string; color: string }) {
+  const styles = useStyles();
   return (
     <View style={[styles.tag, { borderColor: tint(color, 0.35), backgroundColor: tint(color, 0.08) }]}>
       <Text style={[styles.tagText, { color }]}>{label}</Text>
@@ -57,6 +64,8 @@ export function Button({
   icon?: ReactNode;
   style?: StyleProp<ViewStyle>;
 }) {
+  const colors = useColors();
+  const styles = useStyles();
   const t = useT();
   const bg = variant === "primary" ? colors.primary : variant === "danger" ? colors.danger : colors.card;
   const fg = variant === "outline" ? colors.text : colors.primaryText;
@@ -78,6 +87,8 @@ export function Button({
 }
 
 export function Chip({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) {
+  const colors = useColors();
+  const styles = useStyles();
   const t = useT();
   return (
     <Pressable
@@ -92,6 +103,8 @@ export function Chip({ label, active, onPress }: { label: string; active: boolea
 }
 
 export function Loading({ label }: { label: string }) {
+  const colors = useColors();
+  const styles = useStyles();
   return (
     <View style={styles.center}>
       <ActivityIndicator color={colors.primary} />
@@ -101,6 +114,7 @@ export function Loading({ label }: { label: string }) {
 }
 
 export function Empty({ title, body }: { title: string; body?: string }) {
+  const styles = useStyles();
   return (
     <View style={styles.center}>
       <Body style={{ fontWeight: "600" }}>{title}</Body>
@@ -110,10 +124,11 @@ export function Empty({ title, body }: { title: string; body?: string }) {
 }
 
 export function ErrorText({ message }: { message: string }) {
+  const styles = useStyles();
   return <Text style={styles.error}>{message}</Text>;
 }
 
-export const styles = StyleSheet.create({
+export const useStyles = themedStyles((colors) => ({
   card: { backgroundColor: colors.card, borderColor: colors.border, borderWidth: 1, borderRadius: radius.lg, padding: space.lg },
   cardTitleRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: space.md, gap: space.sm },
   cardTitle: { fontSize: 14, fontWeight: "600", color: colors.text, flexShrink: 1 },
@@ -128,4 +143,4 @@ export const styles = StyleSheet.create({
   chipText: { fontSize: 13, color: colors.muted },
   center: { alignItems: "center", justifyContent: "center", paddingVertical: space.xl, paddingHorizontal: space.lg },
   error: { color: colors.danger, fontSize: 13, lineHeight: 18 },
-});
+}));

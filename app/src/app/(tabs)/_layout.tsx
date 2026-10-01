@@ -1,4 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Haptics from "expo-haptics";
 import { Redirect, Tabs } from "expo-router";
 import { StationSwitcher } from "@/components/chrome";
 import { SosButton } from "@/components/sos-button";
@@ -6,7 +7,8 @@ import { useT } from "@/context/language";
 import { useSession } from "@/context/session";
 import { useStation } from "@/context/station";
 import { useAlerts } from "@/hooks/useRecords";
-import { colors } from "@/lib/theme";
+import { useColors } from "@/context/theme";
+
 
 type IconName = keyof typeof Ionicons.glyphMap;
 
@@ -26,6 +28,7 @@ function AlertWatcher() {
 }
 
 export default function TabLayout() {
+  const colors = useColors();
   const { session } = useSession();
   const tr = useT();
   if (!session) return <Redirect href="/login" />;
@@ -37,7 +40,8 @@ export default function TabLayout() {
         screenOptions={{
           tabBarActiveTintColor: colors.primary,
           tabBarInactiveTintColor: colors.muted,
-          tabBarStyle: { borderTopColor: colors.border },
+          tabBarStyle: { borderTopColor: colors.border, backgroundColor: colors.card },
+          animation: "shift",
           headerStyle: { backgroundColor: colors.card },
           headerTitleStyle: { color: colors.text, fontWeight: "600" },
           headerShadowVisible: false,
@@ -49,6 +53,7 @@ export default function TabLayout() {
           <Tabs.Screen
             key={t.name}
             name={t.name}
+            listeners={{ tabPress: () => void Haptics.selectionAsync() }}
             options={{
               title: tr(t.title),
               tabBarIcon: ({ color, size }) => <Ionicons name={t.icon} size={size} color={color} />,

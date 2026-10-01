@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, type Href } from "expo-router";
 import { Screen } from "@/components/chrome";
@@ -7,15 +7,18 @@ import { useT } from "@/context/language";
 import { useSession } from "@/context/session";
 import { useStation } from "@/context/station";
 import { supabase } from "@/lib/supabase";
-import { colors, space } from "@/lib/theme";
+import { space } from "@/lib/theme";
+import { useColors, themedStyles } from "@/context/theme";
 
 const LINKS: { href: Href; title: string; note: string; icon: keyof typeof Ionicons.glyphMap }[] = [
   { href: "/checkin", title: "Wellbeing check-in", note: "Anonymous, once a day", icon: "happy-outline" },
   { href: "/copilot", title: "Ask Polaris", note: "AI copilot in English or Hindi", icon: "chatbubbles-outline" },
-  { href: "/settings", title: "Settings", note: "Language and offline sync", icon: "settings-outline" },
+  { href: "/settings", title: "Settings", note: "Theme, language and offline sync", icon: "settings-outline" },
 ];
 
 export default function MoreScreen() {
+  const colors = useColors();
+  const styles = useStyles();
   const { session } = useSession();
   const { station } = useStation();
   const t = useT();
@@ -60,8 +63,8 @@ export default function MoreScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = themedStyles((colors) => ({
   link: { flexDirection: "row", alignItems: "center", gap: space.md, paddingVertical: space.md },
   divider: { borderTopWidth: 1, borderTopColor: colors.border },
   linkTitle: { fontSize: 15, fontWeight: "600", color: colors.text },
-});
+}));

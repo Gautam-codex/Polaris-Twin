@@ -1,20 +1,22 @@
 import { View } from "react-native";
 import Svg, { G, Path, Rect, Text as SvgText } from "react-native-svg";
-import { colors, healthColor, roofColor } from "@/lib/theme";
+import { healthColor, roofColor } from "@/lib/theme";
 import type { Building } from "@shared/types";
+import { useColors } from "@/context/theme";
 
 const EXTENT = 24;
 
 /** Top-down SVG plan of the station; buildings coloured by health and tappable. */
 export function SiteMap({ buildings, selectedId, onSelect }: { buildings: Building[]; selectedId: string | null; onSelect: (id: string) => void }) {
+  const colors = useColors();
   const size = EXTENT * 2;
   return (
-    <View style={{ aspectRatio: 1.2, width: "100%", backgroundColor: "#FFFFFF", borderRadius: 8, overflow: "hidden" }}>
+    <View style={{ aspectRatio: 1.2, width: "100%", backgroundColor: colors.card, borderRadius: 8, overflow: "hidden" }}>
       <Svg width="100%" height="100%" viewBox={`${-EXTENT} -21 ${size} 40`}>
         {Array.from({ length: 11 }, (_, i) => -EXTENT + i * 5).map((v) => (
           <G key={v}>
-            <Path d={`M ${v} ${-EXTENT} V ${EXTENT}`} stroke="#E3EEFA" strokeWidth={0.15} />
-            <Path d={`M ${-EXTENT} ${v} H ${EXTENT}`} stroke="#E3EEFA" strokeWidth={0.15} />
+            <Path d={`M ${v} ${-EXTENT} V ${EXTENT}`} stroke={colors.mapGrid} strokeWidth={0.15} />
+            <Path d={`M ${-EXTENT} ${v} H ${EXTENT}`} stroke={colors.mapGrid} strokeWidth={0.15} />
           </G>
         ))}
         {buildings.map((b) => {
@@ -34,7 +36,7 @@ export function SiteMap({ buildings, selectedId, onSelect }: { buildings: Buildi
                 strokeWidth={selected ? 0.6 : 0.25}
               />
               {w >= 6 && (
-                <SvgText x={x} y={z + 0.6} fontSize={1.7} fill={colors.text} textAnchor="middle" fontFamily="sans-serif">
+                <SvgText x={x} y={z + 0.6} fontSize={1.7} fill="#0F1F33" textAnchor="middle" fontFamily="sans-serif">
                   {b.name.split(" ")[0]}
                 </SvgText>
               )}
@@ -48,6 +50,7 @@ export function SiteMap({ buildings, selectedId, onSelect }: { buildings: Buildi
 
 /** Semicircle gauge. */
 export function Gauge({ value, max = 100, color, size = 180 }: { value: number; max?: number; color: string; size?: number }) {
+  const colors = useColors();
   const stroke = size * 0.1;
   const r = (size - stroke) / 2;
   const cx = size / 2;

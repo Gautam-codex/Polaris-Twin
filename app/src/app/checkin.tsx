@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Slider from "@react-native-community/slider";
 import * as Haptics from "expo-haptics";
@@ -7,7 +7,8 @@ import { Big, Body, Button, Card, CardTitle, Loading, Muted } from "@/components
 import { useStation } from "@/context/station";
 import { useSync } from "@/context/sync";
 import { getTeamMood } from "@/lib/data";
-import { colors, radius, space } from "@/lib/theme";
+import { radius, space } from "@/lib/theme";
+import { useColors, themedStyles } from "@/context/theme";
 
 const KEY = "polaris-twin:last-checkin";
 const FACES = ["😞", "🙁", "😐", "🙂", "😄"];
@@ -18,6 +19,7 @@ function today(): string {
 }
 
 function Scale({ value, onChange, labels }: { value: number; onChange: (v: number) => void; labels: string[] }) {
+  const styles = useStyles();
   return (
     <View style={styles.scale}>
       {labels.map((label, i) => {
@@ -45,6 +47,8 @@ function Scale({ value, onChange, labels }: { value: number; onChange: (v: numbe
 
 /** Anonymous daily check-in: mood, energy and sleep. Only team averages are ever shown. */
 export default function CheckinScreen() {
+  const colors = useColors();
+  const styles = useStyles();
   const { stationId, station } = useStation();
   const { submit, online } = useSync();
   const [mood, setMood] = useState(0);
@@ -138,11 +142,11 @@ export default function CheckinScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = themedStyles((colors) => ({
   screen: { flex: 1, backgroundColor: colors.background },
   content: { padding: space.lg, gap: space.md },
   scale: { flexDirection: "row", gap: space.sm, marginTop: 6 },
   option: { flex: 1, minHeight: 48, borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, alignItems: "center", justifyContent: "center", backgroundColor: colors.card },
   optionActive: { borderColor: colors.primary, backgroundColor: colors.accent },
   optionText: { fontSize: 22, color: colors.text },
-});
+}));

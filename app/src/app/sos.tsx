@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
@@ -7,9 +7,10 @@ import { Body, Button, Card, CardTitle, Muted } from "@/components/ui";
 import { useT } from "@/context/language";
 import { useStation } from "@/context/station";
 import { useSync } from "@/context/sync";
-import { colors, radius, space, tint } from "@/lib/theme";
+import { radius, space, tint } from "@/lib/theme";
 import { PLAYBOOKS, type EmergencyKind } from "@shared/playbooks";
 import type { AlertSystem } from "@shared/types";
+import { useColors, themedStyles } from "@/context/theme";
 
 interface Choice {
   key: string;
@@ -28,6 +29,8 @@ const CHOICES: Choice[] = [
 
 /** Choose the emergency, send a critical alert and incident (queued when offline), then follow the checklist. */
 export default function SosScreen() {
+  const colors = useColors();
+  const styles = useStyles();
   const { station, stationId } = useStation();
   const { submit, online } = useSync();
   const t = useT();
@@ -134,10 +137,10 @@ export default function SosScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = themedStyles((colors) => ({
   screen: { flex: 1, backgroundColor: colors.background },
   content: { padding: space.lg, gap: space.md, paddingBottom: space.xl * 2 },
   choice: { flexDirection: "row", alignItems: "center", gap: space.md, padding: space.md, borderWidth: 1, borderColor: colors.border, borderRadius: radius.lg, backgroundColor: colors.card },
   step: { flexDirection: "row", gap: space.sm, paddingVertical: space.sm, alignItems: "flex-start" },
   stepText: { flex: 1, fontSize: 14, color: colors.text, lineHeight: 20 },
-});
+}));

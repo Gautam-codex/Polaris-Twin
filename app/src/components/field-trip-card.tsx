@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { TextInput, View } from "react-native";
 import * as Haptics from "expo-haptics";
 import { Big, Body, Button, Card, CardTitle, Chip, Muted, Tag } from "@/components/ui";
 import { useFieldTrip } from "@/hooks/useFieldTrip";
-import { colors, radius, space, tint } from "@/lib/theme";
+import { radius, space, tint } from "@/lib/theme";
 import type { StationId } from "@shared/types";
+import { useColors, themedStyles } from "@/context/theme";
 
 const DESTINATIONS: Record<StationId, string[]> = {
   maitri: ["Priyadarshini Lake", "Oasis ridge survey site", "Ice shelf edge (vehicle)"],
@@ -22,6 +23,8 @@ function countdown(ms: number): string {
 
 /** "Going outside" check-out with a return countdown; turns red when the team is overdue. */
 export function FieldTripCard({ stationId, verdict }: { stationId: StationId; verdict: "Safe" | "Caution" | "Unsafe" }) {
+  const colors = useColors();
+  const styles = useStyles();
   const { trip, now, overdue, start, end } = useFieldTrip();
   const [destination, setDestination] = useState(DESTINATIONS[stationId][0]);
   const [team, setTeam] = useState("");
@@ -89,7 +92,7 @@ export function FieldTripCard({ stationId, verdict }: { stationId: StationId; ve
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = themedStyles((colors) => ({
   wrap: { flexDirection: "row", flexWrap: "wrap", gap: space.sm },
   input: { borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: space.md, minHeight: 44, fontSize: 15, color: colors.text, backgroundColor: colors.card },
-});
+}));

@@ -5,7 +5,8 @@ import { router } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Circle } from "react-native-svg";
 import { useT } from "@/context/language";
-import { colors } from "@/lib/theme";
+import { themedStyles } from "@/context/theme";
+
 
 const HOLD_MS = 2000;
 const SIZE = 64;
@@ -15,6 +16,7 @@ const CIRC = 2 * Math.PI * R;
 
 /** Floating SOS button: hold for 2 s (ring fills, haptics build up) to open the SOS screen. */
 export function SosButton() {
+  const styles = useStyles();
   const insets = useSafeAreaInsets();
   const t = useT();
   const [progress, setProgress] = useState(0);
@@ -88,13 +90,13 @@ export function SosButton() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = themedStyles((colors) => ({
   wrap: { position: "absolute", right: 16, alignItems: "center" },
   button: {
     width: SIZE,
     height: SIZE,
     borderRadius: SIZE / 2,
-    backgroundColor: colors.danger,
+    backgroundColor: "#C62D21",
     alignItems: "center",
     justifyContent: "center",
     elevation: 6,
@@ -104,5 +106,5 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
   },
   label: { color: "#FFFFFF", fontWeight: "700", fontSize: 16, letterSpacing: 1 },
-  hint: { marginTop: 6, fontSize: 11, color: colors.danger, fontWeight: "600" },
-});
+  hint: { marginTop: 6, fontSize: 11, color: "#D2392B", fontWeight: "600" },
+}));

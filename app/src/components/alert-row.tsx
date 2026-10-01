@@ -1,7 +1,8 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { Body, Button, Muted, Tag } from "@/components/ui";
-import { colors, severityColor, space } from "@/lib/theme";
+import { severityColor, space } from "@/lib/theme";
 import type { Alert } from "@shared/types";
+import { useColors, themedStyles } from "@/context/theme";
 
 export function timeAgo(iso: string): string {
   const minutes = Math.round((Date.now() - new Date(iso).getTime()) / 60_000);
@@ -14,6 +15,8 @@ export function timeAgo(iso: string): string {
 
 /** One alert with a severity stripe; stored alerts can be acknowledged. */
 export function AlertRow({ alert, live, onAcknowledge }: { alert: Alert; live?: boolean; onAcknowledge?: () => void }) {
+  const colors = useColors();
+  const styles = useStyles();
   const color = severityColor[alert.severity];
   return (
     <View style={[styles.row, { borderLeftColor: color, opacity: alert.acknowledged ? 0.6 : 1 }]}>
@@ -31,7 +34,7 @@ export function AlertRow({ alert, live, onAcknowledge }: { alert: Alert; live?: 
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = themedStyles((colors) => ({
   row: { borderWidth: 1, borderColor: colors.border, borderLeftWidth: 4, borderRadius: 8, padding: space.md, backgroundColor: colors.card },
   top: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-});
+}));

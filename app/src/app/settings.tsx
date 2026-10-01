@@ -1,12 +1,16 @@
-import { ScrollView, StyleSheet, Switch, View } from "react-native";
+import { ScrollView, Switch, View } from "react-native";
 import { Body, Card, CardTitle, Chip, Muted } from "@/components/ui";
 import { useLanguage } from "@/context/language";
 import { useSync } from "@/context/sync";
 import { describe } from "@/lib/offline-queue";
-import { colors, space } from "@/lib/theme";
+import { space } from "@/lib/theme";
+import { useColors, useTheme, themedStyles } from "@/context/theme";
 
 export default function SettingsScreen() {
+  const colors = useColors();
+  const styles = useStyles();
   const { language, setLanguage } = useLanguage();
+  const { mode, setMode } = useTheme();
   const { online, queue, simulateOffline, setSimulateOffline, lastSyncAt } = useSync();
 
   return (
@@ -18,6 +22,16 @@ export default function SettingsScreen() {
           <Chip label="हिंदी" active={language === "hi"} onPress={() => setLanguage("hi")} />
         </View>
         <Muted>Tab names, headings and buttons. Station data stays in English units.</Muted>
+      </Card>
+
+      <Card style={{ gap: space.sm }}>
+        <CardTitle>Appearance</CardTitle>
+        <View style={{ flexDirection: "row", gap: space.sm, flexWrap: "wrap" }}>
+          <Chip label="System" active={mode === "system"} onPress={() => setMode("system")} />
+          <Chip label="Light" active={mode === "light"} onPress={() => setMode("light")} />
+          <Chip label="Dark" active={mode === "dark"} onPress={() => setMode("dark")} />
+        </View>
+        <Muted>System follows your phone&apos;s light or dark setting.</Muted>
       </Card>
 
       <Card style={{ gap: space.sm }}>
@@ -49,9 +63,9 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = themedStyles((colors) => ({
   screen: { flex: 1, backgroundColor: colors.background },
   content: { padding: space.lg, gap: space.md },
   row: { flexDirection: "row", alignItems: "center", gap: space.md },
   queueItem: { flexDirection: "row", gap: space.sm, paddingVertical: 6, borderTopWidth: 1, borderTopColor: colors.border },
-});
+}));

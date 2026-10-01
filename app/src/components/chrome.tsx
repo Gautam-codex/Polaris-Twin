@@ -1,12 +1,15 @@
 import type { ReactNode } from "react";
-import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
 import { useStation } from "@/context/station";
 import { useSync } from "@/context/sync";
-import { colors, radius, space } from "@/lib/theme";
+import { radius, space } from "@/lib/theme";
 import { STATION_IDS, STATIONS } from "@shared/stations";
+import { useColors, themedStyles } from "@/context/theme";
 
 /** Slim status line: "Online · synced" or "Offline · N changes queued". */
 export function SyncBanner() {
+  const colors = useColors();
+  const styles = useStyles();
   const { online, queue } = useSync();
   const queued = queue.length;
   const color = online ? (queued ? colors.warning : colors.success) : colors.danger;
@@ -16,7 +19,7 @@ export function SyncBanner() {
       : "Online · synced"
     : `Offline · ${queued} change${queued === 1 ? "" : "s"} queued`;
   return (
-    <View style={[styles.banner, { backgroundColor: online && !queued ? colors.accent : "#FDF1EF" }]} accessibilityRole="text">
+    <View style={[styles.banner, { backgroundColor: online && !queued ? colors.accent : colors.bannerWarn }]} accessibilityRole="text">
       <View style={[styles.dot, { backgroundColor: color }]} />
       <Text style={[styles.bannerText, { color }]}>{text}</Text>
       <Text style={styles.sim}>Simulated sensor feed</Text>
@@ -26,6 +29,7 @@ export function SyncBanner() {
 
 /** Maitri / Bharati switcher for the header. */
 export function StationSwitcher() {
+  const styles = useStyles();
   const { stationId, setStation } = useStation();
   return (
     <View style={styles.switcher}>
@@ -46,6 +50,8 @@ export function StationSwitcher() {
 
 /** Scrollable screen body with the sync banner on top and optional pull to refresh. */
 export function Screen({ children, onRefresh, refreshing = false }: { children: ReactNode; onRefresh?: () => void; refreshing?: boolean }) {
+  const colors = useColors();
+  const styles = useStyles();
   return (
     <View style={styles.screen}>
       <SyncBanner />
@@ -60,7 +66,7 @@ export function Screen({ children, onRefresh, refreshing = false }: { children: 
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = themedStyles((colors) => ({
   screen: { flex: 1, backgroundColor: colors.background },
   content: { padding: space.lg, gap: space.md, paddingBottom: 96 },
   banner: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: space.lg, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: colors.border },
@@ -72,4 +78,4 @@ const styles = StyleSheet.create({
   switchActive: { backgroundColor: colors.accent },
   switchText: { fontSize: 13, color: colors.muted },
   switchTextActive: { color: colors.primary, fontWeight: "600" },
-});
+}));

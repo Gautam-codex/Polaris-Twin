@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
 import { router, useLocalSearchParams } from "expo-router";
@@ -7,15 +7,18 @@ import { Screen } from "@/components/chrome";
 import { Body, Button, Card, Empty, ErrorText, Loading, Muted, Tag } from "@/components/ui";
 import { useStation } from "@/context/station";
 import { useInventory } from "@/hooks/useRecords";
-import { colors, radius, space, tint } from "@/lib/theme";
+import { healthColor, radius, space, tint } from "@/lib/theme";
 import { formatNumber } from "@shared/alerts";
 import { inventoryDaysLeft, itemsAtRisk, nextResupplyDate } from "@shared/predictions";
 import type { InventoryCategory, InventoryItem } from "@shared/types";
+import { useColors, themedStyles } from "@/context/theme";
 
 const ORDER: InventoryCategory[] = ["fuel", "food", "medical", "spares", "science"];
 const LABEL: Record<InventoryCategory, string> = { fuel: "Fuel", food: "Food", medical: "Medical", spares: "Spares", science: "Science" };
 
 function Stepper({ item, onChange }: { item: InventoryItem; onChange: (q: number) => void }) {
+  const colors = useColors();
+  const styles = useStyles();
   const step = Math.max(1, Math.round(item.dailyUse));
   return (
     <View style={styles.stepper}>
@@ -33,6 +36,8 @@ function Stepper({ item, onChange }: { item: InventoryItem; onChange: (q: number
 }
 
 export default function InventoryScreen() {
+  const colors = useColors();
+  const styles = useStyles();
   const { stationId } = useStation();
   const { focus } = useLocalSearchParams<{ focus?: string }>();
   const { items, loading, error, reload, setQuantity } = useInventory(stationId);
@@ -87,12 +92,12 @@ export default function InventoryScreen() {
                 const risk = atRisk.has(item.id);
                 const days = inventoryDaysLeft(item);
                 return (
-                  <View key={item.id} style={[styles.item, risk && { backgroundColor: tint("#C27A12", 0.08) }]}>
+                  <View key={item.id} style={[styles.item, risk && { backgroundColor: tint(healthColor.warning, 0.1) }]}>
                     <View style={{ flex: 1, gap: 2 }}>
                       <Body style={{ fontWeight: "600" }}>{item.name}</Body>
                       <View style={{ flexDirection: "row", gap: space.sm, alignItems: "center", flexWrap: "wrap" }}>
                         <Muted>{Number.isFinite(days) ? `${Math.floor(days)} days left` : "Not used daily"}</Muted>
-                        {risk && <Tag label="AT RISK" color="#C27A12" />}
+                        {risk && <Tag label="AT RISK" color={healthColor.warning} />}
                       </View>
                     </View>
                     <Stepper
@@ -112,7 +117,7 @@ export default function InventoryScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = themedStyles((colors) => ({
   searchRow: { flexDirection: "row", gap: space.sm, alignItems: "center" },
   search: { flex: 1, flexDirection: "row", alignItems: "center", gap: 6, borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: space.md, minHeight: 44, backgroundColor: colors.card },
   searchInput: { flex: 1, fontSize: 15, color: colors.text, paddingVertical: 8 },
@@ -121,4 +126,4 @@ const styles = StyleSheet.create({
   stepper: { flexDirection: "row", alignItems: "center", gap: 4 },
   stepBtn: { width: 34, height: 34, borderRadius: 17, borderWidth: 1, borderColor: colors.border, alignItems: "center", justifyContent: "center", backgroundColor: colors.card },
   qty: { minWidth: 72, textAlign: "center", fontSize: 13, color: colors.text, fontVariant: ["tabular-nums"] },
-});
+}));

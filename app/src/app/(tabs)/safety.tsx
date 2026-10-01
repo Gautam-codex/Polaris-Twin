@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { Screen } from "@/components/chrome";
 import { FieldTripCard } from "@/components/field-trip-card";
 import { Gauge } from "@/components/graphics";
@@ -6,15 +6,17 @@ import { Card, CardTitle, Loading, Muted, Tag } from "@/components/ui";
 import { useStation } from "@/context/station";
 import { useForecast } from "@/hooks/useDerived";
 import { useStationSnapshot } from "@/hooks/useStationSnapshot";
-import { colors, space } from "@/lib/theme";
+import { healthColor, space } from "@/lib/theme";
 import { visibilityFor, windChill } from "@shared/environment";
 import { safetyIndex } from "@shared/predictions";
+import { themedStyles } from "@/context/theme";
 
 function labelColor(label: "Safe" | "Caution" | "Unsafe"): string {
-  return label === "Safe" ? colors.success : label === "Caution" ? "#C27A12" : colors.danger;
+  return label === "Safe" ? healthColor.ok : label === "Caution" ? healthColor.warning : healthColor.critical;
 }
 
 export default function SafetyScreen() {
+  const styles = useStyles();
   const { stationId } = useStation();
   const { snapshot } = useStationSnapshot(stationId);
   const forecast = useForecast(stationId, 12);
@@ -67,10 +69,10 @@ export default function SafetyScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = themedStyles((colors) => ({
   score: { fontSize: 32, fontWeight: "600", color: colors.text, marginTop: -space.xl },
   strip: { flexDirection: "row", alignItems: "flex-end", justifyContent: "space-between", height: 64 },
   cell: { flex: 1, alignItems: "center", gap: 4 },
   bar: { width: "60%", borderRadius: 2 },
   hour: { fontSize: 10, color: colors.muted },
-});
+}));

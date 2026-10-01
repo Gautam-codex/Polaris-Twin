@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardAvoidingView, Platform, Text, TextInput, View } from "react-native";
 import { Redirect } from "expo-router";
 import Svg, { Circle, Path, Rect } from "react-native-svg";
 import { Body, Button, Card, ErrorText, Muted } from "@/components/ui";
 import { useSession } from "@/context/session";
 import { DEMO_EMAIL, DEMO_PASSWORD, isSupabaseConfigured, supabase } from "@/lib/supabase";
-import { colors, radius, space } from "@/lib/theme";
+import { radius, space } from "@/lib/theme";
+import { useColors, themedStyles } from "@/context/theme";
 
 function LogoMark() {
+  const colors = useColors();
   return (
     <Svg width={48} height={48} viewBox="0 0 64 64">
       <Rect width={64} height={64} rx={14} fill={colors.primary} />
@@ -19,6 +21,8 @@ function LogoMark() {
 }
 
 export default function LoginScreen() {
+  const colors = useColors();
+  const styles = useStyles();
   const { session } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -85,9 +89,9 @@ export default function LoginScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = themedStyles((colors) => ({
   screen: { flex: 1, backgroundColor: colors.background },
   inner: { flex: 1, justifyContent: "center", padding: space.xl },
   title: { marginTop: space.md, fontSize: 26, fontWeight: "600", color: colors.text },
   input: { borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: space.md, minHeight: 44, fontSize: 15, color: colors.text, backgroundColor: colors.card },
-});
+}));
