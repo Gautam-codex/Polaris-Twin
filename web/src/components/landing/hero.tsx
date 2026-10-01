@@ -35,10 +35,7 @@ export function Hero() {
   return (
     <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 md:px-6 lg:grid-cols-[1fr_1.1fr] lg:py-20">
       <div>
-        <p className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
-          {SITE.event} · {SITE.problemStatement} · NCPOR
-        </p>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-foreground md:text-5xl">Polaris Twin</h1>
+        <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">Polaris Twin</h1>
         <p className="mt-3 text-xl text-foreground">{t("A digital twin for India's Antarctic stations")}</p>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
           One live model of Maitri and Bharati covering buildings, generators, fuel, stores, weather and crew. Each station

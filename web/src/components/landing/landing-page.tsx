@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Users } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Logo } from "@/components/dashboard/logo";
+import { LogoMark } from "@/components/dashboard/logo-mark";
 import { LanguageToggle, useT } from "@/components/language";
 import { SITE } from "@/lib/site";
 import { Architecture } from "./architecture";
@@ -58,8 +59,8 @@ function Footer() {
   return (
     <footer className="mt-10 border-t border-border bg-card">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between md:px-6">
-        <p>
-          {SITE.event} · {SITE.problemStatement} · {SITE.organisation}
+        <p className="flex items-center gap-2 font-medium text-foreground">
+          <LogoMark size={20} /> Polaris Twin
         </p>
         <p className="text-xs">Prototype with a simulated sensor feed. Not an official NCPOR system.</p>
       </div>

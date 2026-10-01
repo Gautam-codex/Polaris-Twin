@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108">
+  <!-- Android adaptive icon foreground (background colour #1D4F86). Ridges run edge to edge; the star sits inside the 66 dp safe zone. -->
+  <path d="M0 108 V86 L24 72 L39 82 L61 64 L84 78 L108 68 V108 Z" fill="#C6E1FF" opacity="0.35"/>
+  <path d="M0 108 V94 L27 82 L46 90 L67 77 L88 87 L108 80 V108 Z" fill="#FFFFFF"/>
+  <path d="M54 24 L57.4 42.6 L76 46 L57.4 49.4 L54 68 L50.6 49.4 L32 46 L50.6 42.6 Z" fill="#C6E1FF"/>
+  <circle cx="54" cy="46" r="2.6" fill="#FFFFFF"/>
+</svg>
