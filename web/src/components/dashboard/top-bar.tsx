@@ -12,6 +12,7 @@ import { STATION_IDS, STATIONS } from "@/shared/stations";
 import { EmergencyButton } from "@/components/emergency/emergency-button";
 import { DemoControls } from "./demo-controls";
 import { LanguageToggle, useT } from "@/components/language";
+import { ThemeToggle } from "@/components/theme";
 import { Logo } from "./logo";
 import { useOps } from "./ops-context";
 import { SidebarNav } from "./sidebar";
@@ -95,6 +96,7 @@ export function TopBar() {
           {demoMode && <DemoControls />}
           <StationSwitcher />
           <EmergencyButton />
+          <ThemeToggle />
           <Button variant="ghost" size="icon" onClick={() => void signOut()} aria-label="Sign out">
             <LogOut />
           </Button>

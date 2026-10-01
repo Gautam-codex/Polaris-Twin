@@ -22,14 +22,14 @@ export function StationMap2D({
   return (
     <svg
       viewBox={`${-EXTENT} ${-EXTENT} ${size} ${size}`}
-      className={cn("h-full w-full bg-white", className)}
+      className={cn("h-full w-full bg-card", className)}
       role="img"
       aria-label={`Site plan of ${snapshot.stationId}`}
       onClick={() => onSelect?.(null)}
     >
       <defs>
         <pattern id="grid2d" width="5" height="5" patternUnits="userSpaceOnUse">
-          <path d="M 5 0 L 0 0 0 5" fill="none" stroke="#E3EEFA" strokeWidth="0.15" />
+          <path d="M 5 0 L 0 0 0 5" fill="none" stroke="var(--viz-grid)" strokeWidth="0.15" />
         </pattern>
       </defs>
       <rect x={-EXTENT} y={-EXTENT} width={size} height={size} fill="url(#grid2d)" />
@@ -54,7 +54,7 @@ export function StationMap2D({
               height={d}
               rx={0.4}
               fill={ROOF_HEX[b.health]}
-              stroke={selected ? "#1D4F86" : HEALTH_HEX[b.health]}
+              stroke={selected ? "var(--viz-primary)" : HEALTH_HEX[b.health]}
               strokeWidth={selected ? 0.5 : 0.2}
             />
             {w >= 6 && (
@@ -65,7 +65,7 @@ export function StationMap2D({
           </g>
         );
       })}
-      <text x={EXTENT - 1} y={-EXTENT + 2} textAnchor="end" fontSize={1.4} fill="#5A6B80">
+      <text x={EXTENT - 1} y={-EXTENT + 2} textAnchor="end" fontSize={1.4} fill="var(--viz-text-muted)">
         N ↑ · grid 5 m
       </text>
     </svg>

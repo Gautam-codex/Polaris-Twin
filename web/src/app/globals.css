@@ -88,6 +88,72 @@
   --sidebar-accent-foreground: #163b63;
   --sidebar-border: #dbe4ee;
   --sidebar-ring: #7fb2ea;
+  /* Charts, diagrams and SVG (used as var() in SVG attributes) */
+  --viz-primary: #1d4f86;
+  --viz-secondary: #5b9bdc;
+  --viz-brand: #c6e1ff;
+  --viz-success: #1c7c4a;
+  --viz-warning: #c27a12;
+  --viz-danger: #b42318;
+  --viz-grid: #e6edf5;
+  --viz-axis: #6b7c90;
+  --viz-surface: #ffffff;
+  --viz-surface-alt: #eef5fd;
+  --viz-line: #b9cde3;
+  --viz-text: #0f1f33;
+  --viz-text-muted: #5a6b80;
+  --viz-track: #e7f1fd;
+}
+
+.dark {
+  --brand: #c6e1ff;
+  --background: #0d1624;
+  --foreground: #e3ebf5;
+  --card: #142033;
+  --card-foreground: #e3ebf5;
+  --popover: #18263b;
+  --popover-foreground: #e3ebf5;
+  --primary: #8bbcf0;
+  --primary-foreground: #0d1624;
+  --secondary: #1b2b43;
+  --secondary-foreground: #c6e1ff;
+  --muted: #182539;
+  --muted-foreground: #95a7bc;
+  --accent: #1b2b43;
+  --accent-foreground: #c6e1ff;
+  --destructive: #f07163;
+  --success: #4cc38a;
+  --warning: #e3a64a;
+  --border: #24344d;
+  --input: #2c3d58;
+  --ring: #8bbcf0;
+  --chart-1: #8bbcf0;
+  --chart-2: #4f8fd1;
+  --chart-3: #e3a64a;
+  --chart-4: #f07163;
+  --chart-5: #4cc38a;
+  --sidebar: #142033;
+  --sidebar-foreground: #e3ebf5;
+  --sidebar-primary: #8bbcf0;
+  --sidebar-primary-foreground: #0d1624;
+  --sidebar-accent: #1b2b43;
+  --sidebar-accent-foreground: #c6e1ff;
+  --sidebar-border: #24344d;
+  --sidebar-ring: #8bbcf0;
+  --viz-primary: #8bbcf0;
+  --viz-secondary: #4f8fd1;
+  --viz-brand: #2a4a70;
+  --viz-success: #4cc38a;
+  --viz-warning: #e3a64a;
+  --viz-danger: #f07163;
+  --viz-grid: #22324a;
+  --viz-axis: #8a9bb0;
+  --viz-surface: #142033;
+  --viz-surface-alt: #101b2b;
+  --viz-line: #34496a;
+  --viz-text: #e3ebf5;
+  --viz-text-muted: #95a7bc;
+  --viz-track: #1b2b43;
 }
 
 @layer base {
@@ -96,8 +162,21 @@
   }
   body {
     @apply bg-background text-foreground;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
   }
   html {
     @apply font-sans;
+  }
+}
+
+/* Subtle motion; switched off for people who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }

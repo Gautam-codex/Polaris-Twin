@@ -22,7 +22,7 @@ function timeAgo(iso: string): string {
 function AlertRow({ alert, live, onAck }: { alert: Alert; live?: boolean; onAck?: () => void }) {
   const t = useT();
   return (
-    <li className={cn("rounded-md border border-border p-3", alert.acknowledged && "opacity-55")}>
+    <li className={cn("rounded-md border border-border p-3 transition-colors hover:bg-muted/60", alert.acknowledged && "opacity-55")}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">

@@ -21,22 +21,23 @@ export const SEVERITY_STYLE: Record<AlertSeverity, string> = {
   critical: HEALTH_STYLE.critical,
 };
 
+/** Chart colours as CSS variables, so they follow the light / dark theme (see globals.css). */
 export const CHART = {
-  primary: "#1D4F86",
-  secondary: "#5B9BDC",
-  brand: "#C6E1FF",
-  success: "#1C7C4A",
-  warning: "#C27A12",
-  danger: "#B42318",
-  grid: "#E6EDF5",
-  axis: "#6B7C90",
+  primary: "var(--viz-primary)",
+  secondary: "var(--viz-secondary)",
+  brand: "var(--viz-brand)",
+  success: "var(--viz-success)",
+  warning: "var(--viz-warning)",
+  danger: "var(--viz-danger)",
+  grid: "var(--viz-grid)",
+  axis: "var(--viz-axis)",
 };
 
 export const TOOLTIP_STYLE = {
-  background: "#FFFFFF",
-  border: "1px solid #DBE4EE",
+  background: "var(--popover)",
+  border: "1px solid var(--border)",
   borderRadius: 6,
   fontSize: 12,
-  color: "#0F1F33",
-  boxShadow: "0 2px 8px rgba(15,31,51,0.08)",
+  color: "var(--popover-foreground)",
+  boxShadow: "0 2px 10px rgba(0,0,0,0.12)",
 };

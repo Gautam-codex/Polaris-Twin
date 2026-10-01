@@ -2,18 +2,18 @@
 
 import { useT } from "@/components/language";
 
-const NAVY = "#1D4F86";
-const LINE = "#5B9BDC";
+const NAVY = "var(--viz-primary)";
+const LINE = "var(--viz-secondary)";
 
 function Box({ x, y, w, h, title, lines, accent = false }: { x: number; y: number; w: number; h: number; title: string; lines: string[]; accent?: boolean }) {
   return (
     <g>
-      <rect x={x} y={y} width={w} height={h} rx={8} fill={accent ? "#E7F1FD" : "#FFFFFF"} stroke={accent ? NAVY : "#C6D7EA"} strokeWidth={accent ? 1.5 : 1} />
-      <text x={x + 14} y={y + 26} fontSize={14} fontWeight={600} fill="#0F1F33">
+      <rect x={x} y={y} width={w} height={h} rx={8} fill={accent ? "var(--viz-track)" : "var(--viz-surface)"} stroke={accent ? NAVY : "var(--viz-line)"} strokeWidth={accent ? 1.5 : 1} />
+      <text x={x + 14} y={y + 26} fontSize={14} fontWeight={600} fill="var(--viz-text)">
         {title}
       </text>
       {lines.map((l, i) => (
-        <text key={l} x={x + 14} y={y + 48 + i * 18} fontSize={12} fill="#5A6B80">
+        <text key={l} x={x + 14} y={y + 48 + i * 18} fontSize={12} fill="var(--viz-text-muted)">
           {l}
         </text>
       ))}
@@ -48,10 +48,10 @@ export function Architecture() {
           <text x={295} y={140} textAnchor="middle" fontSize={12} fontWeight={600} fill={NAVY}>
             Satellite link
           </text>
-          <text x={295} y={196} textAnchor="middle" fontSize={11} fill="#5A6B80">
+          <text x={295} y={196} textAnchor="middle" fontSize={11} fill="var(--viz-text-muted)">
             deltas + alerts
           </text>
-          <text x={295} y={212} textAnchor="middle" fontSize={11} fill="#5A6B80">
+          <text x={295} y={212} textAnchor="middle" fontSize={11} fill="var(--viz-text-muted)">
             ~0.5 KB per sync
           </text>
 

@@ -7,8 +7,8 @@ import { Color, type MeshStandardMaterial } from "three";
 import { HEALTH_HEX, ROOF_HEX } from "@/lib/health";
 import type { Building } from "@/shared/types";
 import { BuildingDetails } from "./building-details";
+import { useScenePalette } from "./scene-palette";
 
-const CLADDING = new Color("#FFFFFF");
 
 interface Props {
   building: Building;
@@ -25,8 +25,12 @@ export function BuildingMesh({ building, selected, hovered, interactive, onHover
   const [w, h, d] = building.size;
   const [x, , z] = building.position;
   const tint = HEALTH_HEX[building.health];
+  const palette = useScenePalette();
   // Neutral cladding with a light health tint; the roof strip carries the full colour.
-  const body = useMemo(() => new Color(tint).lerp(CLADDING, building.health === "ok" ? 0.92 : 0.55), [tint, building.health]);
+  const body = useMemo(
+    () => new Color(tint).lerp(new Color(palette.cladding), building.health === "ok" ? 0.92 : 0.55),
+    [tint, building.health, palette.cladding],
+  );
 
   useFrame(({ clock }) => {
     const m = material.current;
@@ -61,7 +65,7 @@ export function BuildingMesh({ building, selected, hovered, interactive, onHover
       <mesh castShadow receiveShadow>
         <boxGeometry args={[w, h, d]} />
         <meshStandardMaterial ref={material} color={body} emissive={tint} roughness={0.85} metalness={0} flatShading />
-        {(selected || hovered) && <Edges color="#1D4F86" lineWidth={1.5} />}
+        {(selected || hovered) && <Edges color={palette.edge} lineWidth={1.5} />}
       </mesh>
       <BuildingDetails building={building} />
       {/* Roof strip in the pure health colour so status reads from above. */}

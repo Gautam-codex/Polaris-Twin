@@ -38,40 +38,40 @@ export function AntarcticaMap() {
 
   return (
     <svg viewBox={`0 0 ${W} ${H.toFixed(0)}`} className="h-auto w-full" role="img" aria-label="Map of Maitri, Bharati and NCPOR Goa">
-      <rect width={W} height={H} fill="#EEF5FD" />
+      <rect width={W} height={H} fill="var(--viz-surface-alt)" />
       {[0, -30, -60].map((lat) => {
         const [, y] = xy(LON_MIN, lat);
         return (
           <g key={lat}>
-            <line x1={0} x2={W} y1={y} y2={y} stroke="#D6E5F5" strokeDasharray="3 4" />
-            <text x={4} y={y - 4} fontSize={10} fill="#7A8CA0">
+            <line x1={0} x2={W} y1={y} y2={y} stroke="var(--viz-grid)" strokeDasharray="3 4" />
+            <text x={4} y={y - 4} fontSize={10} fill="var(--viz-text-muted)">
               {lat === 0 ? "Equator" : `${Math.abs(lat)}° S`}
             </text>
           </g>
         );
       })}
-      <path d={path(ANTARCTIC_COAST)} fill="#FFFFFF" stroke="#B9CDE3" />
-      <path d={path(INDIA)} fill="#FFFFFF" stroke="#B9CDE3" />
-      <ellipse cx={sx} cy={sy} rx={4} ry={6} fill="#FFFFFF" stroke="#B9CDE3" />
+      <path d={path(ANTARCTIC_COAST)} fill="var(--viz-surface)" stroke="var(--viz-line)" />
+      <path d={path(INDIA)} fill="var(--viz-surface)" stroke="var(--viz-line)" />
+      <ellipse cx={sx} cy={sy} rx={4} ry={6} fill="var(--viz-surface)" stroke="var(--viz-line)" />
       {points.map((p) => (
-        <line key={p.name} x1={p.xy[0]} y1={p.xy[1]} x2={gx} y2={gy} stroke="#5B9BDC" strokeWidth={1.2} strokeDasharray="5 4" />
+        <line key={p.name} x1={p.xy[0]} y1={p.xy[1]} x2={gx} y2={gy} stroke="var(--viz-secondary)" strokeWidth={1.2} strokeDasharray="5 4" />
       ))}
       {points.map((p) => (
         <g key={`${p.name}-pin`}>
-          <circle cx={p.xy[0]} cy={p.xy[1]} r={5} fill="#1D4F86" stroke="#FFFFFF" strokeWidth={1.5} />
-          <text x={p.xy[0]} y={p.xy[1] - 10} textAnchor="middle" fontSize={12} fontWeight={600} fill="#0F1F33">
+          <circle cx={p.xy[0]} cy={p.xy[1]} r={5} fill="var(--viz-primary)" stroke="var(--viz-surface)" strokeWidth={1.5} />
+          <text x={p.xy[0]} y={p.xy[1] - 10} textAnchor="middle" fontSize={12} fontWeight={600} fill="var(--viz-text)">
             {p.name}
           </text>
         </g>
       ))}
-      <rect x={gx - 5} y={gy - 5} width={10} height={10} fill="#B42318" stroke="#FFFFFF" strokeWidth={1.5} />
-      <text x={gx - 10} y={gy + 4} textAnchor="end" fontSize={12} fontWeight={600} fill="#0F1F33">
+      <rect x={gx - 5} y={gy - 5} width={10} height={10} fill="var(--viz-danger)" stroke="var(--viz-surface)" strokeWidth={1.5} />
+      <text x={gx - 10} y={gy + 4} textAnchor="end" fontSize={12} fontWeight={600} fill="var(--viz-text)">
         {GOA.name}
       </text>
-      <text x={W / 2} y={xy(50, -76)[1]} textAnchor="middle" fontSize={11} letterSpacing={3} fill="#7A8CA0">
+      <text x={W / 2} y={xy(50, -76)[1]} textAnchor="middle" fontSize={11} letterSpacing={3} fill="var(--viz-text-muted)">
         ANTARCTICA
       </text>
-      <text x={6} y={14} fontSize={10} fill="#7A8CA0">
+      <text x={6} y={14} fontSize={10} fill="var(--viz-text-muted)">
         Schematic, not for navigation
       </text>
     </svg>

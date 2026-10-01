@@ -6,10 +6,11 @@ import { OrbitControls } from "@react-three/drei";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import type { StationSnapshot } from "@/shared/types";
 import { BuildingMesh } from "./building-mesh";
+import { useTheme } from "@/components/theme";
+import { DARK_SCENE, LIGHT_SCENE, ScenePaletteContext } from "./scene-palette";
 import { SiteProps } from "./site-props";
 import { Snow, WIND_FROM_DEG, WindArrow } from "./weather-effects";
 
-const BACKGROUND = "#EAF2FB";
 const CAMERA: [number, number, number] = [38, 30, 42];
 
 /** Pulls the camera back on narrow or tall views so the whole station stays in frame. */
@@ -44,6 +45,7 @@ export default function TwinScene({ snapshot, selectedId = null, onSelect, mode 
   const controls = useRef<OrbitControlsImpl>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const interactive = mode === "full";
+  const palette = useTheme().theme === "dark" ? DARK_SCENE : LIGHT_SCENE;
   const fromDeg = WIND_FROM_DEG[snapshot.stationId];
 
   useEffect(() => {
@@ -63,13 +65,14 @@ export default function TwinScene({ snapshot, selectedId = null, onSelect, mode 
       onPointerMissed={() => interactive && onSelect?.(null)}
       gl={{ antialias: true, powerPreference: "high-performance" }}
     >
-      <color attach="background" args={[BACKGROUND]} />
-      <fog attach="fog" args={[BACKGROUND, 130, 280]} />
-      <ambientLight intensity={0.9} />
-      <hemisphereLight args={["#FFFFFF", "#C6E1FF", 0.8]} />
+      <ScenePaletteContext.Provider value={palette}>
+      <color attach="background" args={[palette.background]} />
+      <fog attach="fog" args={[palette.background, 130, 280]} />
+      <ambientLight intensity={palette.ambient} />
+      <hemisphereLight args={[palette.hemiSky, palette.hemiGround, 0.8]} />
       <directionalLight
         position={[30, 45, 20]}
-        intensity={1.1}
+        intensity={palette.sun}
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-camera-left={-40}
@@ -81,13 +84,13 @@ export default function TwinScene({ snapshot, selectedId = null, onSelect, mode 
       {/* Unlit white snow, with shadows drawn on a transparent layer just above it. */}
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[110, 48]} />
-        <meshBasicMaterial color="#FFFFFF" />
+        <meshBasicMaterial color={palette.ground} />
       </mesh>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
         <circleGeometry args={[60, 48]} />
-        <shadowMaterial opacity={0.12} />
+        <shadowMaterial opacity={palette.shadow} />
       </mesh>
-      <gridHelper args={[60, 12, "#C6E1FF", "#E3EEFA"]} position={[0, 0.02, 0]} />
+      <gridHelper key={palette.gridMajor} args={[60, 12, palette.gridMajor, palette.gridMinor]} position={[0, 0.02, 0]} />
 
       <SiteProps stationId={snapshot.stationId} buildings={snapshot.buildings} />
 
@@ -120,6 +123,7 @@ export default function TwinScene({ snapshot, selectedId = null, onSelect, mode 
         autoRotate={!interactive}
         autoRotateSpeed={0.6}
       />
+      </ScenePaletteContext.Provider>
     </Canvas>
   );
 }

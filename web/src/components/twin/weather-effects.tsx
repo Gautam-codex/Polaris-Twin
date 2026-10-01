@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { BufferGeometry } from "three";
+import { useScenePalette } from "./scene-palette";
 
 const COUNT = 1800;
 const SPREAD = 90;
@@ -20,6 +21,7 @@ export function windVector(fromDeg: number): [number, number] {
 /** Falling snow; horizontal drift and fall speed follow the live wind. */
 export function Snow({ windKph, fromDeg }: { windKph: number; fromDeg: number }) {
   const geometry = useRef<BufferGeometry>(null);
+  const { snow } = useScenePalette();
   const wind = useRef({ kph: windKph, dir: windVector(fromDeg) });
 
   useEffect(() => {
@@ -65,7 +67,7 @@ export function Snow({ windKph, fromDeg }: { windKph: number; fromDeg: number })
       <bufferGeometry ref={geometry}>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial color="#8FB3D9" size={0.12} sizeAttenuation transparent opacity={0.7} depthWrite={false} />
+      <pointsMaterial color={snow} size={0.12} sizeAttenuation transparent opacity={0.7} depthWrite={false} />
     </points>
   );
 }

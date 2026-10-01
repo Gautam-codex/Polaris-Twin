@@ -21,7 +21,7 @@ export function Panel({
 }) {
   const t = useT();
   return (
-    <section className={cn("flex flex-col rounded-lg border border-border bg-card p-5", className)}>
+    <section className={cn("flex flex-col rounded-lg border border-border bg-card p-5 transition-[border-color,box-shadow] duration-200 hover:border-primary/25 hover:shadow-[0_6px_20px_-12px_rgba(15,31,51,0.25)]", className)}>
       {(title || action) && (
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           {title && (

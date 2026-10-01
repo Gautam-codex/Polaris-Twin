@@ -58,7 +58,7 @@ export function Problem() {
       <Heading eyebrow="01" title={t("The problem")} />
       <div className="grid gap-4 md:grid-cols-3">
         {facts.map((f) => (
-          <article key={f.title} className="rounded-lg border border-border bg-card p-6">
+          <article key={f.title} className="rounded-lg border border-border bg-card p-6 transition duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_8px_24px_-14px_rgba(15,31,51,0.3)]">
             <p className="text-2xl font-semibold text-primary">{f.figure}</p>
             <h3 className="mt-3 font-medium text-foreground">{f.title}</h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
@@ -89,8 +89,8 @@ export function Features() {
       <Heading eyebrow="02" title={t("What it does")} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {FEATURES.map((f) => (
-          <article key={f.title} className="rounded-lg border border-border bg-card p-5">
-            <f.icon className="size-5 text-primary" strokeWidth={1.75} />
+          <article key={f.title} className="group rounded-lg border border-border bg-card p-5 transition duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_8px_24px_-14px_rgba(15,31,51,0.3)]">
+            <f.icon className="size-5 text-primary transition-transform duration-200 group-hover:scale-110" strokeWidth={1.75} />
             <h3 className="mt-3 font-medium text-foreground">{f.title}</h3>
             <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
           </article>

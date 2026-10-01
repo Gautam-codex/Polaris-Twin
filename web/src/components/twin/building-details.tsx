@@ -2,14 +2,12 @@
 
 import { DoubleSide } from "three";
 import type { Building } from "@/shared/types";
+import { useScenePalette } from "./scene-palette";
 
-const GLASS = "#7FA3C8";
-const STEEL = "#AEBBCB";
-const DARK = "#5A6B80";
-const WHITE = "#F4F8FC";
 
 /** Glazing band wrapped around the building at window height. */
 function Windows({ w, h, d }: { w: number; h: number; d: number }) {
+  const { glass: GLASS } = useScenePalette();
   const y = h * 0.08;
   const band = Math.min(1.2, h * 0.2);
   return (
@@ -28,6 +26,7 @@ function Windows({ w, h, d }: { w: number; h: number; d: number }) {
 
 /** Vertical ribs on Bharati's container block. */
 function ContainerRibs({ w, h, d }: { w: number; h: number; d: number }) {
+  const { steel: STEEL } = useScenePalette();
   const count = Math.floor(w / 2.5);
   return (
     <>
@@ -42,6 +41,7 @@ function ContainerRibs({ w, h, d }: { w: number; h: number; d: number }) {
 }
 
 function Tank({ position, radius, height }: { position: [number, number, number]; radius: number; height: number }) {
+  const { tank: WHITE, steel: STEEL } = useScenePalette();
   return (
     <group position={position}>
       <mesh position={[0, height / 2, 0]} castShadow>
@@ -58,6 +58,7 @@ function Tank({ position, radius, height }: { position: [number, number, number]
 
 /** Type-specific detail. Coordinates are relative to the building centre (y = 0 is mid-height). */
 export function BuildingDetails({ building }: { building: Building }) {
+  const { steel: STEEL, dark: DARK, tank: WHITE } = useScenePalette();
   const [w, h, d] = building.size;
   const top = h / 2;
   const ground = -h / 2;

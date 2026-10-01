@@ -6,6 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Logo } from "@/components/dashboard/logo";
 import { LogoMark } from "@/components/dashboard/logo-mark";
 import { LanguageToggle, useT } from "@/components/language";
+import { ThemeToggle } from "@/components/theme";
 import { SITE } from "@/lib/site";
 import { Architecture } from "./architecture";
 import { Hero } from "./hero";
@@ -24,6 +25,7 @@ function Header() {
           <a href="#team" className="hover:text-foreground">{t("Built by")}</a>
         </nav>
         <div className="ml-auto flex items-center gap-2">
+          <ThemeToggle />
           <LanguageToggle />
           <Link href="/login" className={buttonVariants({ variant: "outline", size: "sm" })}>
             {t("Sign in")}

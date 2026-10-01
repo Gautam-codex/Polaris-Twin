@@ -1,7 +1,7 @@
 /** Tiny SVG line chart with no axes. */
 export function Sparkline({
   values,
-  color = "#1D4F86",
+  color = "var(--viz-primary)",
   width = 120,
   height = 32,
 }: {

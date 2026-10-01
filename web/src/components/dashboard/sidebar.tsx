@@ -30,12 +30,14 @@ export function SidebarNav({ collapsed = false, onNavigate }: { collapsed?: bool
             onClick={onNavigate}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
-              active ? "bg-secondary font-medium text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              "group/nav relative flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+              active
+                ? "bg-secondary font-medium text-primary before:absolute before:top-1.5 before:bottom-1.5 before:left-0 before:w-[3px] before:rounded-full before:bg-primary"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground",
               collapsed && "justify-center px-0",
             )}
           >
-            <item.icon className="size-[18px] shrink-0" strokeWidth={1.75} />
+            <item.icon className="size-[18px] shrink-0 transition-transform duration-200 group-hover/nav:scale-110" strokeWidth={1.75} />
             {!collapsed && <span>{t(item.label)}</span>}
             {collapsed && <span className="sr-only">{t(item.label)}</span>}
           </Link>

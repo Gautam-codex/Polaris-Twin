@@ -34,7 +34,7 @@ export function Hero() {
 
   return (
     <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 md:px-6 lg:grid-cols-[1fr_1.1fr] lg:py-20">
-      <div>
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
         <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">Polaris Twin</h1>
         <p className="mt-3 text-xl text-foreground">{t("A digital twin for India's Antarctic stations")}</p>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
@@ -56,7 +56,7 @@ export function Hero() {
           )}
         </div>
       </div>
-      <div className="relative h-[320px] overflow-hidden rounded-lg border border-border bg-card sm:h-[400px]">
+      <div className="relative h-[320px] animate-in overflow-hidden rounded-lg border border-border bg-card fade-in-0 duration-700 sm:h-[400px]">
         {snapshot ? <TwinScene snapshot={snapshot} mode="preview" /> : <SceneLoading />}
         <span className="absolute bottom-3 left-3 rounded border border-border bg-card px-2 py-0.5 text-xs text-muted-foreground">
           Maitri · {t("Simulated sensor feed")}
