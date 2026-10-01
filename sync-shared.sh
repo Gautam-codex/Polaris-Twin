@@ -10,7 +10,7 @@ copy_to() {
   rm -rf "$dest"
   mkdir -p "$dest"
   cp -R "$SRC"/. "$dest"/
-  rm -f "$dest/.gitkeep"
+  rm -f "$dest/.gitkeep" "$dest/test.ts"
   echo "Synced shared/ -> ${dest#"$ROOT"/}"
 }
 
