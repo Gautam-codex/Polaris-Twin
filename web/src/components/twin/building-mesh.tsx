@@ -6,6 +6,7 @@ import { Edges, Html } from "@react-three/drei";
 import { Color, type MeshStandardMaterial } from "three";
 import { HEALTH_HEX, ROOF_HEX } from "@/lib/health";
 import type { Building } from "@/shared/types";
+import { BuildingDetails } from "./building-details";
 
 const CLADDING = new Color("#FFFFFF");
 
@@ -56,12 +57,13 @@ export function BuildingMesh({ building, selected, hovered, interactive, onHover
     : {};
 
   return (
-    <group position={[x, h / 2, z]}>
-      <mesh castShadow receiveShadow {...events}>
+    <group position={[x, h / 2, z]} {...events}>
+      <mesh castShadow receiveShadow>
         <boxGeometry args={[w, h, d]} />
         <meshStandardMaterial ref={material} color={body} emissive={tint} roughness={0.85} metalness={0} flatShading />
         {(selected || hovered) && <Edges color="#1D4F86" lineWidth={1.5} />}
       </mesh>
+      <BuildingDetails building={building} />
       {/* Roof strip in the pure health colour so status reads from above. */}
       <mesh position={[0, h / 2 + 0.06, 0]}>
         <boxGeometry args={[w * 0.92, 0.12, d * 0.92]} />

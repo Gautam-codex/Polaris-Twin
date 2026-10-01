@@ -6,6 +6,7 @@ import { OrbitControls } from "@react-three/drei";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import type { StationSnapshot } from "@/shared/types";
 import { BuildingMesh } from "./building-mesh";
+import { SiteProps } from "./site-props";
 import { Snow, WIND_FROM_DEG, WindArrow } from "./weather-effects";
 
 const BACKGROUND = "#EAF2FB";
@@ -87,6 +88,8 @@ export default function TwinScene({ snapshot, selectedId = null, onSelect, mode 
         <shadowMaterial opacity={0.12} />
       </mesh>
       <gridHelper args={[60, 12, "#C6E1FF", "#E3EEFA"]} position={[0, 0.02, 0]} />
+
+      <SiteProps stationId={snapshot.stationId} buildings={snapshot.buildings} />
 
       {snapshot.buildings.map((b) => (
         <BuildingMesh
