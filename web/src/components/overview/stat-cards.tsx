@@ -9,7 +9,7 @@ import { useFuelRunway } from "@/hooks/useFuelRunway";
 import { HEALTH_LABEL, HEALTH_STYLE } from "@/lib/health";
 import { formatNumber } from "@/shared/alerts";
 import { safetyIndex } from "@/shared/predictions";
-import type { Health } from "@/shared/types";
+import type { Health, StationSnapshot } from "@/shared/types";
 
 const SAFETY_HEALTH: Record<"Safe" | "Caution" | "Unsafe", Health> = { Safe: "ok", Caution: "warning", Unsafe: "critical" };
 
@@ -17,8 +17,11 @@ function Pill({ health, children }: { health: Health; children: React.ReactNode 
   return <span className={cn("rounded border px-2.5 py-0.5 text-xs font-medium", HEALTH_STYLE[health])}>{children}</span>;
 }
 
-export function StatCards() {
-  const { snapshot, stationId } = useStation();
+/** The four headline cards; pass `at` to show a past snapshot (replay), else the live one. */
+export function StatCards({ at }: { at?: StationSnapshot }) {
+  const live = useStation();
+  const snapshot = at ?? live.snapshot;
+  const stationId = snapshot?.stationId ?? live.stationId;
   const runway = useFuelRunway(stationId, snapshot?.fuelLitres ?? null, snapshot?.timestamp ?? null);
   if (!snapshot) return null;
 
@@ -39,7 +42,7 @@ export function StatCards() {
           <span className="ml-2 text-base font-normal text-muted-foreground">systems OK</span>
         </p>
         <p className="mt-2 text-sm text-muted-foreground">
-          {alerts.length === 0 ? "No live alerts" : `${alerts.length} live alert${alerts.length > 1 ? "s" : ""}`}
+          {alerts.length === 0 ? "No sensor alerts" : `${alerts.length} sensor alert${alerts.length > 1 ? "s" : ""}`}
         </p>
       </Panel>
 
