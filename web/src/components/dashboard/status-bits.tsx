@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { useNow } from "@/hooks/useNow";
+import { useOps } from "./ops-context";
 import { useStation } from "./station-context";
 
 function formatTime(ms: number, offsetHours: number): string {
@@ -29,6 +30,15 @@ export function Clocks() {
 export function SyncPill() {
   const now = useNow(1000);
   const { snapshot } = useStation();
+  const { linkDown, queue } = useOps();
+  if (linkDown) {
+    return (
+      <span className="inline-flex items-center gap-1.5 rounded border border-destructive/30 bg-destructive/8 px-2 py-0.5 text-xs font-medium text-destructive">
+        <span className="size-1.5 rounded-full bg-destructive" />
+        Link down · running offline{queue.length > 0 && ` · ${queue.length} queued`}
+      </span>
+    );
+  }
   const seconds = now && snapshot ? Math.max(0, Math.round((now - snapshot.timestamp) / 1000)) : null;
   return (
     <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">

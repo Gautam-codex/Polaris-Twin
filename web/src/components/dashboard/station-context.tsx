@@ -10,8 +10,10 @@ interface StationContextValue extends StationSnapshotState {
   stationId: StationId;
   station: Station;
   setStation: (id: StationId) => void;
-  /** Adds the current ?station= to a dashboard link. */
+  /** Adds the current ?station= (and ?demo=1 when presenting) to a dashboard link. */
   withStation: (href: string) => string;
+  /** True when the URL has ?demo=1. */
+  demoMode: boolean;
 }
 
 const StationContext = createContext<StationContextValue | null>(null);
@@ -37,11 +39,15 @@ export function StationProvider({ children }: { children: ReactNode }) {
     [params, pathname, router],
   );
 
-  const withStation = useCallback((href: string) => `${href}?station=${stationId}`, [stationId]);
+  const demoMode = params.get("demo") === "1";
+  const withStation = useCallback(
+    (href: string) => `${href}?station=${stationId}${demoMode ? "&demo=1" : ""}`,
+    [stationId, demoMode],
+  );
 
   const value = useMemo(
-    () => ({ ...live, stationId, station: STATIONS[stationId], setStation, withStation }),
-    [live, stationId, setStation, withStation],
+    () => ({ ...live, stationId, station: STATIONS[stationId], setStation, withStation, demoMode }),
+    [live, stationId, setStation, withStation, demoMode],
   );
 
   return <StationContext.Provider value={value}>{children}</StationContext.Provider>;

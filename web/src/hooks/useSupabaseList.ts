@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { acknowledgeAlert, getAlerts, getInventory, subscribeToAlerts, updateInventory } from "@/lib/data";
+import { useOps } from "@/components/dashboard/ops-context";
 import { isSupabaseConfigured } from "@/lib/supabase";
 import type { Alert, InventoryItem, StationId } from "@/shared/types";
 
@@ -17,6 +18,7 @@ function message(e: unknown): string {
 
 /** Stored alerts for a station, kept live with Supabase realtime. */
 export function useAlerts(stationId: StationId) {
+  const { runOrQueue } = useOps();
   const [state, setState] = useState<ListState<Alert>>({ items: [], loading: isSupabaseConfigured, error: null });
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export function useAlerts(stationId: StationId) {
   const acknowledge = useCallback(async (id: string) => {
     setState((prev) => ({ ...prev, items: prev.items.map((a) => (a.id === id ? { ...a, acknowledged: true } : a)) }));
     try {
-      await acknowledgeAlert(id);
+      await runOrQueue("Acknowledge alert", () => acknowledgeAlert(id));
     } catch (e) {
       setState((prev) => ({
         ...prev,
@@ -49,13 +51,14 @@ export function useAlerts(stationId: StationId) {
         items: prev.items.map((a) => (a.id === id ? { ...a, acknowledged: false } : a)),
       }));
     }
-  }, []);
+  }, [runOrQueue]);
 
   return { ...state, acknowledge };
 }
 
 /** Inventory rows for a station from Supabase, with an optimistic quantity update. */
 export function useInventory(stationId: StationId) {
+  const { runOrQueue } = useOps();
   const [state, setState] = useState<ListState<InventoryItem>>({ items: [], loading: isSupabaseConfigured, error: null });
 
   useEffect(() => {
@@ -82,7 +85,7 @@ export function useInventory(stationId: StationId) {
       }),
     }));
     try {
-      await updateInventory(id, { quantity });
+      await runOrQueue(`Set quantity to ${quantity}`, () => updateInventory(id, { quantity }));
     } catch (e) {
       setState((prev) => ({
         ...prev,
@@ -90,7 +93,7 @@ export function useInventory(stationId: StationId) {
         items: prev.items.map((item) => (item.id === id && previous !== undefined ? { ...item, quantity: previous } : item)),
       }));
     }
-  }, []);
+  }, [runOrQueue]);
 
   return { ...state, setQuantity };
 }

@@ -18,6 +18,7 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { getSupabase } from "@/lib/supabase";
 import { STATION_IDS, STATIONS } from "@/shared/stations";
+import { DemoControls } from "./demo-controls";
 import { Logo } from "./logo";
 import { SidebarNav } from "./sidebar";
 import { Clocks, SimulatedBadge, SyncPill } from "./status-bits";
@@ -90,6 +91,7 @@ function MobileNav() {
 
 export function TopBar() {
   const router = useRouter();
+  const { demoMode } = useStation();
   const signOut = async () => {
     await getSupabase().auth.signOut();
     router.replace("/login");
@@ -106,6 +108,7 @@ export function TopBar() {
           <SimulatedBadge />
         </div>
         <div className="ml-auto flex items-center gap-2">
+          {demoMode && <DemoControls />}
           <StationSwitcher />
           <EmergencyButton />
           <Button variant="ghost" size="icon" onClick={() => void signOut()} aria-label="Sign out">

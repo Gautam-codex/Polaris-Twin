@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { AskPolaris } from "@/components/copilot/ask-polaris";
 import { useSession } from "@/hooks/useSession";
+import { OpsProvider } from "./ops-context";
 import { Sidebar } from "./sidebar";
 import { StationProvider } from "./station-context";
 import { TopBar } from "./top-bar";
@@ -32,15 +33,17 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   if (loading || !session) return <FullScreenLoader label="Checking your session…" />;
 
   return (
-    <StationProvider>
-      <div className="flex min-h-screen">
-        <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((c) => !c)} />
-        <div className="flex min-w-0 flex-1 flex-col">
-          <TopBar />
-          <main className="flex-1 px-4 pt-6 pb-24 md:px-8 md:pt-8">{children}</main>
+    <OpsProvider>
+      <StationProvider>
+        <div className="flex min-h-screen">
+          <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((c) => !c)} />
+          <div className="flex min-w-0 flex-1 flex-col">
+            <TopBar />
+            <main className="flex-1 px-4 pt-6 pb-24 md:px-8 md:pt-8">{children}</main>
+          </div>
         </div>
-      </div>
-      <AskPolaris />
-    </StationProvider>
+        <AskPolaris />
+      </StationProvider>
+    </OpsProvider>
   );
 }
