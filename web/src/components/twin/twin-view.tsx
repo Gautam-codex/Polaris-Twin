@@ -50,7 +50,7 @@ export function TwinView() {
 
   return (
     <div className="flex flex-col gap-4 lg:flex-row">
-      <div className="relative h-[60vh] min-h-[420px] flex-1 overflow-hidden rounded-lg border border-border bg-card">
+      <div className="relative h-[60vh] min-h-[420px] w-full overflow-hidden rounded-lg border border-border bg-card lg:w-auto lg:flex-1">
         {snapshot ? (
           <TwinScene snapshot={snapshot} selectedId={selectedId} onSelect={setSelectedId} resetKey={resetKey} />
         ) : (

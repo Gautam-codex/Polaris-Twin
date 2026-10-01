@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import { useEffect, useRef, useState, type RefObject } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import type { StationSnapshot } from "@/shared/types";
@@ -9,6 +9,24 @@ import { BuildingMesh } from "./building-mesh";
 import { Snow, WIND_FROM_DEG, WindArrow } from "./weather-effects";
 
 const BACKGROUND = "#EAF2FB";
+const CAMERA: [number, number, number] = [38, 30, 42];
+
+/** Pulls the camera back on narrow or tall views so the whole station stays in frame. */
+function FitCamera({ controls }: { controls: RefObject<OrbitControlsImpl | null> }) {
+  const camera = useThree((state) => state.camera);
+  const width = useThree((state) => state.size.width);
+  const height = useThree((state) => state.size.height);
+  useEffect(() => {
+    const aspect = width / Math.max(1, height);
+    const k = aspect < 0.9 ? 1.55 : aspect < 1.3 ? 1.3 : aspect < 1.6 ? 1.1 : 1;
+    camera.position.set(CAMERA[0] * k, CAMERA[1] * k, CAMERA[2] * k);
+    camera.lookAt(0, 2, 0);
+    controls.current?.target.set(0, 2, 0);
+    controls.current?.update();
+    controls.current?.saveState();
+  }, [camera, width, height, controls]);
+  return null;
+}
 
 export interface TwinSceneProps {
   snapshot: StationSnapshot;
@@ -40,12 +58,12 @@ export default function TwinScene({ snapshot, selectedId = null, onSelect, mode 
       shadows="percentage"
       flat
       dpr={[1, mode === "preview" ? 1.25 : 1.75]}
-      camera={{ position: [38, 30, 42], fov: 45, near: 0.5, far: 400 }}
+      camera={{ position: CAMERA, fov: 45, near: 0.5, far: 400 }}
       onPointerMissed={() => interactive && onSelect?.(null)}
       gl={{ antialias: true, powerPreference: "high-performance" }}
     >
       <color attach="background" args={[BACKGROUND]} />
-      <fog attach="fog" args={[BACKGROUND, 80, 180]} />
+      <fog attach="fog" args={[BACKGROUND, 130, 280]} />
       <ambientLight intensity={0.9} />
       <hemisphereLight args={["#FFFFFF", "#C6E1FF", 0.8]} />
       <directionalLight
@@ -85,13 +103,14 @@ export default function TwinScene({ snapshot, selectedId = null, onSelect, mode 
       <Snow windKph={snapshot.weather.windKph} fromDeg={fromDeg} />
       <WindArrow windKph={snapshot.weather.windKph} fromDeg={fromDeg} />
 
+      <FitCamera controls={controls} />
       <OrbitControls
         ref={controls}
         target={[0, 2, 0]}
         enableDamping
         maxPolarAngle={Math.PI / 2.15}
         minDistance={20}
-        maxDistance={120}
+        maxDistance={170}
         enablePan={interactive}
         enableZoom={interactive}
         enableRotate={interactive}
