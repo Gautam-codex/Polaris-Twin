@@ -7,6 +7,7 @@ import { AskPolaris } from "@/components/copilot/ask-polaris";
 import { useSession } from "@/hooks/useSession";
 import { EmergencyBanner } from "@/components/emergency/emergency-banner";
 import { OpsProvider, useOps } from "./ops-context";
+import { SyncStrip } from "./sync-strip";
 import { Sidebar } from "./sidebar";
 import { StationProvider } from "./station-context";
 import { TopBar } from "./top-bar";
@@ -30,6 +31,7 @@ function Frame({ collapsed, onToggle, children }: { collapsed: boolean; onToggle
         <TopBar />
         <main className="flex-1 px-4 pt-6 pb-24 md:px-8 md:pt-8">
           <EmergencyBanner />
+          <SyncStrip />
           {children}
         </main>
       </div>

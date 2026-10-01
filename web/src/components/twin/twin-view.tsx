@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { useStation } from "@/components/dashboard/station-context";
 import { HEALTH_HEX, HEALTH_LABEL } from "@/lib/health";
 import type { Health } from "@/shared/types";
+import { useOps } from "@/components/dashboard/ops-context";
 import { BuildingPanel } from "./building-panel";
+import { StationMap2D } from "./station-map-2d";
 import { WIND_FROM_DEG } from "./weather-effects";
 
 export function SceneLoading() {
@@ -43,6 +45,7 @@ function Legend() {
 /** Full-page 3D twin with overlays and a side panel for the selected building. */
 export function TwinView() {
   const { snapshot, history, stationId } = useStation();
+  const { lowBandwidth } = useOps();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [resetKey, setResetKey] = useState(0);
   const selected = snapshot?.buildings.find((b) => b.id === selectedId) ?? null;
@@ -51,7 +54,9 @@ export function TwinView() {
   return (
     <div className="flex flex-col gap-4 lg:flex-row">
       <div className="relative h-[60vh] min-h-[420px] w-full overflow-hidden rounded-lg border border-border bg-card lg:w-auto lg:flex-1">
-        {snapshot ? (
+        {snapshot && lowBandwidth ? (
+          <StationMap2D snapshot={snapshot} selectedId={selectedId} onSelect={setSelectedId} />
+        ) : snapshot ? (
           <TwinScene snapshot={snapshot} selectedId={selectedId} onSelect={setSelectedId} resetKey={resetKey} />
         ) : (
           <SceneLoading />
@@ -64,9 +69,11 @@ export function TwinView() {
                 Wind <span className="font-medium text-foreground">{snapshot.weather.windKph} km/h</span> from {compass(fromDeg)}
               </span>
             </div>
-            <Button variant="outline" size="sm" className="absolute top-3 right-3 bg-card" onClick={() => setResetKey((k) => k + 1)}>
-              <RotateCcw /> Reset view
-            </Button>
+            {!lowBandwidth && (
+              <Button variant="outline" size="sm" className="absolute top-3 right-3 bg-card" onClick={() => setResetKey((k) => k + 1)}>
+                <RotateCcw /> Reset view
+              </Button>
+            )}
             <div className="absolute bottom-3 left-3">
               <Legend />
             </div>

@@ -27,6 +27,7 @@ export interface Emergency {
 }
 
 const EMERGENCY_KEY = "polaris-twin:emergency";
+const LOW_BANDWIDTH_KEY = "polaris-twin:low-bandwidth";
 
 function loadEmergency(): Emergency | null {
   try {
@@ -47,6 +48,9 @@ function saveEmergency(e: Emergency | null): void {
 }
 
 interface OpsContextValue {
+  /** Low-bandwidth mode: 60 s refresh, fewer chart points, 2D map instead of 3D. */
+  lowBandwidth: boolean;
+  setLowBandwidth: (on: boolean) => void;
   emergency: Emergency | null;
   startEmergency: (kind: EmergencyKind, stationId: StationId) => void;
   updateEmergency: (patch: Partial<Pick<Emergency, "done" | "notifiedAt">>) => void;
@@ -75,6 +79,7 @@ export function OpsProvider({ children }: { children: ReactNode }) {
   const [lastSyncError, setLastSyncError] = useState<string | null>(null);
   const [faultPending, setFaultPending] = useState(false);
   const [emergency, setEmergency] = useState<Emergency | null>(null);
+  const [lowBandwidth, setLowBandwidthState] = useState(false);
   const nextId = useRef(1);
   const linkDownRef = useRef(false);
   const faultTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -153,8 +158,24 @@ export function OpsProvider({ children }: { children: ReactNode }) {
 
   // Restore an emergency that was active before a reload (read after mount to avoid hydration mismatch).
   useEffect(() => {
-    const id = setTimeout(() => setEmergency(loadEmergency()), 0);
+    const id = setTimeout(() => {
+      setEmergency(loadEmergency());
+      try {
+        setLowBandwidthState(localStorage.getItem(LOW_BANDWIDTH_KEY) === "1");
+      } catch {
+        // Storage unavailable; stay in normal mode.
+      }
+    }, 0);
     return () => clearTimeout(id);
+  }, []);
+
+  const setLowBandwidth = useCallback((on: boolean) => {
+    setLowBandwidthState(on);
+    try {
+      localStorage.setItem(LOW_BANDWIDTH_KEY, on ? "1" : "0");
+    } catch {
+      // Storage unavailable; the setting lasts for this page view.
+    }
   }, []);
 
   const startEmergency = useCallback((kind: EmergencyKind, stationId: StationId) => {
@@ -179,6 +200,8 @@ export function OpsProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(
     () => ({
+      lowBandwidth,
+      setLowBandwidth,
       emergency,
       startEmergency,
       updateEmergency,
@@ -190,7 +213,7 @@ export function OpsProvider({ children }: { children: ReactNode }) {
       runOrQueue,
       demo: { injectFault, triggerBlizzard, clearAll, faultPending },
     }),
-    [emergency, startEmergency, updateEmergency, endEmergency, linkDown, setLinkDown, queue, lastSyncError, runOrQueue, injectFault, triggerBlizzard, clearAll, faultPending],
+    [lowBandwidth, setLowBandwidth, emergency, startEmergency, updateEmergency, endEmergency, linkDown, setLinkDown, queue, lastSyncError, runOrQueue, injectFault, triggerBlizzard, clearAll, faultPending],
   );
 
   return <OpsContext.Provider value={value}>{children}</OpsContext.Provider>;

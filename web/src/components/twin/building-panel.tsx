@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { cn } from "cn";
+import { useOps } from "@/components/dashboard/ops-context";
 import { Sparkline } from "@/components/dashboard/sparkline";
 import { HEALTH_LABEL, HEALTH_STYLE, CHART } from "@/lib/health";
 import { formatNumber } from "@/shared/alerts";
@@ -100,6 +101,7 @@ export function BuildingPanel({
   history: StationSnapshot[];
   onClose: () => void;
 }) {
+  const { lowBandwidth } = useOps();
   return (
     <aside className="flex flex-col rounded-lg border border-border bg-card p-5">
       <div className="flex items-start justify-between gap-3">
@@ -117,7 +119,7 @@ export function BuildingPanel({
       <div className="mt-4 divide-y divide-border">
         {building.type === "power" ? <GeneratorReadings history={history} /> : <Readings building={building} snapshot={snapshot} />}
       </div>
-      <p className="mt-4 text-xs text-muted-foreground">Simulated sensor feed · updates every 5 s</p>
+      <p className="mt-4 text-xs text-muted-foreground">Simulated sensor feed · updates every {lowBandwidth ? "60" : "5"} s</p>
     </aside>
   );
 }

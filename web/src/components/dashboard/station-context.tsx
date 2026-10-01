@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useMemo, type ReactNode } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useStationSnapshot, type StationSnapshotState } from "@/hooks/useStationSnapshot";
+import { useOps } from "./ops-context";
 import { STATIONS } from "@/shared/stations";
 import type { Station, StationId } from "@/shared/types";
 
@@ -28,7 +29,8 @@ export function StationProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const stationId = parseStation(params.get("station"));
-  const live = useStationSnapshot(stationId);
+  const { lowBandwidth } = useOps();
+  const live = useStationSnapshot(stationId, lowBandwidth ? 60_000 : 5_000);
 
   const setStation = useCallback(
     (id: StationId) => {

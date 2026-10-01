@@ -79,7 +79,7 @@ export function InventoryTable({ stationId, resupplyDate, now }: { stationId: St
                     </TableCell>
                     <TableCell className="capitalize text-muted-foreground">{item.category}</TableCell>
                     <TableCell>
-                      <EditableQuantity item={item} onSave={(q) => void setQuantity(item.id, q)} />
+                      <EditableQuantity item={item} onSave={(q) => void setQuantity(item.id, q, item.name)} />
                     </TableCell>
                     <TableCell className="text-right tabular-nums text-muted-foreground">
                       {item.dailyUse} {item.unit}

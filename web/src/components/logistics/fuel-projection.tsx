@@ -4,6 +4,7 @@ import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Too
 import { TrendingDown } from "lucide-react";
 import { Panel } from "@/components/dashboard/panel";
 import { TOOLTIP_STYLE } from "@/components/energy/energy-charts";
+import { useOps } from "@/components/dashboard/ops-context";
 import { CHART } from "@/lib/health";
 import { formatNumber } from "@/shared/alerts";
 import type { FuelRunway } from "@/shared/types";
@@ -15,7 +16,9 @@ export function FuelProjection({ runway, fuelLitres, now }: { runway: FuelRunway
   const resupplyMs = Date.parse(`${runway.resupplyDate}T00:00:00Z`);
   const days = Math.ceil((resupplyMs - now) / DAY) + 30;
   const short = runway.marginDays < 0;
-  const data = Array.from({ length: days + 1 }, (_, d) => ({
+  const { lowBandwidth } = useOps();
+  const step = lowBandwidth ? 7 : 1;
+  const data = Array.from({ length: Math.floor(days / step) + 1 }, (_, i) => i * step).map((d) => ({
     t: now + d * DAY,
     fuel: Math.max(0, fuelLitres - runway.burnRateLpd * d),
   }));

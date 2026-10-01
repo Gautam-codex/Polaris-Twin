@@ -28,8 +28,8 @@ export interface StationSnapshotState {
   loading: boolean;
 }
 
-/** Live simulated snapshot for a station, refreshed every 5 s, with 10 minutes of history. */
-export function useStationSnapshot(stationId: StationId): StationSnapshotState {
+/** Live simulated snapshot for a station, refreshed every `tickMs` (5 s default), with 10 minutes of history. */
+export function useStationSnapshot(stationId: StationId, tickMs: number = TICK_MS): StationSnapshotState {
   const [state, setState] = useState<StationSnapshotState>({ snapshot: null, history: [], loading: true });
   const weather = useRef<LiveWeather>(null);
 
@@ -42,7 +42,7 @@ export function useStationSnapshot(stationId: StationId): StationSnapshotState {
       const snapshot = getSnapshot(stationId, now, weather.current ?? undefined);
       setState((prev) => {
         const sameStation = prev.snapshot?.stationId === stationId;
-        const base = sameStation ? prev.history : getHistory(stationId, now - HISTORY_MS, now - TICK_MS, TICK_MS);
+        const base = sameStation ? prev.history : getHistory(stationId, now - HISTORY_MS, now - tickMs, tickMs);
         const history = [...base.filter((s) => s.timestamp > now - HISTORY_MS && s.timestamp < snapshot.timestamp), snapshot];
         return { snapshot, history, loading: false };
       });
@@ -64,7 +64,7 @@ export function useStationSnapshot(stationId: StationId): StationSnapshotState {
     };
 
     const first = setTimeout(tick, 0);
-    const interval = setInterval(tick, TICK_MS);
+    const interval = setInterval(tick, tickMs);
     void loadWeather();
     const weatherInterval = setInterval(() => void loadWeather(), WEATHER_REFRESH_MS);
 
@@ -74,7 +74,7 @@ export function useStationSnapshot(stationId: StationId): StationSnapshotState {
       clearInterval(interval);
       clearInterval(weatherInterval);
     };
-  }, [stationId]);
+  }, [stationId, tickMs]);
 
   return state;
 }

@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import { LogOut, Menu } from "lucide-react";
 import { cn } from "cn";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { getSupabase } from "@/lib/supabase";
 import { STATION_IDS, STATIONS } from "@/shared/stations";
 import { EmergencyButton } from "@/components/emergency/emergency-button";
 import { DemoControls } from "./demo-controls";
 import { Logo } from "./logo";
+import { useOps } from "./ops-context";
 import { SidebarNav } from "./sidebar";
 import { Clocks, SimulatedBadge, SyncPill } from "./status-bits";
 import { useStation } from "./station-context";
@@ -34,6 +36,16 @@ function StationSwitcher() {
         </button>
       ))}
     </div>
+  );
+}
+
+function LowBandwidthSwitch() {
+  const { lowBandwidth, setLowBandwidth } = useOps();
+  return (
+    <label className="ml-auto inline-flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
+      <Switch size="sm" checked={lowBandwidth} onCheckedChange={(c) => setLowBandwidth(c)} aria-label="Low-bandwidth mode" />
+      Low bandwidth
+    </label>
   );
 }
 
@@ -73,6 +85,7 @@ export function TopBar() {
           <Clocks />
           <SyncPill />
           <SimulatedBadge />
+          <LowBandwidthSwitch />
         </div>
         <div className="ml-auto flex items-center gap-2">
           {demoMode && <DemoControls />}

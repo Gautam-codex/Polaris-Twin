@@ -9,6 +9,7 @@ import { useStation } from "@/components/dashboard/station-context";
 import { HeatingChart, SupplyMixChart } from "@/components/energy/energy-charts";
 import { GeneratorCards } from "@/components/energy/generator-cards";
 import { MaintenanceCard } from "@/components/energy/maintenance-card";
+import { useOps } from "@/components/dashboard/ops-context";
 import { useSampledHistory } from "@/hooks/useSampledHistory";
 import { CHART } from "@/lib/health";
 import { detectAnomalies } from "@/shared/predictions";
@@ -23,7 +24,8 @@ export default function EnergyPage() {
   const timestamp = snapshot?.timestamp ?? null;
 
   const recent = useSampledHistory(stationId, timestamp, 30 * MINUTE, ANOMALY_STEP, faultVersion);
-  const day = useSampledHistory(stationId, timestamp, 24 * 60 * MINUTE, 30 * MINUTE);
+  const { lowBandwidth } = useOps();
+  const day = useSampledHistory(stationId, timestamp, 24 * 60 * MINUTE, (lowBandwidth ? 120 : 30) * MINUTE);
   const anomalies = useMemo(() => detectAnomalies(recent), [recent]);
   const faultActive = faultVersion >= 0 && getFault(stationId) !== null;
 

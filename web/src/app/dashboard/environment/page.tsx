@@ -8,6 +8,7 @@ import { Panel } from "@/components/dashboard/panel";
 import { useStation } from "@/components/dashboard/station-context";
 import { FieldTripPlanner } from "@/components/environment/field-trip";
 import { ForecastChart, LiveWeather, StockCards } from "@/components/environment/weather-panels";
+import { useOps } from "@/components/dashboard/ops-context";
 import { useWeatherForecast } from "@/hooks/useWeatherForecast";
 import { CHART } from "@/lib/health";
 import { safetyIndex } from "@/shared/predictions";
@@ -30,7 +31,10 @@ export default function EnvironmentPage() {
   const api = useWeatherForecast(stationId);
   const hour = snapshot ? Math.floor(snapshot.timestamp / HOUR) * HOUR : null;
   const fallback = useMemo(() => (hour === null ? [] : simulatedForecast(stationId, hour)), [stationId, hour]);
-  const forecast = api?.forecast ?? fallback;
+  const { lowBandwidth } = useOps();
+  const fullForecast = api?.forecast ?? fallback;
+  // Low bandwidth: every third hour is enough for the chart; the planner still uses every hour.
+  const chartForecast = lowBandwidth ? fullForecast.filter((_, i) => i % 3 === 0) : fullForecast;
   const forecastSource = api?.source ?? "simulated";
 
   if (!snapshot) {
@@ -70,9 +74,9 @@ export default function EnvironmentPage() {
             </div>
           </Panel>
         </div>
-        <ForecastChart forecast={forecast} source={forecastSource} />
+        <ForecastChart forecast={chartForecast} source={forecastSource} />
         <div className="grid gap-4 xl:grid-cols-2">
-          <FieldTripPlanner stationId={stationId} forecast={forecast} now={hour ?? snapshot.timestamp} />
+          <FieldTripPlanner stationId={stationId} forecast={fullForecast} now={hour ?? snapshot.timestamp} />
           <StockCards snapshot={snapshot} station={station} />
         </div>
       </div>

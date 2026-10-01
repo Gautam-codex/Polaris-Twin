@@ -9,6 +9,8 @@ import { Panel } from "@/components/dashboard/panel";
 import { useStation } from "@/components/dashboard/station-context";
 import { StatCards } from "@/components/overview/stat-cards";
 import { SPEEDS, Timeline, type TimelineMarker } from "@/components/replay/timeline";
+import { useOps } from "@/components/dashboard/ops-context";
+import { StationMap2D } from "@/components/twin/station-map-2d";
 import { SceneLoading } from "@/components/twin/twin-view";
 import { useAlerts } from "@/hooks/useSupabaseList";
 import { SEVERITY_STYLE } from "@/lib/health";
@@ -26,6 +28,7 @@ const FRAME_MS = 250;
 export default function ReplayPage() {
   const { stationId, station, snapshot } = useStation();
   const stored = useAlerts(stationId);
+  const { lowBandwidth } = useOps();
   const hour = snapshot ? Math.floor(snapshot.timestamp / HOUR) * HOUR : null;
   const end = hour === null ? 0 : hour + HOUR;
   const start = end - SPAN;
@@ -100,7 +103,7 @@ export default function ReplayPage() {
           <div className="grid gap-4 xl:grid-cols-3">
             <Panel title="Station at this moment" icon={Boxes} className="xl:col-span-2">
               <div className="h-72 overflow-hidden rounded-md border border-border">
-                <TwinScene snapshot={at} mode="preview" />
+                {lowBandwidth ? <StationMap2D snapshot={at} /> : <TwinScene snapshot={at} mode="preview" />}
               </div>
             </Panel>
             <Panel title="Alerts active at this time" icon={BellRing}>

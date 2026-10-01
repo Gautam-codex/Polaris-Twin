@@ -73,7 +73,7 @@ export function useInventory(stationId: StationId) {
   }, [stationId]);
 
   /** Saves a new quantity; reverts and reports the error if Supabase rejects it. */
-  const setQuantity = useCallback(async (id: string, quantity: number) => {
+  const setQuantity = useCallback(async (id: string, quantity: number, name = "item") => {
     let previous: number | undefined;
     setState((prev) => ({
       ...prev,
@@ -85,7 +85,7 @@ export function useInventory(stationId: StationId) {
       }),
     }));
     try {
-      await runOrQueue(`Set quantity to ${quantity}`, () => updateInventory(id, { quantity }));
+      await runOrQueue(`${name}: quantity set to ${quantity}`, () => updateInventory(id, { quantity }));
     } catch (e) {
       setState((prev) => ({
         ...prev,
