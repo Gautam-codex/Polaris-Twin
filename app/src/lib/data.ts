@@ -136,6 +136,16 @@ export async function createIncident(incident: NewIncident): Promise<void> {
   if (error) fail(error.message);
 }
 
+/** Team mood over the last `days` days; the average is hidden below `minResponses` check-ins. */
+export async function getTeamMood(stationId: StationId, days: number, minResponses = 3): Promise<{ mood: number | null; responses: number }> {
+  const since = new Date(Date.now() - days * 86_400_000).toISOString();
+  const { data, error } = await supabase.from("wellbeing_checkins").select("mood").eq("station_id", stationId).gte("created_at", since);
+  if (error) fail(error.message);
+  const moods = ((data ?? []) as { mood: number }[]).map((r) => r.mood);
+  if (moods.length < minResponses) return { mood: null, responses: moods.length };
+  return { mood: Math.round((moods.reduce((a, b) => a + b, 0) / moods.length) * 10) / 10, responses: moods.length };
+}
+
 export type NewCheckin = Pick<WellbeingCheckin, "stationId" | "mood" | "sleepHours" | "energy">;
 
 export async function createCheckin(checkin: NewCheckin): Promise<void> {

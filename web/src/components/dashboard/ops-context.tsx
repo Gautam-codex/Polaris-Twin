@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { createAlert } from "@/lib/data";
-import type { EmergencyKind } from "@/lib/playbooks";
+import type { EmergencyKind } from "@/shared/playbooks";
 import { setFault, setWeatherOverride } from "@/shared/simulator";
 import { STATION_IDS } from "@/shared/stations";
 import type { StationId } from "@/shared/types";

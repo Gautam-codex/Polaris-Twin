@@ -1,6 +1,8 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Redirect, Tabs } from "expo-router";
 import { StationSwitcher } from "@/components/chrome";
+import { SosButton } from "@/components/sos-button";
+import { useT } from "@/context/language";
 import { useSession } from "@/context/session";
 import { useStation } from "@/context/station";
 import { useAlerts } from "@/hooks/useRecords";
@@ -25,6 +27,7 @@ function AlertWatcher() {
 
 export default function TabLayout() {
   const { session } = useSession();
+  const tr = useT();
   if (!session) return <Redirect href="/login" />;
 
   return (
@@ -47,12 +50,13 @@ export default function TabLayout() {
             key={t.name}
             name={t.name}
             options={{
-              title: t.title,
+              title: tr(t.title),
               tabBarIcon: ({ color, size }) => <Ionicons name={t.icon} size={size} color={color} />,
             }}
           />
         ))}
       </Tabs>
+      <SosButton />
     </>
   );
 }

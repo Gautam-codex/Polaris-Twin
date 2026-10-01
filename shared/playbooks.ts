@@ -1,4 +1,5 @@
 // Emergency checklists, based on docs/sops.md. Prototype content, not official NCPOR procedures.
+// Shared by the website (emergency mode) and the crew app (SOS).
 
 export type EmergencyKind = "fire" | "medevac" | "power" | "blizzard";
 

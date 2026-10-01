@@ -6,15 +6,20 @@ import { API_BASE } from "@/lib/supabase";
 
 const HOUR = 3_600_000;
 
-/** Fuel runway from the last 24 h of simulated burn, rebuilt once an hour. */
-export function useFuelRunway(snapshot: StationSnapshot | null): FuelRunway | null {
+/** Last 24 h of simulated snapshots (hourly), rebuilt once an hour. */
+export function useDayHistory(snapshot: StationSnapshot | null): StationSnapshot[] | null {
   const stationId = snapshot?.stationId ?? null;
   const hour = snapshot ? Math.floor(snapshot.timestamp / HOUR) : null;
-  const history = useMemo(() => {
+  return useMemo(() => {
     if (stationId === null || hour === null) return null;
     const end = hour * HOUR;
     return getHistory(stationId, end - 24 * HOUR, end, HOUR);
   }, [stationId, hour]);
+}
+
+/** Fuel runway from the last 24 h of simulated burn. */
+export function useFuelRunway(snapshot: StationSnapshot | null): FuelRunway | null {
+  const history = useDayHistory(snapshot);
   return useMemo(() => (history && snapshot ? fuelRunway(snapshot.fuelLitres, history) : null), [history, snapshot]);
 }
 

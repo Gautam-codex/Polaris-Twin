@@ -8,7 +8,7 @@ import { useT } from "@/components/language";
 import { useOps } from "@/components/dashboard/ops-context";
 import { useNow } from "@/hooks/useNow";
 import { createIncident } from "@/lib/data";
-import { PLAYBOOKS } from "@/lib/playbooks";
+import { PLAYBOOKS } from "@/shared/playbooks";
 import { STATIONS } from "@/shared/stations";
 
 function elapsed(ms: number): string {

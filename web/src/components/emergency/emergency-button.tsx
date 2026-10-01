@@ -17,7 +17,7 @@ import {
 import { useT } from "@/components/language";
 import { useOps } from "@/components/dashboard/ops-context";
 import { useStation } from "@/components/dashboard/station-context";
-import { EMERGENCY_KINDS, PLAYBOOKS, type EmergencyKind } from "@/lib/playbooks";
+import { EMERGENCY_KINDS, PLAYBOOKS, type EmergencyKind } from "@/shared/playbooks";
 
 /** Top-bar button: pick an emergency type and confirm to switch the dashboard into emergency mode. */
 export function EmergencyButton() {

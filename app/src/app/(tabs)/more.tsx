@@ -1,43 +1,42 @@
-import { StyleSheet, Switch, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { router, type Href } from "expo-router";
 import { Screen } from "@/components/chrome";
 import { Body, Button, Card, CardTitle, Muted } from "@/components/ui";
+import { useT } from "@/context/language";
 import { useSession } from "@/context/session";
 import { useStation } from "@/context/station";
-import { useSync } from "@/context/sync";
-import { describe } from "@/lib/offline-queue";
 import { supabase } from "@/lib/supabase";
 import { colors, space } from "@/lib/theme";
+
+const LINKS: { href: Href; title: string; note: string; icon: keyof typeof Ionicons.glyphMap }[] = [
+  { href: "/checkin", title: "Wellbeing check-in", note: "Anonymous, once a day", icon: "happy-outline" },
+  { href: "/copilot", title: "Ask Polaris", note: "AI copilot in English or Hindi", icon: "chatbubbles-outline" },
+  { href: "/settings", title: "Settings", note: "Language and offline sync", icon: "settings-outline" },
+];
 
 export default function MoreScreen() {
   const { session } = useSession();
   const { station } = useStation();
-  const { online, queue, simulateOffline, setSimulateOffline, lastSyncAt } = useSync();
+  const t = useT();
 
   return (
     <Screen>
-      <Card style={{ gap: space.sm }}>
-        <CardTitle>Sync</CardTitle>
-        <View style={styles.row}>
-          <View style={{ flex: 1 }}>
-            <Body>Simulate offline</Body>
-            <Muted>Hold all changes as if the satellite link were down.</Muted>
-          </View>
-          <Switch
-            value={simulateOffline}
-            onValueChange={setSimulateOffline}
-            trackColor={{ true: colors.primary, false: colors.border }}
-            accessibilityLabel="Simulate offline"
-          />
-        </View>
-        <Muted>
-          {online ? "Online" : "Offline"} · {queue.length} queued
-          {lastSyncAt ? ` · last sync ${new Date(lastSyncAt).toISOString().slice(11, 19)} UTC` : ""}
-        </Muted>
-        {queue.map((q) => (
-          <View key={q.id} style={styles.queueItem}>
-            <Body style={{ flex: 1 }}>{describe(q.action)}</Body>
-            <Muted>{new Date(q.queuedAt).toISOString().slice(11, 16)}</Muted>
-          </View>
+      <Card style={{ paddingVertical: space.xs }}>
+        {LINKS.map((l, i) => (
+          <Pressable
+            key={l.title}
+            onPress={() => router.push(l.href)}
+            accessibilityRole="button"
+            style={({ pressed }) => [styles.link, i > 0 && styles.divider, pressed && { opacity: 0.7 }]}
+          >
+            <Ionicons name={l.icon} size={22} color={colors.primary} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.linkTitle}>{t(l.title)}</Text>
+              <Muted>{l.note}</Muted>
+            </View>
+            <Ionicons name="chevron-forward" size={18} color={colors.muted} />
+          </Pressable>
         ))}
       </Card>
 
@@ -62,6 +61,7 @@ export default function MoreScreen() {
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: "row", alignItems: "center", gap: space.md },
-  queueItem: { flexDirection: "row", gap: space.sm, paddingVertical: 6, borderTopWidth: 1, borderTopColor: colors.border },
+  link: { flexDirection: "row", alignItems: "center", gap: space.md, paddingVertical: space.md },
+  divider: { borderTopWidth: 1, borderTopColor: colors.border },
+  linkTitle: { fontSize: 15, fontWeight: "600", color: colors.text },
 });

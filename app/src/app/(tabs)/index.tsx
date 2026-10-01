@@ -17,7 +17,7 @@ import { nextResupplyDate } from "@shared/predictions";
 const DAY = 86_400_000;
 
 export default function HomeScreen() {
-  const { stationId, station } = useStation();
+  const { stationId } = useStation();
   const { snapshot, refresh } = useStationSnapshot(stationId);
   const runway = useFuelRunway(snapshot);
   const alerts = useAlerts(stationId);
@@ -66,7 +66,7 @@ export default function HomeScreen() {
 
       <Card>
         <CardTitle right={<Button label="All alerts" variant="outline" onPress={() => router.push("/alerts")} style={{ minHeight: 32, paddingHorizontal: space.md }} />}>
-          Latest alerts · {station.name}
+          Latest alerts
         </CardTitle>
         {alerts.loading && latest.length === 0 ? (
           <Loading label="Loading alerts…" />

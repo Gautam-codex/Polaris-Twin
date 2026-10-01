@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View, type StyleProp, type TextStyle, type ViewStyle } from "react-native";
+import { useT } from "@/context/language";
 import { colors, radius, space, tint } from "@/lib/theme";
 
 export function Card({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
@@ -7,9 +8,10 @@ export function Card({ children, style }: { children: ReactNode; style?: StylePr
 }
 
 export function CardTitle({ children, right }: { children: ReactNode; right?: ReactNode }) {
+  const t = useT();
   return (
     <View style={styles.cardTitleRow}>
-      <Text style={styles.cardTitle}>{children}</Text>
+      <Text style={styles.cardTitle}>{typeof children === "string" ? t(children) : children}</Text>
       {right}
     </View>
   );
@@ -55,6 +57,7 @@ export function Button({
   icon?: ReactNode;
   style?: StyleProp<ViewStyle>;
 }) {
+  const t = useT();
   const bg = variant === "primary" ? colors.primary : variant === "danger" ? colors.danger : colors.card;
   const fg = variant === "outline" ? colors.text : colors.primaryText;
   return (
@@ -69,12 +72,13 @@ export function Button({
       ]}
     >
       {icon}
-      <Text style={[styles.buttonText, { color: fg }]}>{label}</Text>
+      <Text style={[styles.buttonText, { color: fg }]}>{t(label)}</Text>
     </Pressable>
   );
 }
 
 export function Chip({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) {
+  const t = useT();
   return (
     <Pressable
       onPress={onPress}
@@ -82,7 +86,7 @@ export function Chip({ label, active, onPress }: { label: string; active: boolea
       accessibilityState={{ selected: active }}
       style={[styles.chip, active && { backgroundColor: colors.accent, borderColor: colors.primary }]}
     >
-      <Text style={[styles.chipText, active && { color: colors.primary, fontWeight: "600" }]}>{label}</Text>
+      <Text style={[styles.chipText, active && { color: colors.primary, fontWeight: "600" }]}>{t(label)}</Text>
     </Pressable>
   );
 }

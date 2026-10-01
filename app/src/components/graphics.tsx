@@ -9,8 +9,8 @@ const EXTENT = 24;
 export function SiteMap({ buildings, selectedId, onSelect }: { buildings: Building[]; selectedId: string | null; onSelect: (id: string) => void }) {
   const size = EXTENT * 2;
   return (
-    <View style={{ aspectRatio: 1.25, width: "100%", backgroundColor: "#FFFFFF", borderRadius: 8, overflow: "hidden" }}>
-      <Svg width="100%" height="100%" viewBox={`${-EXTENT} ${-EXTENT * 0.8} ${size} ${size * 0.8}`}>
+    <View style={{ aspectRatio: 1.2, width: "100%", backgroundColor: "#FFFFFF", borderRadius: 8, overflow: "hidden" }}>
+      <Svg width="100%" height="100%" viewBox={`${-EXTENT} -21 ${size} 40`}>
         {Array.from({ length: 11 }, (_, i) => -EXTENT + i * 5).map((v) => (
           <G key={v}>
             <Path d={`M ${v} ${-EXTENT} V ${EXTENT}`} stroke="#E3EEFA" strokeWidth={0.15} />
@@ -34,7 +34,7 @@ export function SiteMap({ buildings, selectedId, onSelect }: { buildings: Buildi
                 strokeWidth={selected ? 0.6 : 0.25}
               />
               {w >= 6 && (
-                <SvgText x={x} y={z + 0.6} fontSize={1.7} fill={colors.text} textAnchor="middle">
+                <SvgText x={x} y={z + 0.6} fontSize={1.7} fill={colors.text} textAnchor="middle" fontFamily="sans-serif">
                   {b.name.split(" ")[0]}
                 </SvgText>
               )}
