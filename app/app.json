@@ -22,7 +22,8 @@
         "CAMERA",
         "VIBRATE",
         "POST_NOTIFICATIONS"
-      ]
+      ],
+      "versionCode": 1
     },
     "web": {
       "output": "single",
