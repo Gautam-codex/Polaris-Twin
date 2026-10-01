@@ -22,7 +22,7 @@ Tech stack (do not change without asking):
 - Website: Next.js 16 App Router with src/ directory, TypeScript, Tailwind, shadcn/ui, Recharts, @react-three/fiber + @react-three/drei, lucide-react
 - Mobile: Expo (React Native) with Expo Router, TypeScript
 - Backend: Supabase (Postgres, auth, realtime) via @supabase/supabase-js
-- AI copilot: Google Gemini API (gemini-2.0-flash) called only from a Next.js API route; key in GEMINI_API_KEY
+- AI copilot: Google Gemini API (gemini-3.5-flash, falling back to gemini-flash-latest; gemini-2.0-flash is retired) called only from a Next.js API route; key in GEMINI_API_KEY, optional GEMINI_MODEL override
 - Weather: Open-Meteo free API (no key)
 - Sensor data: deterministic time-seeded simulator in shared/simulator.ts, so every viewer sees the same values at the same time
 - Deploy: Vercel (web, root directory web), EAS Build APK (app)

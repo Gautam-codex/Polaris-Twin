@@ -207,3 +207,33 @@ export interface ComplianceLog {
   note: string;
   createdAt: string;
 }
+
+// ---- Copilot (/api/copilot) ----
+
+export type CopilotLanguage = "en" | "hi";
+
+export interface CopilotTurn {
+  role: "user" | "assistant";
+  text: string;
+}
+
+export interface CopilotRequest {
+  stationId: StationId;
+  question: string;
+  snapshot: StationSnapshot;
+  fuelRunway: FuelRunway;
+  /** Extra what-if runways, e.g. "ship 20 days late". */
+  fuelScenarios?: { label: string; runway: FuelRunway }[];
+  safetyIndex: SafetyIndex;
+  atRiskItems: InventoryItem[];
+  recentAlerts: Alert[];
+  language: CopilotLanguage;
+  /** Earlier turns of this conversation, oldest first. */
+  history?: CopilotTurn[];
+}
+
+export interface CopilotResponse {
+  answer: string;
+  model?: string;
+  error?: string;
+}

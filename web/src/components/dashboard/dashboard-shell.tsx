@@ -3,6 +3,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { AskPolaris } from "@/components/copilot/ask-polaris";
 import { useSession } from "@/hooks/useSession";
 import { Sidebar } from "./sidebar";
 import { StationProvider } from "./station-context";
@@ -36,9 +37,10 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((c) => !c)} />
         <div className="flex min-w-0 flex-1 flex-col">
           <TopBar />
-          <main className="flex-1 px-4 py-6 md:px-8 md:py-8">{children}</main>
+          <main className="flex-1 px-4 pt-6 pb-24 md:px-8 md:pt-8">{children}</main>
         </div>
       </div>
+      <AskPolaris />
     </StationProvider>
   );
 }
