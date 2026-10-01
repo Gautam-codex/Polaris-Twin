@@ -82,6 +82,20 @@ export interface WeatherSnapshot {
   source: "open-meteo" | "simulated";
 }
 
+export interface WeatherForecastPoint {
+  /** ISO 8601 time (UTC). */
+  time: string;
+  tempC: number;
+  windKph: number;
+}
+
+/** Response of the website's /api/weather route. */
+export interface WeatherResponse extends WeatherSnapshot {
+  stationId: StationId;
+  /** Next 48 hours, hourly. */
+  forecast: WeatherForecastPoint[];
+}
+
 export type AlertSeverity = "info" | "warning" | "critical";
 
 export type AlertSystem = "power" | "fuel" | "weather" | "water" | "comms" | "inventory";

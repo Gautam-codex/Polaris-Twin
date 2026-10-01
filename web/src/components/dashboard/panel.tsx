@@ -19,7 +19,7 @@ export function Panel({
   return (
     <section className={cn("flex flex-col rounded-2xl border border-border bg-card p-5", className)}>
       {(title || action) && (
-        <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           {title && (
             <h2 className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
               {Icon && <Icon className="size-4 text-primary" />}

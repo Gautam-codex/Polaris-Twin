@@ -69,10 +69,14 @@ export const GENERATOR_CAPACITY_KW = 250;
 
 export const GENERATOR_IDS = ["dg-1", "dg-2", "dg-3"] as const;
 
-/** Fuel in the tanks right after the annual resupply (litres). */
+/**
+ * Fuel in the tanks right after the annual resupply (litres). Sized so a normal
+ * year ends with roughly two months in reserve; a long ship delay plus a cold
+ * spell can still run it short.
+ */
 export const SEASON_START_FUEL: Record<StationId, number> = {
-  maitri: 900_000,
-  bharati: 880_000,
+  maitri: 500_000,
+  bharati: 440_000,
 };
 
 /** Approximate crew on station at a given time (summer = Nov-Mar). */

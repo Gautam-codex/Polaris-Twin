@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { acknowledgeAlert, getAlerts, getInventory, subscribeToAlerts } from "@/lib/data";
+import { acknowledgeAlert, getAlerts, getInventory, subscribeToAlerts, updateInventory } from "@/lib/data";
 import { isSupabaseConfigured } from "@/lib/supabase";
 import type { Alert, InventoryItem, StationId } from "@/shared/types";
 
@@ -54,7 +54,7 @@ export function useAlerts(stationId: StationId) {
   return { ...state, acknowledge };
 }
 
-/** Inventory rows for a station from Supabase. */
+/** Inventory rows for a station from Supabase, with an optimistic quantity update. */
 export function useInventory(stationId: StationId) {
   const [state, setState] = useState<ListState<InventoryItem>>({ items: [], loading: isSupabaseConfigured, error: null });
 
@@ -69,5 +69,28 @@ export function useInventory(stationId: StationId) {
     };
   }, [stationId]);
 
-  return state;
+  /** Saves a new quantity; reverts and reports the error if Supabase rejects it. */
+  const setQuantity = useCallback(async (id: string, quantity: number) => {
+    let previous: number | undefined;
+    setState((prev) => ({
+      ...prev,
+      error: null,
+      items: prev.items.map((item) => {
+        if (item.id !== id) return item;
+        previous = item.quantity;
+        return { ...item, quantity };
+      }),
+    }));
+    try {
+      await updateInventory(id, { quantity });
+    } catch (e) {
+      setState((prev) => ({
+        ...prev,
+        error: message(e),
+        items: prev.items.map((item) => (item.id === id && previous !== undefined ? { ...item, quantity: previous } : item)),
+      }));
+    }
+  }, []);
+
+  return { ...state, setQuantity };
 }

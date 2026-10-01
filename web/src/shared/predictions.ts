@@ -144,6 +144,28 @@ export function detectAnomalies(history: HistoryPoint[]): Alert[] {
 }
 
 /**
+ * Minutes until a rising reading crosses `limit`, from the least-squares slope of
+ * the samples (spaced `stepMs` apart). 0 if already over the limit, null if not rising.
+ */
+export function minutesToLimit(values: number[], stepMs: number, limit: number): number | null {
+  if (values.length < 3) return null;
+  const latest = values[values.length - 1];
+  if (latest >= limit) return 0;
+  const n = values.length;
+  const meanX = (n - 1) / 2;
+  const meanY = values.reduce((a, b) => a + b, 0) / n;
+  let num = 0;
+  let den = 0;
+  values.forEach((y, x) => {
+    num += (x - meanX) * (y - meanY);
+    den += (x - meanX) ** 2;
+  });
+  const slopePerMinute = (num / den) * (60_000 / stepMs);
+  if (slopePerMinute <= 0.01) return null;
+  return round((limit - latest) / slopePerMinute);
+}
+
+/**
  * Score = 100 - (wind over 40 km/h x 1.2, max 50) - (wind chill below -30 °C x 2, max 30)
  * - (30 if visibility < 1 km, 40 if < 0.2 km), floored at 0.
  */
@@ -152,15 +174,15 @@ export function safetyIndex(weather: WeatherSnapshot): SafetyIndex {
   const reasons: string[] = [];
   if (weather.windKph > 40) {
     score -= Math.min(50, (weather.windKph - 40) * 1.2);
-    reasons.push(`Wind ${weather.windKph} km/h is above the 40 km/h outdoor limit`);
+    reasons.push(`Wind ${round(weather.windKph)} km/h is above the 40 km/h outdoor limit`);
   }
   if (weather.windChillC < -30) {
     score -= Math.min(30, (-30 - weather.windChillC) * 2);
-    reasons.push(`Wind chill ${weather.windChillC} °C risks frostbite within minutes`);
+    reasons.push(`Wind chill ${round(weather.windChillC)} °C risks frostbite within minutes`);
   }
   if (weather.visibilityKm < 1) {
     score -= weather.visibilityKm < 0.2 ? 40 : 30;
-    reasons.push(`Visibility ${weather.visibilityKm} km; whiteout risk`);
+    reasons.push(`Visibility ${round(weather.visibilityKm, 1)} km; whiteout risk`);
   }
   score = Math.max(0, Math.round(score));
   const label = score >= 70 ? "Safe" : score >= 40 ? "Caution" : "Unsafe";
