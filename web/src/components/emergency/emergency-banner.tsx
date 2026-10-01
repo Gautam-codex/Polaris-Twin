@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Check, Send } from "lucide-react";
 import { cn } from "cn";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/components/language";
 import { useOps } from "@/components/dashboard/ops-context";
 import { useNow } from "@/hooks/useNow";
 import { createIncident } from "@/lib/data";
@@ -25,6 +26,7 @@ export function EmergencyBanner() {
   const now = useNow(1000);
   const [notifying, setNotifying] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const t = useT();
   if (!emergency) return null;
 
   const playbook = PLAYBOOKS[emergency.kind];
@@ -77,11 +79,11 @@ export function EmergencyBanner() {
             </span>
           ) : (
             <Button size="sm" variant="outline" disabled={notifying} onClick={() => void notify()}>
-              <Send /> Notify NCPOR Goa
+              <Send /> {t("Notify NCPOR Goa")}
             </Button>
           )}
           <Button size="sm" variant="destructive" className="bg-destructive text-white hover:bg-destructive/90" onClick={endEmergency}>
-            End emergency
+            {t("End emergency")}
           </Button>
         </div>
       </div>

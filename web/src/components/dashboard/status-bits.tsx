@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { useNow } from "@/hooks/useNow";
+import { useT } from "@/components/language";
 import { useOps } from "./ops-context";
 import { useStation } from "./station-context";
 
@@ -49,9 +50,10 @@ export function SyncPill() {
 }
 
 export function SimulatedBadge() {
+  const t = useT();
   return (
     <Badge variant="outline" className="rounded border-border font-normal text-muted-foreground">
-      Simulated sensor feed
+      {t("Simulated sensor feed")}
     </Badge>
   );
 }

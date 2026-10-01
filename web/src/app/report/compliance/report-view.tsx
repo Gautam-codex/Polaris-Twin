@@ -14,18 +14,23 @@ import { STATIONS } from "@/shared/stations";
 export function ReportView() {
   const stationId = parseStation(useSearchParams().get("station"));
   const station = STATIONS[stationId];
-  const [now] = useState(() => Date.now());
+  // Set after mount so the server and browser render the same first frame.
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => {
+    const id = setTimeout(() => setNow(Date.now()), 0);
+    return () => clearTimeout(id);
+  }, []);
   const data = useCompliance(stationId, now);
   const printed = useRef(false);
 
   useEffect(() => {
-    if (data.loading || printed.current) return;
+    if (now === null || data.loading || printed.current) return;
     printed.current = true;
     const id = setTimeout(() => window.print(), 800);
     return () => clearTimeout(id);
-  }, [data.loading]);
+  }, [now, data.loading]);
 
-  const generated = new Date(now).toISOString().slice(0, 16).replace("T", " ");
+  const generated = now === null ? "…" : new Date(now).toISOString().slice(0, 16).replace("T", " ");
   const total12 = data.monthly.reduce((s, m) => s + m.co2Tonnes, 0);
   const rows: [string, string][] = [
     ["CO₂ emitted, last 30 days (estimated)", data.last30 ? `${data.last30.co2Tonnes.toFixed(2)} t` : "…"],

@@ -22,8 +22,15 @@ import type {
   WellbeingTrendPoint,
 } from "@/shared/types";
 
+const OFFLINE_MESSAGE = "Can't reach the station database right now. Live sensor data still works; stored records will load when the connection returns.";
+
+/** Turns low-level network failures into a message a crew member can act on. */
+export function friendlyError(message: string): string {
+  return /failed to fetch|networkerror|fetch failed|load failed/i.test(message) ? OFFLINE_MESSAGE : message;
+}
+
 function check<T>(result: { data: T | null; error: { message: string } | null }): T {
-  if (result.error) throw new Error(result.error.message);
+  if (result.error) throw new Error(friendlyError(result.error.message));
   if (result.data === null) throw new Error("Supabase returned no data");
   return result.data;
 }
@@ -171,7 +178,7 @@ export async function createCheckin(checkin: NewCheckin): Promise<void> {
     sleep_hours: checkin.sleepHours,
     energy: checkin.energy,
   });
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(friendlyError(error.message));
 }
 
 // ---- Compliance

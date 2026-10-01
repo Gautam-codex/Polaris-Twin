@@ -4,6 +4,7 @@ import { Pause, Play } from "lucide-react";
 import { cn } from "cn";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { useT } from "@/components/language";
 import { HEALTH_HEX } from "@/lib/health";
 import type { Health } from "@/shared/types";
 
@@ -45,6 +46,7 @@ export function Timeline({
   onTogglePlay: () => void;
   onSpeed: (index: number) => void;
 }) {
+  const t = useT();
   const span = end - start;
   const minutes = Math.round((value - start) / 60_000);
 
@@ -70,7 +72,7 @@ export function Timeline({
           </div>
           <Button size="sm" onClick={onTogglePlay} aria-label={playing ? "Pause" : "Play"}>
             {playing ? <Pause /> : <Play />}
-            {playing ? "Pause" : "Play"}
+            {t(playing ? "Pause" : "Play")}
           </Button>
         </div>
       </div>

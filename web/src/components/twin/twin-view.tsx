@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useStation } from "@/components/dashboard/station-context";
 import { HEALTH_HEX, HEALTH_LABEL } from "@/lib/health";
 import type { Health } from "@/shared/types";
+import { useT } from "@/components/language";
 import { useOps } from "@/components/dashboard/ops-context";
 import { BuildingPanel } from "./building-panel";
 import { StationMap2D } from "./station-map-2d";
@@ -46,6 +47,7 @@ function Legend() {
 export function TwinView() {
   const { snapshot, history, stationId } = useStation();
   const { lowBandwidth } = useOps();
+  const t = useT();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [resetKey, setResetKey] = useState(0);
   const selected = snapshot?.buildings.find((b) => b.id === selectedId) ?? null;
@@ -71,7 +73,7 @@ export function TwinView() {
             </div>
             {!lowBandwidth && (
               <Button variant="outline" size="sm" className="absolute top-3 right-3 bg-card" onClick={() => setResetKey((k) => k + 1)}>
-                <RotateCcw /> Reset view
+                <RotateCcw /> {t("Reset view")}
               </Button>
             )}
             <div className="absolute bottom-3 left-3">

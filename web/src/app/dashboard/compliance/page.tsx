@@ -8,11 +8,13 @@ import { useOps } from "@/components/dashboard/ops-context";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Panel } from "@/components/dashboard/panel";
 import { useStation } from "@/components/dashboard/station-context";
+import { useT } from "@/components/language";
 import { useCompliance } from "@/hooks/useCompliance";
 
 export default function CompliancePage() {
   const { stationId, station, snapshot } = useStation();
   const { runOrQueue } = useOps();
+  const t = useT();
   const data = useCompliance(stationId, snapshot?.timestamp ?? null, runOrQueue);
 
   return (
@@ -27,7 +29,7 @@ export default function CompliancePage() {
             rel="noopener"
             className={buttonVariants({ variant: "outline" })}
           >
-            <Printer /> Export report
+            <Printer /> {t("Export report")}
           </a>
         }
       />

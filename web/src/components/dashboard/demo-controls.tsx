@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CloudSnow, FlaskConical, RotateCcw, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger } from "@/components/ui/popover";
+import { useT } from "@/components/language";
 import { useOps } from "./ops-context";
 import { useStation } from "./station-context";
 
@@ -12,6 +13,7 @@ export function DemoControls() {
   const { demo, linkDown, setLinkDown } = useOps();
   const { station, stationId } = useStation();
   const [note, setNote] = useState<string | null>(null);
+  const t = useT();
 
   const act = (message: string, fn: () => void) => {
     fn();
@@ -21,7 +23,7 @@ export function DemoControls() {
   return (
     <Popover>
       <PopoverTrigger render={<Button variant="outline" size="sm" />}>
-        <FlaskConical /> Demo
+        <FlaskConical /> {t("Demo")}
       </PopoverTrigger>
       <PopoverContent align="end" className="w-80">
         <PopoverHeader>

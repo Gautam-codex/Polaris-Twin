@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { ClipboardPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useT } from "@/components/language";
 import { Panel } from "@/components/dashboard/panel";
 import type { NewComplianceLog } from "@/lib/data";
 import type { StationId } from "@/shared/types";
@@ -16,6 +17,7 @@ export function LogForm({ stationId, onSubmit }: { stationId: StationId; onSubmi
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
   const [saved, setSaved] = useState<string | null>(null);
+  const t = useT();
   const unit = kind === "waste" ? "kg" : "L";
   const value = Number(amount);
   const valid = amount !== "" && Number.isFinite(value) && value > 0 && value < 100_000;
@@ -56,7 +58,7 @@ export function LogForm({ stationId, onSubmit }: { stationId: StationId; onSubmi
           />
         </label>
         <Button type="submit" disabled={!valid} className="h-9 self-start">
-          Add to register
+          {t("Add to register")}
         </Button>
         {saved && <p className="text-sm text-success">{saved}</p>}
       </form>

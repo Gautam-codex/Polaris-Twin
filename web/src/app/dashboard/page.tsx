@@ -8,15 +8,17 @@ import { MiniCharts } from "@/components/overview/mini-charts";
 import { AtRiskCard, ResupplyCountdown } from "@/components/overview/resupply-card";
 import { StatCards } from "@/components/overview/stat-cards";
 import { TwinPreview } from "@/components/overview/twin-preview";
+import { useT } from "@/components/language";
 import { HEALTH_LABEL, HEALTH_STYLE } from "@/lib/health";
 
 export default function OverviewPage() {
   const { station, snapshot } = useStation();
+  const t = useT();
 
   return (
     <>
       <PageHeader
-        title={`${station.name} control room`}
+        title={t("{station} control room", { station: t(station.name) })}
         description={`${station.region} · est. ${station.established}`}
         actions={
           snapshot && (

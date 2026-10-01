@@ -11,6 +11,7 @@ import { getSupabase } from "@/lib/supabase";
 import { STATION_IDS, STATIONS } from "@/shared/stations";
 import { EmergencyButton } from "@/components/emergency/emergency-button";
 import { DemoControls } from "./demo-controls";
+import { LanguageToggle, useT } from "@/components/language";
 import { Logo } from "./logo";
 import { useOps } from "./ops-context";
 import { SidebarNav } from "./sidebar";
@@ -19,6 +20,7 @@ import { useStation } from "./station-context";
 
 function StationSwitcher() {
   const { stationId, setStation } = useStation();
+  const t = useT();
   return (
     <div className="inline-flex rounded-md border border-border bg-card p-0.5" role="group" aria-label="Station">
       {STATION_IDS.map((id) => (
@@ -32,7 +34,7 @@ function StationSwitcher() {
             stationId === id ? "bg-secondary font-medium text-primary" : "text-muted-foreground hover:text-foreground",
           )}
         >
-          {STATIONS[id].name}
+          {t(STATIONS[id].name)}
         </button>
       ))}
     </div>
@@ -41,10 +43,11 @@ function StationSwitcher() {
 
 function LowBandwidthSwitch() {
   const { lowBandwidth, setLowBandwidth } = useOps();
+  const t = useT();
   return (
     <label className="ml-auto inline-flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
       <Switch size="sm" checked={lowBandwidth} onCheckedChange={(c) => setLowBandwidth(c)} aria-label="Low-bandwidth mode" />
-      Low bandwidth
+      {t("Low bandwidth")}
     </label>
   );
 }
@@ -86,6 +89,7 @@ export function TopBar() {
           <SyncPill />
           <SimulatedBadge />
           <LowBandwidthSwitch />
+          <LanguageToggle />
         </div>
         <div className="ml-auto flex items-center gap-2">
           {demoMode && <DemoControls />}

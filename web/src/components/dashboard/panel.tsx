@@ -1,6 +1,9 @@
+"use client";
+
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "cn";
+import { useT } from "@/components/language";
 
 /** Standard dashboard card: rounded-lg, subtle border, optional title row. */
 export function Panel({
@@ -16,6 +19,7 @@ export function Panel({
   className?: string;
   children: ReactNode;
 }) {
+  const t = useT();
   return (
     <section className={cn("flex flex-col rounded-lg border border-border bg-card p-5", className)}>
       {(title || action) && (
@@ -23,7 +27,7 @@ export function Panel({
           {title && (
             <h2 className="flex items-center gap-2 text-sm font-medium text-foreground">
               {Icon && <Icon className="size-4 text-muted-foreground" strokeWidth={1.75} />}
-              {title}
+              {t(title)}
             </h2>
           )}
           {action}

@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { HeartPulse, Sun } from "lucide-react";
+import { useT } from "@/components/language";
 import { Panel } from "@/components/dashboard/panel";
 import { CHART, TOOLTIP_STYLE } from "@/lib/health";
 import { MIN_RESPONSES, WINDOW_DAYS, type RollingPoint } from "@/hooks/useWellbeing";
@@ -56,9 +57,10 @@ export function DaylightCard({ station, now }: { station: Station; now: number }
   const hours = Math.floor(today);
   const minutes = Math.round((today - hours) * 60);
   const change = Math.round((tomorrow - today) * 60);
+  const t = useT();
 
   return (
-    <Panel title={`Daylight at ${station.name}`} icon={Sun}>
+    <Panel title={t("Daylight at {station}", { station: t(station.name) })} icon={Sun}>
       <p className="text-3xl font-medium tabular-nums">
         {today === 0 ? "Polar night" : today === 24 ? "24 h" : `${hours} h ${minutes} min`}
       </p>

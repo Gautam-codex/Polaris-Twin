@@ -5,6 +5,7 @@ import { cn } from "cn";
 import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/dashboard/panel";
 import { useStation } from "@/components/dashboard/station-context";
+import { useT } from "@/components/language";
 import { useAlerts } from "@/hooks/useSupabaseList";
 import { SEVERITY_STYLE } from "@/lib/health";
 import type { Alert } from "@/shared/types";
@@ -19,6 +20,7 @@ function timeAgo(iso: string): string {
 }
 
 function AlertRow({ alert, live, onAck }: { alert: Alert; live?: boolean; onAck?: () => void }) {
+  const t = useT();
   return (
     <li className={cn("rounded-md border border-border p-3", alert.acknowledged && "opacity-55")}>
       <div className="flex items-start justify-between gap-3">
@@ -44,7 +46,7 @@ function AlertRow({ alert, live, onAck }: { alert: Alert; live?: boolean; onAck?
             </span>
           ) : (
             <Button size="sm" variant="outline" className="shrink-0" onClick={onAck}>
-              Acknowledge
+              {t("Acknowledge")}
             </Button>
           ))}
       </div>

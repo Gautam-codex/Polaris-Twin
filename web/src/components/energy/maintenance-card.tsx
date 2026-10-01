@@ -3,6 +3,7 @@
 import { CheckCircle2, FlaskConical, Wrench } from "lucide-react";
 import { cn } from "cn";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/components/language";
 import { Panel } from "@/components/dashboard/panel";
 import { SEVERITY_STYLE } from "@/lib/health";
 import { THRESHOLDS } from "@/shared/alerts";
@@ -33,6 +34,7 @@ export function MaintenanceCard({
   faultActive: boolean;
   onToggleFault: () => void;
 }) {
+  const t = useT();
   const latest = history.at(-1);
   const recent = history.slice(-TREND_POINTS);
 
@@ -43,7 +45,7 @@ export function MaintenanceCard({
       action={
         <Button size="sm" variant={faultActive ? "outline" : "secondary"} onClick={onToggleFault}>
           <FlaskConical />
-          {faultActive ? "Clear demo fault" : "Simulate fault on Generator 1"}
+          {t(faultActive ? "Clear demo fault" : "Simulate fault on Generator 1")}
         </Button>
       }
     >

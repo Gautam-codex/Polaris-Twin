@@ -6,6 +6,7 @@ import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { cn } from "cn";
 import { NAV_ITEMS } from "@/lib/nav";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useT } from "@/components/language";
 import { useStation } from "./station-context";
 
 function isActive(pathname: string, href: string): boolean {
@@ -16,6 +17,7 @@ function isActive(pathname: string, href: string): boolean {
 export function SidebarNav({ collapsed = false, onNavigate }: { collapsed?: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();
   const { withStation } = useStation();
+  const t = useT();
 
   return (
     <nav className="flex flex-col gap-1">
@@ -34,15 +36,15 @@ export function SidebarNav({ collapsed = false, onNavigate }: { collapsed?: bool
             )}
           >
             <item.icon className="size-[18px] shrink-0" strokeWidth={1.75} />
-            {!collapsed && <span>{item.label}</span>}
-            {collapsed && <span className="sr-only">{item.label}</span>}
+            {!collapsed && <span>{t(item.label)}</span>}
+            {collapsed && <span className="sr-only">{t(item.label)}</span>}
           </Link>
         );
         if (!collapsed) return link;
         return (
           <Tooltip key={item.href}>
             <TooltipTrigger render={link} />
-            <TooltipContent side="right">{item.label}</TooltipContent>
+            <TooltipContent side="right">{t(item.label)}</TooltipContent>
           </Tooltip>
         );
       })}
@@ -52,6 +54,7 @@ export function SidebarNav({ collapsed = false, onNavigate }: { collapsed?: bool
 
 /** Desktop sidebar (md and up) that collapses to icons. */
 export function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
+  const t = useT();
   return (
     <aside
       className={cn(
@@ -60,7 +63,7 @@ export function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle:
       )}
     >
       <div className={cn("mb-6 flex items-center px-2 pt-2", collapsed ? "justify-center" : "justify-between")}>
-        {!collapsed && <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Modules</span>}
+        {!collapsed && <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t("Modules")}</span>}
         <button
           type="button"
           onClick={onToggle}

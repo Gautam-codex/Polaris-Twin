@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Boxes } from "lucide-react";
 import { Panel } from "@/components/dashboard/panel";
 import { useStation } from "@/components/dashboard/station-context";
+import { useT } from "@/components/language";
 import { useOps } from "@/components/dashboard/ops-context";
 import { StationMap2D } from "@/components/twin/station-map-2d";
 import { SceneLoading } from "@/components/twin/twin-view";
@@ -14,13 +15,14 @@ const TwinScene = dynamic(() => import("@/components/twin/twin-scene"), { ssr: f
 export function TwinPreview() {
   const { snapshot, withStation } = useStation();
   const { lowBandwidth } = useOps();
+  const t = useT();
   return (
     <Panel
       title={lowBandwidth ? "Site plan (2D)" : "3D twin"}
       icon={Boxes}
       action={
         <Link href={withStation("/dashboard/twin")} className="flex items-center gap-1 text-xs font-medium text-primary hover:underline">
-          Open twin <ArrowRight className="size-3.5" />
+          {t("Open twin")} <ArrowRight className="size-3.5" />
         </Link>
       }
     >

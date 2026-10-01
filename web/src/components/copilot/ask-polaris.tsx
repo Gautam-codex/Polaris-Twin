@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useStation } from "@/components/dashboard/station-context";
+import { useT } from "@/components/language";
 import { useCopilotContext } from "@/hooks/useCopilotContext";
 import type { CopilotLanguage, CopilotResponse, CopilotTurn, StationId } from "@/shared/types";
 import { ChatBubble, TypingIndicator, type ChatMessage } from "./chat-message";
@@ -35,6 +36,7 @@ const suggestions = (stationId: StationId): Record<CopilotLanguage, string[]> =>
 export function AskPolaris() {
   const { station, stationId } = useStation();
   const context = useCopilotContext();
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [language, setLanguage] = useState<CopilotLanguage>("en");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -85,7 +87,7 @@ export function AskPolaris() {
           <Button size="lg" className="fixed right-5 bottom-5 z-40 h-11 rounded-md px-4 shadow-md" />
         }
       >
-        <MessageSquareText /> Ask Polaris
+        <MessageSquareText /> {t("Ask Polaris")}
       </SheetTrigger>
       <SheetContent side="right" className="flex flex-col gap-0 p-0 data-[side=right]:w-full data-[side=right]:sm:max-w-md">
         <SheetHeader className="border-b border-border p-4 pr-12">

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { KeyRound, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useT } from "@/components/language";
 import { useSession } from "@/hooks/useSession";
 import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 
@@ -25,6 +26,7 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const t = useT();
 
   useEffect(() => {
     if (session) router.replace(next);
@@ -68,7 +70,7 @@ export function LoginForm() {
       )}
       <Button type="submit" size="lg" className="h-10" disabled={submitting || !isSupabaseConfigured}>
         {submitting && <Loader2 className="animate-spin" />}
-        Sign in
+        {t("Sign in")}
       </Button>
 
       <div className="rounded-md border border-border bg-secondary p-4 text-sm">
@@ -96,7 +98,7 @@ export function LoginForm() {
             if (DEMO_PASSWORD) setPassword(DEMO_PASSWORD);
           }}
         >
-          Use demo account
+          {t("Use demo account")}
         </Button>
       </div>
     </form>

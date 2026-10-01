@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useT } from "@/components/language";
 import { useOps } from "@/components/dashboard/ops-context";
 import { useStation } from "@/components/dashboard/station-context";
 import { EMERGENCY_KINDS, PLAYBOOKS, type EmergencyKind } from "@/lib/playbooks";
@@ -24,12 +25,13 @@ export function EmergencyButton() {
   const { emergency, startEmergency } = useOps();
   const [open, setOpen] = useState(false);
   const [kind, setKind] = useState<EmergencyKind | null>(null);
+  const t = useT();
 
   if (emergency) {
     return (
-      <Button variant="destructive" className="bg-destructive text-white hover:bg-destructive/90" disabled aria-label="Emergency active">
+      <Button variant="destructive" className="bg-destructive text-white hover:bg-destructive/90" disabled aria-label={t("Emergency active")}>
         <Siren />
-        <span className="hidden sm:inline">Emergency active</span>
+        <span className="hidden sm:inline">{t("Emergency active")}</span>
       </Button>
     );
   }
@@ -42,9 +44,9 @@ export function EmergencyButton() {
         if (!o) setKind(null);
       }}
     >
-      <DialogTrigger render={<Button variant="destructive" className="bg-destructive text-white hover:bg-destructive/90" aria-label="Emergency" />}>
+      <DialogTrigger render={<Button variant="destructive" className="bg-destructive text-white hover:bg-destructive/90" aria-label={t("Emergency")} />}>
         <Siren />
-        <span className="hidden sm:inline">Emergency</span>
+        <span className="hidden sm:inline">{t("Emergency")}</span>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -70,7 +72,7 @@ export function EmergencyButton() {
           ))}
         </div>
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
+          <DialogClose render={<Button variant="outline" />}>{t("Cancel")}</DialogClose>
           <Button
             variant="destructive"
             className="bg-destructive text-white hover:bg-destructive/90"
@@ -81,7 +83,7 @@ export function EmergencyButton() {
               setOpen(false);
             }}
           >
-            Confirm emergency
+            {t("Confirm emergency")}
           </Button>
         </DialogFooter>
       </DialogContent>
