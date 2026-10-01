@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "Polaris Twin",
+    "slug": "polaris-twin",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "polaristwin",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "bundleIdentifier": "com.polaristwin.app",
+      "icon": "./assets/images/icon.png"
+    },
+    "android": {
+      "package": "com.polaristwin.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#1D4F86",
+        "foregroundImage": "./assets/images/android-icon-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "CAMERA",
+        "VIBRATE",
+        "POST_NOTIFICATIONS"
+      ]
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#1D4F86",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 140
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Polaris Twin uses the camera to scan inventory barcodes.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#1D4F86"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
