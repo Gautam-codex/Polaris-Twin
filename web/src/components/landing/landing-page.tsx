@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ExternalLink, UserRound } from "lucide-react";
+import { Users } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Logo } from "@/components/dashboard/logo";
 import { LanguageToggle, useT } from "@/components/language";
@@ -43,7 +43,7 @@ function Builder() {
       </div>
       <article className="flex max-w-md items-center gap-4 rounded-lg border border-border bg-card p-5">
         <span className="grid size-12 place-items-center rounded-full bg-secondary text-primary">
-          <UserRound className="size-6" strokeWidth={1.75} />
+          <Users className="size-6" strokeWidth={1.75} />
         </span>
         <div>
           <p className="font-medium text-foreground">{SITE.builderName}</p>
@@ -62,9 +62,6 @@ function Footer() {
           {SITE.event} · {SITE.problemStatement} · {SITE.organisation}
         </p>
         <p className="text-xs">Prototype with a simulated sensor feed. Not an official NCPOR system.</p>
-        <a href={SITE.githubUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-primary hover:underline">
-          GitHub <ExternalLink className="size-3.5" />
-        </a>
       </div>
     </footer>
   );

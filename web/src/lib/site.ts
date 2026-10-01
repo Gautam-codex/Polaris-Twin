@@ -1,11 +1,10 @@
-// Public site details. Fill in builderName and androidApkUrl before the final submission.
+// Public site details. Fill in androidApkUrl before the final submission.
 
 export const SITE = {
-  builderName: "Your Name",
-  builderRole: "Solo builder · design, web, mobile and data",
+  builderName: "Commit Crew",
+  builderRole: "Commit Crew · design, web, mobile and data",
   /** Direct link to the EAS-built APK. Leave empty to show "coming soon". */
   androidApkUrl: "",
-  githubUrl: "https://github.com/Gautam-codex/Polaris-Twin",
   event: "Smart India Hackathon 2026",
   problemStatement: "PS 26060",
   organisation: "Ministry of Earth Sciences / NCPOR",
