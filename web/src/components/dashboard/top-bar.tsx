@@ -2,22 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, Menu, Siren } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { cn } from "cn";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { getSupabase } from "@/lib/supabase";
 import { STATION_IDS, STATIONS } from "@/shared/stations";
+import { EmergencyButton } from "@/components/emergency/emergency-button";
 import { DemoControls } from "./demo-controls";
 import { Logo } from "./logo";
 import { SidebarNav } from "./sidebar";
@@ -43,30 +34,6 @@ function StationSwitcher() {
         </button>
       ))}
     </div>
-  );
-}
-
-function EmergencyButton() {
-  const { station } = useStation();
-  return (
-    <Dialog>
-      <DialogTrigger render={<Button variant="destructive" className="bg-destructive text-white hover:bg-destructive/90" />}>
-        <Siren />
-        <span className="hidden sm:inline">Emergency</span>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Declare an emergency at {station.name}?</DialogTitle>
-          <DialogDescription>
-            Emergency mode will raise a critical alert for all crew and the NCPOR control room in Goa and switch the
-            dashboard to the emergency checklist.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Close</DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
   );
 }
 
