@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { Snowflake } from "lucide-react";
 
 export function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight text-foreground">
-      <Snowflake className="size-5 text-primary" />
-      <span>Polaris Twin</span>
+    <Link href="/" className="flex items-center gap-2.5 text-foreground">
+      <span aria-hidden className="grid size-6 place-items-center rounded bg-primary text-[11px] font-semibold text-brand">PT</span>
+      <span className="text-[15px] font-semibold tracking-tight">Polaris Twin</span>
     </Link>
   );
 }

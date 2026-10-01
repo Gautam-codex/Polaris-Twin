@@ -52,6 +52,14 @@ export function useStationSnapshot(stationId: StationId): StationSnapshotState {
       const live = await fetchWeather(stationId);
       if (cancelled) return;
       weather.current = live;
+      // Re-apply the live weather to the stored history so charts don't jump.
+      if (live) {
+        setState((prev) =>
+          prev.snapshot?.stationId === stationId
+            ? { ...prev, history: prev.history.map((s) => getSnapshot(stationId, s.timestamp, live)) }
+            : prev,
+        );
+      }
       tick();
     };
 

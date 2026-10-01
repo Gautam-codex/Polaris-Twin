@@ -21,7 +21,7 @@ export function TwinPreview() {
         </Link>
       }
     >
-      <Link href={withStation("/dashboard/twin")} className="block h-72 overflow-hidden rounded-xl border border-border" aria-label="Open the 3D twin">
+      <Link href={withStation("/dashboard/twin")} className="block h-72 overflow-hidden rounded-md border border-border" aria-label="Open the 3D twin">
         {snapshot ? <TwinScene snapshot={snapshot} mode="preview" /> : <SceneLoading />}
       </Link>
     </Panel>

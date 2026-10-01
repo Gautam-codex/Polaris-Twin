@@ -70,8 +70,8 @@ export function FieldTripPlanner({ stationId, forecast, now }: { stationId: Stat
         </label>
       </div>
 
-      <div className={cn("mt-5 rounded-xl border p-4", VERDICT_STYLE[plan.verdict])}>
-        <p className="text-2xl font-semibold">{plan.verdict}</p>
+      <div className={cn("mt-5 rounded-md border p-4", VERDICT_STYLE[plan.verdict])}>
+        <p className="text-2xl font-medium">{plan.verdict}</p>
         <p className="mt-1 text-sm">
           {DESTINATIONS[stationId][destination]} · worst-hour safety score {plan.minScore}/100
           {plan.worstTime && ` at ${plan.worstTime.slice(11, 16)} UTC`}

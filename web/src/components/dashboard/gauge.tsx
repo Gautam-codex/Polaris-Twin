@@ -34,11 +34,11 @@ export function Gauge({
   return (
     <div className="flex flex-col items-center">
       <svg width={size} height={size / 2 + stroke} viewBox={`0 0 ${size} ${size / 2 + stroke}`} role="img" aria-label={`${label}: ${sublabel ?? ""}`}>
-        <path d={track} fill="none" stroke="rgba(148,163,184,0.15)" strokeWidth={stroke} strokeLinecap="round" />
+        <path d={track} fill="none" stroke="#E7F1FD" strokeWidth={stroke} strokeLinecap="butt" />
         {fraction > 0.001 && (
-          <path d={fill} fill="none" stroke={color} strokeWidth={stroke} strokeLinecap="round" style={{ transition: "all 0.7s ease-out" }} />
+          <path d={fill} fill="none" stroke={color} strokeWidth={stroke} strokeLinecap="butt" style={{ transition: "all 0.7s ease-out" }} />
         )}
-        <text x={cx} y={cy - stroke * 0.2} textAnchor="middle" fill="#E2E8F0" fontSize={size * 0.2} fontWeight={600}>
+        <text x={cx} y={cy - stroke * 0.2} textAnchor="middle" fill="#0F1F33" fontSize={size * 0.2} fontWeight={500}>
           {label}
         </text>
       </svg>

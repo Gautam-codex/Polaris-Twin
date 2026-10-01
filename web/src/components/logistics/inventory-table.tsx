@@ -42,8 +42,8 @@ export function InventoryTable({ stationId, resupplyDate, now }: { stationId: St
               type="button"
               onClick={() => setCategory(c)}
               className={cn(
-                "rounded-full border px-3 py-1 text-xs capitalize transition-colors",
-                category === c ? "border-primary bg-primary/15 text-primary" : "border-border text-muted-foreground hover:text-foreground",
+                "rounded border px-3 py-1 text-xs capitalize transition-colors",
+                category === c ? "border-primary bg-secondary text-primary" : "border-border text-muted-foreground hover:text-foreground",
               )}
             >
               {c}
@@ -51,7 +51,7 @@ export function InventoryTable({ stationId, resupplyDate, now }: { stationId: St
           ))}
         </div>
       </div>
-      {error && <p className="mb-3 rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p>}
+      {error && <p className="mb-3 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p>}
       {loading ? (
         <p className="text-sm text-muted-foreground">Loading inventory…</p>
       ) : (

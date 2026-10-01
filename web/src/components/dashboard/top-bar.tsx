@@ -26,7 +26,7 @@ import { useStation } from "./station-context";
 function StationSwitcher() {
   const { stationId, setStation } = useStation();
   return (
-    <div className="inline-flex rounded-xl border border-border bg-background p-0.5" role="group" aria-label="Station">
+    <div className="inline-flex rounded-md border border-border bg-card p-0.5" role="group" aria-label="Station">
       {STATION_IDS.map((id) => (
         <button
           key={id}
@@ -34,8 +34,8 @@ function StationSwitcher() {
           onClick={() => setStation(id)}
           aria-pressed={stationId === id}
           className={cn(
-            "rounded-lg px-3 py-1 text-sm font-medium transition-colors",
-            stationId === id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+            "rounded px-3 py-1 text-sm transition-colors",
+            stationId === id ? "bg-secondary font-medium text-primary" : "text-muted-foreground hover:text-foreground",
           )}
         >
           {STATIONS[id].name}
@@ -96,7 +96,7 @@ export function TopBar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-border bg-card">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 md:px-6">
         <MobileNav />
         <Logo />

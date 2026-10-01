@@ -32,7 +32,7 @@ export function GeneratorCards({ history, anomalies }: { history: StationSnapsho
             key={g.id}
             title={g.name}
             icon={Cog}
-            action={<span className={cn("rounded-full border px-2.5 py-0.5 text-xs font-medium", HEALTH_STYLE[health])}>{HEALTH_LABEL[health]}</span>}
+            action={<span className={cn("rounded border px-2.5 py-0.5 text-xs font-medium", HEALTH_STYLE[health])}>{HEALTH_LABEL[health]}</span>}
           >
             <p className="text-sm text-muted-foreground">{g.running ? "Running" : "Standby"} · {g.fuelBurnLph} L/h</p>
             <div className="mt-4 flex flex-col gap-4 text-sm">
@@ -61,7 +61,7 @@ export function GeneratorCards({ history, anomalies }: { history: StationSnapsho
             {badges.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {badges.map((a) => (
-                  <span key={a.id} className={cn("rounded-full border px-2 py-0.5 text-[11px] font-medium", SEVERITY_STYLE[a.severity])}>
+                  <span key={a.id} className={cn("rounded border px-2 py-0.5 text-[11px] font-medium", SEVERITY_STYLE[a.severity])}>
                     {a.title.replace(`${g.name} `, "")}
                   </span>
                 ))}

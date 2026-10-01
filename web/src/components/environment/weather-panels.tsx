@@ -14,7 +14,7 @@ function SourceBadge({ source }: { source: WeatherSnapshot["source"] }) {
   return (
     <span
       className={cn(
-        "rounded-full border px-2.5 py-0.5 text-xs font-medium",
+        "rounded border px-2.5 py-0.5 text-xs font-medium",
         live ? "border-success/30 bg-success/10 text-success" : "border-warning/30 bg-warning/10 text-warning",
       )}
     >
@@ -36,7 +36,7 @@ export function LiveWeather({ weather }: { weather: WeatherSnapshot }) {
         {items.map((i) => (
           <div key={i.label}>
             <dt className="text-sm text-muted-foreground">{i.label}</dt>
-            <dd className="mt-1 text-2xl font-semibold tabular-nums">{i.value}</dd>
+            <dd className="mt-1 text-2xl font-medium tabular-nums">{i.value}</dd>
           </div>
         ))}
       </dl>
@@ -80,11 +80,11 @@ export function StockCards({ snapshot, station }: { snapshot: StationSnapshot; s
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <Panel title="Snow depth" icon={Snowflake}>
-        <p className="text-3xl font-semibold tabular-nums">{snapshot.weather.snowCm} cm</p>
+        <p className="text-3xl font-medium tabular-nums">{snapshot.weather.snowCm} cm</p>
         <p className="mt-2 text-sm text-muted-foreground">Around the station buildings. Drifts build up fastest in blizzards.</p>
       </Panel>
       <Panel title="Water stock" icon={Droplets}>
-        <p className="text-3xl font-semibold tabular-nums">{formatNumber(snapshot.waterLitres)} L</p>
+        <p className="text-3xl font-medium tabular-nums">{formatNumber(snapshot.waterLitres)} L</p>
         <p className="mt-2 text-sm text-muted-foreground">Source: {waterSource}</p>
       </Panel>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Send, Sparkles } from "lucide-react";
+import { MessageSquareText, Send } from "lucide-react";
 import { cn } from "cn";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -82,16 +82,16 @@ export function AskPolaris() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         render={
-          <Button size="lg" className="fixed right-5 bottom-5 z-40 h-12 rounded-full px-5 shadow-lg shadow-primary/20" />
+          <Button size="lg" className="fixed right-5 bottom-5 z-40 h-11 rounded-md px-4 shadow-md" />
         }
       >
-        <Sparkles /> Ask Polaris
+        <MessageSquareText /> Ask Polaris
       </SheetTrigger>
       <SheetContent side="right" className="flex flex-col gap-0 p-0 data-[side=right]:w-full data-[side=right]:sm:max-w-md">
         <SheetHeader className="border-b border-border p-4 pr-12">
           <div className="flex items-center justify-between gap-3">
             <SheetTitle className="flex items-center gap-2">
-              <Sparkles className="size-4 text-primary" /> Ask Polaris
+              Ask Polaris
             </SheetTitle>
             <div className="inline-flex rounded-lg border border-border p-0.5 text-xs" role="group" aria-label="Language">
               {(["en", "hi"] as const).map((l) => (
@@ -120,7 +120,7 @@ export function AskPolaris() {
                   type="button"
                   disabled={!context || busy}
                   onClick={() => void ask(s)}
-                  className="rounded-xl border border-border px-3 py-2 text-left text-sm text-foreground transition-colors hover:border-primary/50 hover:bg-primary/10 disabled:opacity-50"
+                  className="rounded-md border border-border px-3 py-2 text-left text-sm text-foreground transition-colors hover:border-primary/40 hover:bg-secondary disabled:opacity-50"
                 >
                   {s}
                 </button>

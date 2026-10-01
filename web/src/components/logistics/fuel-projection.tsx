@@ -19,19 +19,13 @@ export function FuelProjection({ runway, fuelLitres, now }: { runway: FuelRunway
     t: now + d * DAY,
     fuel: Math.max(0, fuelLitres - runway.burnRateLpd * d),
   }));
-  const color = short ? CHART.danger : CHART.success;
+  const color = short ? CHART.danger : CHART.primary;
 
   return (
     <Panel title="Fuel projection" icon={TrendingDown}>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 16, right: 12, bottom: 0, left: 0 }}>
-            <defs>
-              <linearGradient id="fuelFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={color} stopOpacity={0.35} />
-                <stop offset="100%" stopColor={color} stopOpacity={0} />
-              </linearGradient>
-            </defs>
             <CartesianGrid stroke={CHART.grid} vertical={false} />
             <XAxis
               dataKey="t"
@@ -56,7 +50,7 @@ export function FuelProjection({ runway, fuelLitres, now }: { runway: FuelRunway
               strokeDasharray="4 4"
               label={{ value: "Resupply", position: "insideTopRight", fill: CHART.primary, fontSize: 11 }}
             />
-            <Area type="monotone" dataKey="fuel" stroke={color} strokeWidth={2} fill="url(#fuelFill)" isAnimationActive={false} />
+            <Area type="monotone" dataKey="fuel" stroke={color} strokeWidth={2} fill={short ? CHART.danger : CHART.brand} fillOpacity={short ? 0.12 : 0.45} isAnimationActive={false} />
           </AreaChart>
         </ResponsiveContainer>
       </div>

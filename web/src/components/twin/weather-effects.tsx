@@ -65,7 +65,7 @@ export function Snow({ windKph, fromDeg }: { windKph: number; fromDeg: number })
       <bufferGeometry ref={geometry}>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial color="#F8FAFC" size={0.16} sizeAttenuation transparent opacity={0.85} depthWrite={false} />
+      <pointsMaterial color="#8FB3D9" size={0.12} sizeAttenuation transparent opacity={0.7} depthWrite={false} />
     </points>
   );
 }
@@ -75,16 +75,16 @@ export function WindArrow({ windKph, fromDeg }: { windKph: number; fromDeg: numb
   const [dx, dz] = windVector(fromDeg);
   const length = 4 + Math.min(windKph, 90) / 9;
   const rotation = Math.atan2(-dz, dx);
-  const color = windKph > 60 ? "#EF4444" : windKph > 40 ? "#F59E0B" : "#38BDF8";
+  const color = windKph > 60 ? "#B42318" : windKph > 40 ? "#C27A12" : "#1D4F86";
   return (
     <group position={[-26, 0.3, 26]} rotation={[0, rotation, 0]}>
       <mesh position={[length / 2, 0, 0]} rotation={[0, 0, -Math.PI / 2]}>
         <cylinderGeometry args={[0.25, 0.25, length, 8]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.4} />
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0} />
       </mesh>
       <mesh position={[length + 0.8, 0, 0]} rotation={[0, 0, -Math.PI / 2]}>
         <coneGeometry args={[0.8, 1.8, 12]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.4} />
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0} />
       </mesh>
     </group>
   );

@@ -59,7 +59,7 @@ export default function EnvironmentPage() {
               <Gauge value={safety.score} color={safetyColor} label={String(safety.score)} sublabel={safety.label} size={220} />
               <ul className="flex flex-1 flex-col gap-2 text-sm">
                 {safety.reasons.map((r) => (
-                  <li key={r} className="rounded-xl border border-border px-3 py-2 text-muted-foreground">
+                  <li key={r} className="rounded-md border border-border px-3 py-2 text-muted-foreground">
                     {r}
                   </li>
                 ))}

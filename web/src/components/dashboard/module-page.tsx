@@ -8,8 +8,8 @@ export function ModulePage({ href }: { href: string }) {
   return (
     <>
       <PageHeader title={item.label} description={item.description} />
-      <div className="flex min-h-[320px] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-card p-10 text-center">
-        <item.icon className="size-10 text-primary" />
+      <div className="flex min-h-[320px] flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-border bg-card p-10 text-center">
+        <item.icon className="size-8 text-muted-foreground" strokeWidth={1.5} />
         <p className="text-base font-medium text-foreground">{item.label} module</p>
         <p className="max-w-md text-sm text-muted-foreground">{item.description}.</p>
       </div>

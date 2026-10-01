@@ -8,7 +8,7 @@ import type { StationSnapshot } from "@/shared/types";
 import { BuildingMesh } from "./building-mesh";
 import { Snow, WIND_FROM_DEG, WindArrow } from "./weather-effects";
 
-const BACKGROUND = "#0B1220";
+const BACKGROUND = "#EAF2FB";
 
 export interface TwinSceneProps {
   snapshot: StationSnapshot;
@@ -38,17 +38,19 @@ export default function TwinScene({ snapshot, selectedId = null, onSelect, mode 
   return (
     <Canvas
       shadows="percentage"
+      flat
       dpr={[1, mode === "preview" ? 1.25 : 1.75]}
       camera={{ position: [38, 30, 42], fov: 45, near: 0.5, far: 400 }}
       onPointerMissed={() => interactive && onSelect?.(null)}
       gl={{ antialias: true, powerPreference: "high-performance" }}
     >
       <color attach="background" args={[BACKGROUND]} />
-      <fog attach="fog" args={[BACKGROUND, 70, 170]} />
-      <hemisphereLight args={["#BFDBFE", "#0B1220", 0.7]} />
+      <fog attach="fog" args={[BACKGROUND, 80, 180]} />
+      <ambientLight intensity={0.9} />
+      <hemisphereLight args={["#FFFFFF", "#C6E1FF", 0.8]} />
       <directionalLight
         position={[30, 45, 20]}
-        intensity={1.5}
+        intensity={1.1}
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-camera-left={-40}
@@ -57,11 +59,16 @@ export default function TwinScene({ snapshot, selectedId = null, onSelect, mode 
         shadow-camera-bottom={-40}
       />
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+      {/* Unlit white snow, with shadows drawn on a transparent layer just above it. */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[110, 48]} />
-        <meshStandardMaterial color="#DCE6F2" roughness={1} />
+        <meshBasicMaterial color="#FFFFFF" />
       </mesh>
-      <gridHelper args={[60, 12, "#94A3B8", "#B6C4D6"]} position={[0, 0.02, 0]} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
+        <circleGeometry args={[60, 48]} />
+        <shadowMaterial opacity={0.12} />
+      </mesh>
+      <gridHelper args={[60, 12, "#C6E1FF", "#E3EEFA"]} position={[0, 0.02, 0]} />
 
       {snapshot.buildings.map((b) => (
         <BuildingMesh

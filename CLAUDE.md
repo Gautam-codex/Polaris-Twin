@@ -27,7 +27,7 @@ Tech stack (do not change without asking):
 - Sensor data: deterministic time-seeded simulator in shared/simulator.ts, so every viewer sees the same values at the same time
 - Deploy: Vercel (web, root directory web), EAS Build APK (app)
 
-Design: dark "polar control room" theme. Background #0B1220, cards #111A2E, primary ice blue #38BDF8, success #22C55E, warning #F59E0B, danger #EF4444, text #E2E8F0. Font Inter. rounded-2xl cards, subtle borders, generous spacing, no clutter. Product name shown as "Polaris Twin".
+Design: minimal, professional light theme built around brand blue #C6E1FF. Background #F5F8FC, cards #FFFFFF, borders #DBE4EE, text #0F1F33, muted text #5A6B80, primary navy #1D4F86 (buttons, active states, main chart series), secondary blue #5B9BDC, light accent surfaces #E7F1FD, success #1C7C4A, warning #A15C07, danger #B42318. Font IBM Plex Sans (IBM Plex Mono for clocks). rounded-lg cards (8px), square-ish status tags, thin borders, muted icons, no gradients, glows or decorative animation. Product name shown as "Polaris Twin".
 
 Rules:
 - Write complete, working files. No placeholders or TODO stubs.

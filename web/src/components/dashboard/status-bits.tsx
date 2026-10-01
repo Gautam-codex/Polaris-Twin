@@ -1,6 +1,5 @@
 "use client";
 
-import { Radio } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useNow } from "@/hooks/useNow";
 import { useStation } from "./station-context";
@@ -32,11 +31,8 @@ export function SyncPill() {
   const { snapshot } = useStation();
   const seconds = now && snapshot ? Math.max(0, Math.round((now - snapshot.timestamp) / 1000)) : null;
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-success/30 bg-success/10 px-2.5 py-1 text-xs font-medium text-success">
-      <span className="relative flex size-2">
-        <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-60" />
-        <span className="relative inline-flex size-2 rounded-full bg-success" />
-      </span>
+    <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+      <span className="size-1.5 rounded-full bg-success" />
       {seconds === null ? "Syncing…" : `Synced ${seconds}s ago`}
     </span>
   );
@@ -44,8 +40,7 @@ export function SyncPill() {
 
 export function SimulatedBadge() {
   return (
-    <Badge variant="outline" className="gap-1 border-warning/40 text-warning">
-      <Radio />
+    <Badge variant="outline" className="rounded border-border font-normal text-muted-foreground">
       Simulated sensor feed
     </Badge>
   );

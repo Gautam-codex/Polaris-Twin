@@ -16,7 +16,7 @@ export function ResupplyCountdown() {
   const days = Math.ceil((resupply.getTime() - snapshot.timestamp) / DAY);
   return (
     <Panel title="Next resupply (ISEA ship)" icon={Ship}>
-      <p className="text-4xl font-semibold tabular-nums text-primary">
+      <p className="text-4xl font-medium tabular-nums text-primary">
         {days}
         <span className="ml-2 text-base font-normal text-muted-foreground">days</span>
       </p>

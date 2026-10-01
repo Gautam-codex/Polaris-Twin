@@ -3,7 +3,7 @@
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Panel } from "@/components/dashboard/panel";
 import { useStation } from "@/components/dashboard/station-context";
-import { CHART } from "@/lib/health";
+import { CHART, TOOLTIP_STYLE } from "@/lib/health";
 import { formatNumber } from "@/shared/alerts";
 import type { StationSnapshot } from "@/shared/types";
 
@@ -20,8 +20,8 @@ interface Series {
 
 const SERIES: Series[] = [
   { key: "temp", title: "Outside temperature", unit: "°C", color: CHART.primary, pick: (s) => s.weather.tempC, decimals: 1, minSpan: 4 },
-  { key: "load", title: "Station load", unit: "kW", color: CHART.warning, pick: (s) => s.energy.totalLoadKw, decimals: 1, minSpan: 40 },
-  { key: "fuel", title: "Diesel stock", unit: "L", color: CHART.success, pick: (s) => s.fuelLitres, decimals: 0, minSpan: 200 },
+  { key: "load", title: "Station load", unit: "kW", color: CHART.secondary, pick: (s) => s.energy.totalLoadKw, decimals: 1, minSpan: 40 },
+  { key: "fuel", title: "Diesel stock", unit: "L", color: CHART.primary, pick: (s) => s.fuelLitres, decimals: 0, minSpan: 200 },
 ];
 
 function fmt(value: number, decimals: number): string {
@@ -68,7 +68,7 @@ function MiniChart({ series, history }: { series: Series; history: StationSnapsh
               width={52}
             />
             <Tooltip
-              contentStyle={{ background: "#111A2E", border: "1px solid rgba(148,163,184,0.2)", borderRadius: 12, fontSize: 12 }}
+              contentStyle={TOOLTIP_STYLE}
               labelFormatter={(t) => `${clock(Number(t))} UTC`}
               formatter={(v) => [`${fmt(Number(v), series.decimals)} ${series.unit}`, series.title]}
             />

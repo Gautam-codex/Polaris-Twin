@@ -24,7 +24,7 @@ function GeneratorReadings({ history }: { history: StationSnapshot[] }) {
       {latest.energy.generators.map((g, index) => {
         const series = history.map((s) => s.energy.generators[index]);
         return (
-          <div key={g.id} className="rounded-xl border border-border p-3">
+          <div key={g.id} className="rounded-md border border-border p-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-foreground">{g.name}</span>
               <span className={cn("text-xs", g.running ? "text-success" : "text-muted-foreground")}>
@@ -101,7 +101,7 @@ export function BuildingPanel({
   onClose: () => void;
 }) {
   return (
-    <aside className="flex flex-col rounded-2xl border border-border bg-card p-5">
+    <aside className="flex flex-col rounded-lg border border-border bg-card p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-widest text-muted-foreground">{building.type}</p>
@@ -111,7 +111,7 @@ export function BuildingPanel({
           <X className="size-4" />
         </button>
       </div>
-      <span className={cn("mt-3 w-fit rounded-full border px-2.5 py-0.5 text-xs font-medium", HEALTH_STYLE[building.health])}>
+      <span className={cn("mt-3 w-fit rounded border px-2.5 py-0.5 text-xs font-medium", HEALTH_STYLE[building.health])}>
         {HEALTH_LABEL[building.health]}
       </span>
       <div className="mt-4 divide-y divide-border">

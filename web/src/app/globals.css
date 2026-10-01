@@ -8,7 +8,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-plex-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -28,6 +28,7 @@
   --color-border: var(--border);
   --color-destructive: var(--destructive);
   --color-success: var(--success);
+  --color-brand: var(--brand);
   --color-warning: var(--warning);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
@@ -51,77 +52,42 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --success: #16a34a;
-  --warning: #d97706;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  /* Polaris Twin "polar control room" palette */
-  --background: #0b1220;
-  --foreground: #e2e8f0;
-  --card: #111a2e;
-  --card-foreground: #e2e8f0;
-  --popover: #111a2e;
-  --popover-foreground: #e2e8f0;
-  --primary: #38bdf8;
-  --primary-foreground: #0b1220;
-  --secondary: #1a2540;
-  --secondary-foreground: #e2e8f0;
-  --muted: #1a2540;
-  --muted-foreground: #94a3b8;
-  --accent: #1a2540;
-  --accent-foreground: #e2e8f0;
-  --destructive: #ef4444;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --border: rgb(148 163 184 / 15%);
-  --input: rgb(148 163 184 / 20%);
-  --ring: #38bdf8;
-  --chart-1: #38bdf8;
-  --chart-2: #22c55e;
-  --chart-3: #f59e0b;
-  --chart-4: #ef4444;
-  --chart-5: #a78bfa;
-  --sidebar: #111a2e;
-  --sidebar-foreground: #e2e8f0;
-  --sidebar-primary: #38bdf8;
-  --sidebar-primary-foreground: #0b1220;
-  --sidebar-accent: #1a2540;
-  --sidebar-accent-foreground: #e2e8f0;
-  --sidebar-border: rgb(148 163 184 / 15%);
-  --sidebar-ring: #38bdf8;
+  /* Polaris Twin palette: minimal light theme built around #C6E1FF. */
+  --brand: #c6e1ff;
+  --background: #f5f8fc;
+  --foreground: #0f1f33;
+  --card: #ffffff;
+  --card-foreground: #0f1f33;
+  --popover: #ffffff;
+  --popover-foreground: #0f1f33;
+  --primary: #1d4f86;
+  --primary-foreground: #ffffff;
+  --secondary: #e7f1fd;
+  --secondary-foreground: #163b63;
+  --muted: #eef3f9;
+  --muted-foreground: #5a6b80;
+  --accent: #e7f1fd;
+  --accent-foreground: #163b63;
+  --destructive: #b42318;
+  --success: #1c7c4a;
+  --warning: #a15c07;
+  --border: #dbe4ee;
+  --input: #cfdbe8;
+  --ring: #7fb2ea;
+  --chart-1: #1d4f86;
+  --chart-2: #5b9bdc;
+  --chart-3: #a15c07;
+  --chart-4: #b42318;
+  --chart-5: #1c7c4a;
+  --radius: 0.5rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f1f33;
+  --sidebar-primary: #1d4f86;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e7f1fd;
+  --sidebar-accent-foreground: #163b63;
+  --sidebar-border: #dbe4ee;
+  --sidebar-ring: #7fb2ea;
 }
 
 @layer base {

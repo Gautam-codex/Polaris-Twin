@@ -1,7 +1,7 @@
 /** Tiny SVG line chart with no axes. */
 export function Sparkline({
   values,
-  color = "#38BDF8",
+  color = "#1D4F86",
   width = 120,
   height = 32,
 }: {
@@ -23,7 +23,7 @@ export function Sparkline({
     .join(" ");
   return (
     <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} aria-hidden className="overflow-visible">
-      <polyline points={points} fill="none" stroke={color} strokeWidth={1.75} strokeLinejoin="round" strokeLinecap="round" />
+      <polyline points={points} fill="none" stroke={color} strokeWidth={1.5} strokeLinejoin="round" strokeLinecap="round" />
     </svg>
   );
 }

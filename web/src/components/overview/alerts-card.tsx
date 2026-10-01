@@ -20,11 +20,11 @@ function timeAgo(iso: string): string {
 
 function AlertRow({ alert, live, onAck }: { alert: Alert; live?: boolean; onAck?: () => void }) {
   return (
-    <li className={cn("rounded-xl border border-border p-3", alert.acknowledged && "opacity-55")}>
+    <li className={cn("rounded-md border border-border p-3", alert.acknowledged && "opacity-55")}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <span className={cn("rounded-full border px-2 py-0.5 text-[11px] font-medium capitalize", SEVERITY_STYLE[alert.severity])}>
+            <span className={cn("rounded border px-2 py-0.5 text-[11px] font-medium capitalize", SEVERITY_STYLE[alert.severity])}>
               {alert.severity}
             </span>
             {live && (

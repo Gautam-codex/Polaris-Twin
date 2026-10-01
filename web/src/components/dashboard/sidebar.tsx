@@ -28,12 +28,12 @@ export function SidebarNav({ collapsed = false, onNavigate }: { collapsed?: bool
             onClick={onNavigate}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
-              active ? "bg-primary/15 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+              active ? "bg-secondary font-medium text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground",
               collapsed && "justify-center px-0",
             )}
           >
-            <item.icon className="size-5 shrink-0" />
+            <item.icon className="size-[18px] shrink-0" strokeWidth={1.75} />
             {!collapsed && <span>{item.label}</span>}
             {collapsed && <span className="sr-only">{item.label}</span>}
           </Link>
@@ -55,12 +55,12 @@ export function Sidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle:
   return (
     <aside
       className={cn(
-        "sticky top-0 hidden h-screen shrink-0 flex-col border-r border-border bg-card/60 p-3 transition-[width] md:flex",
+        "sticky top-0 hidden h-screen shrink-0 flex-col border-r border-border bg-card p-3 transition-[width] md:flex",
         collapsed ? "w-[72px]" : "w-60",
       )}
     >
       <div className={cn("mb-6 flex items-center px-2 pt-2", collapsed ? "justify-center" : "justify-between")}>
-        {!collapsed && <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Modules</span>}
+        {!collapsed && <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Modules</span>}
         <button
           type="button"
           onClick={onToggle}

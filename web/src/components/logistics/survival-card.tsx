@@ -59,7 +59,7 @@ export function SurvivalCard({
     >
       <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
         <div>
-          <p className={cn("text-6xl font-semibold tabular-nums", short ? "text-destructive" : "text-foreground")}>
+          <p className={cn("text-6xl font-medium tabular-nums", short ? "text-destructive" : "text-foreground")}>
             {runway ? <AnimatedNumber value={Math.floor(runway.daysLeft)} /> : "…"}
             <span className="ml-3 text-xl font-normal text-muted-foreground">days of diesel</span>
           </p>
@@ -85,7 +85,7 @@ export function SurvivalCard({
             </div>
           </dl>
         </div>
-        <div className="flex flex-col justify-center gap-6 rounded-xl border border-border p-5">
+        <div className="flex flex-col justify-center gap-6 rounded-md border border-border p-5">
           <ScenarioSlider label="Ship delay" value={shipDelay} max={60} unit="days" onChange={onShipDelay} />
           <ScenarioSlider label="Colder than forecast" value={colder} max={10} unit="°C" onChange={onColder} />
           <p className="text-xs text-muted-foreground">Each degree colder adds 2.5% to diesel burn for heating.</p>

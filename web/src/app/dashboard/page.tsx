@@ -20,7 +20,7 @@ export default function OverviewPage() {
         description={`${station.region} · est. ${station.established}`}
         actions={
           snapshot && (
-            <span className={cn("rounded-full border px-3 py-1 text-sm font-medium", HEALTH_STYLE[snapshot.overallHealth])}>
+            <span className={cn("rounded border px-3 py-1 text-sm font-medium", HEALTH_STYLE[snapshot.overallHealth])}>
               Station {HEALTH_LABEL[snapshot.overallHealth]}
             </span>
           )

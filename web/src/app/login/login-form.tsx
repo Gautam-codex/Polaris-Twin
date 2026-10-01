@@ -62,7 +62,7 @@ export function LoginForm() {
           className="h-10"
         />
       </label>
-      {error && <p className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p>}
+      {error && <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p>}
       {!isSupabaseConfigured && (
         <p className="text-sm text-warning">Supabase keys are missing in web/.env.local, so sign-in is unavailable.</p>
       )}
@@ -71,7 +71,7 @@ export function LoginForm() {
         Sign in
       </Button>
 
-      <div className="rounded-xl border border-primary/30 bg-primary/10 p-4 text-sm">
+      <div className="rounded-md border border-border bg-secondary p-4 text-sm">
         <p className="flex items-center gap-2 font-medium text-primary">
           <KeyRound className="size-4" />
           Demo account

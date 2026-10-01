@@ -28,7 +28,7 @@ function compass(deg: number): string {
 
 function Legend() {
   return (
-    <div className="flex flex-wrap gap-3 rounded-xl border border-border bg-card/90 px-3 py-2 text-xs text-muted-foreground backdrop-blur">
+    <div className="flex flex-wrap gap-3 rounded-md border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
       {(Object.keys(HEALTH_HEX) as Health[]).map((h) => (
         <span key={h} className="flex items-center gap-1.5">
           <span className="size-2.5 rounded-sm" style={{ background: HEALTH_HEX[h] }} />
@@ -50,7 +50,7 @@ export function TwinView() {
 
   return (
     <div className="flex flex-col gap-4 lg:flex-row">
-      <div className="relative h-[60vh] min-h-[420px] flex-1 overflow-hidden rounded-2xl border border-border bg-card">
+      <div className="relative h-[60vh] min-h-[420px] flex-1 overflow-hidden rounded-lg border border-border bg-card">
         {snapshot ? (
           <TwinScene snapshot={snapshot} selectedId={selectedId} onSelect={setSelectedId} resetKey={resetKey} />
         ) : (
@@ -58,13 +58,13 @@ export function TwinView() {
         )}
         {snapshot && (
           <>
-            <div className="pointer-events-none absolute top-3 left-3 flex items-center gap-2 rounded-xl border border-border bg-card/90 px-3 py-2 text-xs text-muted-foreground backdrop-blur">
-              <Wind className="size-4 text-primary" />
+            <div className="pointer-events-none absolute top-3 left-3 flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
+              <Wind className="size-4 text-muted-foreground" />
               <span>
                 Wind <span className="font-medium text-foreground">{snapshot.weather.windKph} km/h</span> from {compass(fromDeg)}
               </span>
             </div>
-            <Button variant="outline" size="sm" className="absolute top-3 right-3 bg-card/90" onClick={() => setResetKey((k) => k + 1)}>
+            <Button variant="outline" size="sm" className="absolute top-3 right-3 bg-card" onClick={() => setResetKey((k) => k + 1)}>
               <RotateCcw /> Reset view
             </Button>
             <div className="absolute bottom-3 left-3">
@@ -77,8 +77,8 @@ export function TwinView() {
         {selected && snapshot ? (
           <BuildingPanel building={selected} snapshot={snapshot} history={history} onClose={() => setSelectedId(null)} />
         ) : (
-          <div className="flex h-full min-h-[160px] flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-            <MousePointerClick className="size-6 text-primary" />
+          <div className="flex h-full min-h-[160px] flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+            <MousePointerClick className="size-5 text-muted-foreground" />
             Click a building to see its live readings. Drag to orbit, scroll to zoom.
           </div>
         )}

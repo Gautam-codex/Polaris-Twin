@@ -15,10 +15,10 @@ export function ChatBubble({ message }: { message: ChatMessage }) {
     <div className={cn("flex", user ? "justify-end" : "justify-start")}>
       <div
         className={cn(
-          "max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
-          user && "rounded-br-md bg-primary text-primary-foreground",
-          !user && !message.error && "rounded-bl-md border border-border bg-background text-foreground",
-          message.error && "rounded-bl-md border border-destructive/30 bg-destructive/10 text-destructive",
+          "max-w-[88%] rounded-lg px-3.5 py-2.5 text-sm leading-relaxed",
+          user && "bg-primary text-primary-foreground",
+          !user && !message.error && "assistant-bubble border border-border bg-secondary/60 text-foreground",
+          message.error && "assistant-bubble border border-destructive/30 bg-destructive/8 text-destructive",
         )}
       >
         {user ? (
@@ -36,7 +36,7 @@ export function ChatBubble({ message }: { message: ChatMessage }) {
 export function TypingIndicator() {
   return (
     <div className="flex justify-start" aria-label="Polaris is typing">
-      <div className="flex gap-1 rounded-2xl rounded-bl-md border border-border bg-background px-4 py-3">
+      <div className="flex gap-1 rounded-lg border border-border bg-secondary/60 px-4 py-3">
         {[0, 150, 300].map((delay) => (
           <span key={delay} className="size-1.5 animate-bounce rounded-full bg-muted-foreground" style={{ animationDelay: `${delay}ms` }} />
         ))}

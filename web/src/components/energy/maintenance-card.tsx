@@ -48,7 +48,7 @@ export function MaintenanceCard({
       }
     >
       {anomalies.length === 0 ? (
-        <div className="flex items-center gap-3 rounded-xl border border-success/30 bg-success/10 p-4 text-sm text-success">
+        <div className="flex items-center gap-3 rounded-md border border-success/30 bg-success/10 p-4 text-sm text-success">
           <CheckCircle2 className="size-5 shrink-0" />
           All generators are within their normal range. No maintenance action needed.
         </div>
@@ -64,9 +64,9 @@ export function MaintenanceCard({
               : minutesToLimit(vibration, stepMs, THRESHOLDS.vibrationCriticalMm);
             const limit = isCoolant ? `${THRESHOLDS.coolantCriticalC} °C coolant` : `${THRESHOLDS.vibrationCriticalMm} mm/s vibration`;
             return (
-              <li key={a.id} className="rounded-xl border border-border p-4">
+              <li key={a.id} className="rounded-md border border-border p-4">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className={cn("rounded-full border px-2 py-0.5 text-[11px] font-medium capitalize", SEVERITY_STYLE[a.severity])}>
+                  <span className={cn("rounded border px-2 py-0.5 text-[11px] font-medium capitalize", SEVERITY_STYLE[a.severity])}>
                     {a.severity}
                   </span>
                   <span className="text-sm font-medium text-foreground">{a.title}</span>
