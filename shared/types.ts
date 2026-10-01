@@ -95,6 +95,8 @@ export interface Alert {
   message: string;
   /** ISO 8601 timestamp. */
   createdAt: string;
+  /** Set for alerts stored in Supabase; live simulator alerts leave it undefined. */
+  acknowledged?: boolean;
 }
 
 export interface StationSnapshot {
@@ -139,4 +141,55 @@ export interface ComplianceSummary {
   co2Tonnes: number;
   dieselLitres: number;
   wasteKg: number;
+}
+
+// ---- Records stored in Supabase ----
+
+export type IncidentSeverity = "low" | "medium" | "high";
+
+export type IncidentStatus = "open" | "resolved";
+
+export interface Incident {
+  id: string;
+  stationId: StationId;
+  title: string;
+  description: string;
+  severity: IncidentSeverity;
+  status: IncidentStatus;
+  reportedBy: string;
+  createdAt: string;
+}
+
+/** Anonymous crew check-in: no user is stored. */
+export interface WellbeingCheckin {
+  id: string;
+  stationId: StationId;
+  /** 1 (low) to 5 (great). */
+  mood: number;
+  sleepHours: number;
+  /** 1 (exhausted) to 5 (energetic). */
+  energy: number;
+  createdAt: string;
+}
+
+/** Daily averages of check-ins. */
+export interface WellbeingTrendPoint {
+  /** YYYY-MM-DD (UTC). */
+  date: string;
+  mood: number;
+  sleepHours: number;
+  energy: number;
+  count: number;
+}
+
+export type ComplianceKind = "diesel" | "waste" | "spill" | "emission";
+
+export interface ComplianceLog {
+  id: string;
+  stationId: StationId;
+  kind: ComplianceKind;
+  amount: number;
+  unit: string;
+  note: string;
+  createdAt: string;
 }
