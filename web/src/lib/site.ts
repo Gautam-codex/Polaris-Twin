@@ -1,10 +1,10 @@
-// Public site details. Fill in androidApkUrl before the final submission.
+// Public site details.
 
 export const SITE = {
   builderName: "Commit Crew",
   builderRole: "Commit Crew · design, web, mobile and data",
   /** Direct link to the EAS-built APK. Leave empty to show "coming soon". */
-  androidApkUrl: "",
+  androidApkUrl: "https://expo.dev/artifacts/eas/acLNhJOerOcGciMJCq9v9aGZ8jDkbY-rqPQd33T3COM.apk",
   event: "Smart India Hackathon 2026",
   problemStatement: "PS 26060",
   organisation: "Ministry of Earth Sciences / NCPOR",

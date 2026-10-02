@@ -17,7 +17,7 @@ Built by **Commit Crew** for **Smart India Hackathon 2026**, problem statement *
 | | |
 | --- | --- |
 | Website (control room dashboard) | https://polaris-twin-psi.vercel.app |
-| Android app (APK) | _link added after the EAS build_ |
+| Android app (APK) | [Download the APK](https://expo.dev/artifacts/eas/acLNhJOerOcGciMJCq9v9aGZ8jDkbY-rqPQd33T3COM.apk) (allow "install unknown apps" when Android asks) |
 | Demo video | _link added after recording_ |
 | Printable shelf labels for the app's scanner | https://polaris-twin-psi.vercel.app/barcodes |
 
