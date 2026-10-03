@@ -89,8 +89,8 @@ export async function createAlert(alert: NewAlert): Promise<Alert> {
   return toAlert(row as unknown as AlertRow);
 }
 
-/** Calls `onAlert` for every new or updated alert. Returns an unsubscribe function. */
-export function subscribeToAlerts(onAlert: (alert: Alert) => void, stationId?: StationId): () => void {
+/** Calls `onAlert` for every new (inserted = true) or updated alert. Returns an unsubscribe function. */
+export function subscribeToAlerts(onAlert: (alert: Alert, inserted: boolean) => void, stationId?: StationId): () => void {
   const supabase = getSupabase();
   const channel = supabase
     .channel(`alerts-${stationId ?? "all"}-${Math.random().toString(36).slice(2)}`)
@@ -103,7 +103,7 @@ export function subscribeToAlerts(onAlert: (alert: Alert) => void, stationId?: S
         ...(stationId ? { filter: `station_id=eq.${stationId}` } : {}),
       },
       (payload) => {
-        if (payload.new && "id" in payload.new) onAlert(toAlert(payload.new as AlertRow));
+        if (payload.new && "id" in payload.new) onAlert(toAlert(payload.new as AlertRow), payload.eventType === "INSERT");
       },
     )
     .subscribe();

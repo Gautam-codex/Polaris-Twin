@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { Vibration } from "react-native";
+import { AppState, Vibration } from "react-native";
 import { useSync } from "@/context/sync";
-import { getAlerts, getInventory, subscribeToNewAlerts } from "@/lib/data";
+import { getAlerts, getInventory, subscribeToAlerts } from "@/lib/data";
 import { notify } from "@/lib/notifications";
 import type { Alert, InventoryItem, StationId } from "@shared/types";
 
@@ -15,7 +15,9 @@ function message(e: unknown): string {
   return e instanceof Error ? e.message : "Something went wrong";
 }
 
-/** Station alerts from Supabase; new alerts arrive in realtime with vibration and a notification. */
+const POLL_MS = 30_000;
+
+/** Station alerts from Supabase, kept live (new alerts vibrate and notify; acknowledgements from the website update in place). */
 export function useAlerts(stationId: StationId, { notifyOnInsert = false } = {}) {
   const [state, setState] = useState<ListState<Alert>>({ items: [], loading: true, error: null });
 
@@ -30,13 +32,21 @@ export function useAlerts(stationId: StationId, { notifyOnInsert = false } = {})
 
   useEffect(() => {
     void load();
-    return subscribeToNewAlerts(stationId, (alert) => {
-      setState((prev) => ({ ...prev, items: [alert, ...prev.items.filter((a) => a.id !== alert.id)] }));
-      if (notifyOnInsert) {
+    const unsubscribe = subscribeToAlerts(stationId, (alert, inserted) => {
+      setState((prev) => ({ ...prev, items: [alert, ...prev.items.filter((a) => a.id !== alert.id)].sort((a, b) => b.createdAt.localeCompare(a.createdAt)) }));
+      if (inserted && notifyOnInsert) {
         Vibration.vibrate(alert.severity === "critical" ? [0, 400, 200, 400] : 300);
         void notify(`${alert.severity === "critical" ? "Critical" : "New"} alert: ${alert.title}`, alert.message);
       }
     });
+    // Phones drop the realtime connection in the background, so also re-check regularly and on return.
+    const poll = setInterval(() => void load(), POLL_MS);
+    const appState = AppState.addEventListener("change", (s) => s === "active" && void load());
+    return () => {
+      unsubscribe();
+      clearInterval(poll);
+      appState.remove();
+    };
   }, [stationId, load, notifyOnInsert]);
 
   return { ...state, reload: load };

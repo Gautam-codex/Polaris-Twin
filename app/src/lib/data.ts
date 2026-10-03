@@ -99,13 +99,16 @@ export async function createAlert(alert: NewAlert): Promise<void> {
   if (error) fail(error.message);
 }
 
-/** Calls `onInsert` for every new alert at the station. Returns an unsubscribe function. */
-export function subscribeToNewAlerts(stationId: StationId, onInsert: (alert: Alert) => void): () => void {
+/**
+ * Calls `onChange` for every new alert at the station (inserted = true) and for every
+ * change to an existing one, such as the control room acknowledging it. Returns an unsubscribe function.
+ */
+export function subscribeToAlerts(stationId: StationId, onChange: (alert: Alert, inserted: boolean) => void): () => void {
   const channel = supabase
     .channel(`app-alerts-${stationId}-${Date.now()}`)
-    .on("postgres_changes", { event: "INSERT", schema: "public", table: "alerts", filter: `station_id=eq.${stationId}` }, (payload) =>
-      onInsert(toAlert(payload.new as AlertRow)),
-    )
+    .on("postgres_changes", { event: "*", schema: "public", table: "alerts", filter: `station_id=eq.${stationId}` }, (payload) => {
+      if (payload.new && "id" in payload.new) onChange(toAlert(payload.new as AlertRow), payload.eventType === "INSERT");
+    })
     .subscribe();
   return () => {
     void supabase.removeChannel(channel);

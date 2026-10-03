@@ -5,6 +5,7 @@ import { cn } from "cn";
 import { Button } from "@/components/ui/button";
 import { useT } from "@/components/language";
 import { SEVERITY_STYLE } from "@/lib/health";
+import { STATIONS } from "@/shared/stations";
 import type { Alert } from "@/shared/types";
 
 export function timeAgo(iso: string): string {
@@ -20,7 +21,7 @@ export function timeAgo(iso: string): string {
  * One alert. `live` marks a sensor alert from the simulator (it clears by itself, so it
  * has no acknowledge button). Acknowledging is done only from the control room website.
  */
-export function AlertRow({ alert, live, onAck }: { alert: Alert; live?: boolean; onAck?: () => void }) {
+export function AlertRow({ alert, live, onAck, showStation }: { alert: Alert; live?: boolean; onAck?: () => void; showStation?: boolean }) {
   const t = useT();
   return (
     <li className="rounded-md border border-border p-3 transition-colors hover:bg-muted/60">
@@ -30,6 +31,9 @@ export function AlertRow({ alert, live, onAck }: { alert: Alert; live?: boolean;
             <span className={cn("rounded border px-2 py-0.5 text-[11px] font-medium capitalize", SEVERITY_STYLE[alert.severity])}>
               {alert.severity}
             </span>
+            {showStation && (
+              <span className="rounded border border-border bg-secondary px-2 py-0.5 text-[11px] font-medium text-primary">{STATIONS[alert.stationId].name}</span>
+            )}
             {live && (
               <span className="flex items-center gap-1 text-[11px] text-warning">
                 <Radio className="size-3" /> live sensor

@@ -16,15 +16,15 @@ function message(e: unknown): string {
   return e instanceof Error ? e.message : "Something went wrong";
 }
 
-/** Stored alerts for a station (newest `limit`), kept live with Supabase realtime. */
-export function useAlerts(stationId: StationId, limit = 20) {
+/** Stored alerts for a station, or every station when `stationId` is null (newest `limit`), kept live with Supabase realtime. */
+export function useAlerts(stationId: StationId | null, limit = 20) {
   const { runOrQueue } = useOps();
   const [state, setState] = useState<ListState<Alert>>({ items: [], loading: isSupabaseConfigured, error: null });
 
   useEffect(() => {
     if (!isSupabaseConfigured) return;
     let active = true;
-    getAlerts(stationId, limit)
+    getAlerts(stationId ?? undefined, limit)
       .then((items) => active && setState({ items, loading: false, error: null }))
       .catch((e: unknown) => active && setState({ items: [], loading: false, error: message(e) }));
     const unsubscribe = subscribeToAlerts((alert) => {
@@ -33,10 +33,17 @@ export function useAlerts(stationId: StationId, limit = 20) {
         const items = [alert, ...rest].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, limit);
         return { ...prev, items };
       });
-    }, stationId);
+    }, stationId ?? undefined);
+    // Fallback if the realtime connection drops: refresh the list every 30 s.
+    const poll = setInterval(() => {
+      getAlerts(stationId ?? undefined, limit)
+        .then((items) => active && setState((prev) => ({ ...prev, items, error: null })))
+        .catch(() => undefined);
+    }, 30_000);
     return () => {
       active = false;
       unsubscribe();
+      clearInterval(poll);
     };
   }, [stationId, limit]);
 

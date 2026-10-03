@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { Siren } from "lucide-react";
 import { subscribeToAlerts } from "@/lib/data";
 import { isSupabaseConfigured } from "@/lib/supabase";
@@ -17,9 +18,9 @@ export function SosToast() {
 
   useEffect(() => {
     if (!isSupabaseConfigured) return;
-    const unsubscribe = subscribeToAlerts((a) => {
-      const fresh = Date.now() - new Date(a.createdAt).getTime() < 60_000;
-      if (!a.title.startsWith("SOS") || a.acknowledged || !fresh || seen.current.has(a.id)) return;
+    const unsubscribe = subscribeToAlerts((a, inserted) => {
+      // Only brand-new SOS alerts; acknowledgements arrive as updates and are ignored.
+      if (!inserted || !a.title.startsWith("SOS") || seen.current.has(a.id)) return;
       seen.current.add(a.id);
       setAlert(a);
       if (timer.current) clearTimeout(timer.current);
@@ -33,8 +34,10 @@ export function SosToast() {
 
   if (!alert) return null;
   return (
-    <div
+    <Link
+      href="/dashboard/alerts"
       role="alert"
+      onClick={() => setAlert(null)}
       className="fixed right-4 bottom-20 z-50 w-80 animate-in rounded-lg border border-destructive/40 bg-card p-4 shadow-lg fade-in-0 slide-in-from-bottom-4 md:right-6"
     >
       <div className="flex items-start gap-3">
@@ -43,9 +46,9 @@ export function SosToast() {
         </span>
         <div className="min-w-0">
           <p className="text-sm font-semibold text-destructive">{alert.title}</p>
-          <p className="mt-0.5 text-xs text-muted-foreground">{STATIONS[alert.stationId].name} · crew app</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">{STATIONS[alert.stationId].name} · crew app · open alerts</p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
