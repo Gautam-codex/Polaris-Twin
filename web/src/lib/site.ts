@@ -4,7 +4,7 @@ export const SITE = {
   builderName: "Commit Crew",
   builderRole: "Commit Crew · design, web, mobile and data",
   /** Direct link to the EAS-built APK. Leave empty to show "coming soon". */
-  androidApkUrl: "https://expo.dev/artifacts/eas/SU5qLgUiDsu6QXO5Z_2xlogg9yssjp8STqxsKbttpwc.apk",
+  androidApkUrl: "https://expo.dev/artifacts/eas/EFmzSZ58U2QpQ5TbYsg4AoG8iLANqEYJ--2wEUZZ8vE.apk",
   event: "Smart India Hackathon 2026",
   problemStatement: "PS 26060",
   organisation: "Ministry of Earth Sciences / NCPOR",
