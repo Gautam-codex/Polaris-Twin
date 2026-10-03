@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { Screen } from "@/components/chrome";
@@ -32,7 +32,7 @@ export default function HomeScreen() {
   const [view, setView] = useState<"3d" | "map">("3d");
   const [failed3d, setFailed3d] = useState(false);
   // The 3D model is streamed from the website, so it needs a connection; the 2D map always works.
-  const can3d = online && Boolean(API_BASE) && !failed3d;
+  const can3d = Platform.OS !== "web" && online && Boolean(API_BASE) && !failed3d;
   const show3d = view === "3d" && can3d;
 
   const onRefresh = async () => {

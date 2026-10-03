@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import { LanguageProvider } from "@/components/language";
+import { AutoTranslate } from "@/components/auto-translate";
 import { THEME_BOOT_SCRIPT, ThemeProvider } from "@/components/theme";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ThemeProvider>
           <LanguageProvider>
             <TooltipProvider>{children}</TooltipProvider>
+            <AutoTranslate />
           </LanguageProvider>
         </ThemeProvider>
       </body>

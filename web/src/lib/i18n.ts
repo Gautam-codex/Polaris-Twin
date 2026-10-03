@@ -1,6 +1,8 @@
 // English → Hindi for navigation, headings, card titles and buttons.
 // Keys are the English text; {name} placeholders are filled by t(text, vars).
 
+import { toHindi } from "@/shared/i18n";
+
 export type Language = "en" | "hi";
 
 type Pair = { en: string; hi: string };
@@ -105,9 +107,14 @@ const PAIRS: Pair[] = [
 
 const HINDI = new Map(PAIRS.map((p) => [p.en, p.hi]));
 
-/** Translate English UI text; unknown text is returned unchanged. */
+function fillVars(text: string, vars?: Record<string, string | number>): string {
+  if (!vars) return text;
+  return text.replace(/\{(\w+)\}/g, (_, key: string) => String(vars[key] ?? `{${key}}`));
+}
+
+/** Translate English UI text; falls back to the shared dictionary, then to the English text. */
 export function translate(text: string, language: Language, vars?: Record<string, string | number>): string {
-  const base = language === "hi" ? (HINDI.get(text) ?? text) : text;
-  if (!vars) return base;
-  return base.replace(/\{(\w+)\}/g, (_, key: string) => String(vars[key] ?? `{${key}}`));
+  if (language !== "hi") return fillVars(text, vars);
+  const own = HINDI.get(text);
+  return own !== undefined ? fillVars(own, vars) : toHindi(fillVars(text, vars));
 }

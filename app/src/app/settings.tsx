@@ -21,7 +21,7 @@ export default function SettingsScreen() {
           <Chip label="English" active={language === "en"} onPress={() => setLanguage("en")} />
           <Chip label="हिंदी" active={language === "hi"} onPress={() => setLanguage("hi")} />
         </View>
-        <Muted>Tab names, headings and buttons. Station data stays in English units.</Muted>
+        <Muted>The whole app switches language. Units such as kW, L and km/h stay the same.</Muted>
       </Card>
 
       <Card style={{ gap: space.sm }}>

@@ -1,3 +1,4 @@
+import { useT } from "@/context/language";
 import { useState } from "react";
 import { TextInput, View } from "react-native";
 import * as Haptics from "expo-haptics";
@@ -24,6 +25,7 @@ function countdown(ms: number): string {
 /** "Going outside" check-out with a return countdown; turns red when the team is overdue. */
 export function FieldTripCard({ stationId, verdict }: { stationId: StationId; verdict: "Safe" | "Caution" | "Unsafe" }) {
   const colors = useColors();
+  const t = useT();
   const styles = useStyles();
   const { trip, now, overdue, start, end } = useFieldTrip();
   const [destination, setDestination] = useState(DESTINATIONS[stationId][0]);
@@ -69,7 +71,7 @@ export function FieldTripCard({ stationId, verdict }: { stationId: StationId; ve
       </View>
       <View style={{ gap: 6 }}>
         <Muted>Team names (at least 2)</Muted>
-        <TextInput value={team} onChangeText={setTeam} placeholder="e.g. Asha, Ravi" placeholderTextColor={colors.muted} style={styles.input} />
+        <TextInput value={team} onChangeText={setTeam} placeholder={t("e.g. Asha, Ravi")} placeholderTextColor={colors.muted} style={styles.input} />
       </View>
       <View style={{ gap: 6 }}>
         <Muted>Back within</Muted>

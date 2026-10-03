@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
+import { Pressable, RefreshControl, ScrollView, View } from "react-native";
+import { Text } from "@/components/text";
 import { useStation } from "@/context/station";
 import { useSync } from "@/context/sync";
 import { radius, space } from "@/lib/theme";

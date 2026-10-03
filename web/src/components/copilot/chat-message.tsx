@@ -14,6 +14,8 @@ export function ChatBubble({ message }: { message: ChatMessage }) {
   return (
     <div className={cn("flex", user ? "justify-end" : "justify-start")}>
       <div
+        // Chat text is the user's own words or the AI's answer, already in the chosen language.
+        translate={message.error ? undefined : "no"}
         className={cn(
           "max-w-[88%] rounded-lg px-3.5 py-2.5 text-sm leading-relaxed",
           user && "bg-primary text-primary-foreground",

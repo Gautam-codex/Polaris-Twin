@@ -1,4 +1,5 @@
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
+import { Text } from "@/components/text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, type Href } from "expo-router";
 import { Screen } from "@/components/chrome";

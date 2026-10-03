@@ -1,4 +1,6 @@
-// English → Hindi for tab names, headings and buttons. Keys are the English text.
+// English → Hindi for tab names, headings and buttons. Everything else goes through the shared dictionary.
+
+import { toHindi } from "@shared/i18n";
 
 export type Language = "en" | "hi";
 
@@ -67,7 +69,8 @@ const HINDI: Record<string, string> = {
   "हिंदी": "हिंदी",
 };
 
-/** Translate English UI text; unknown text is returned unchanged. */
+/** Translate English UI text; falls back to the shared dictionary, then to the English text. */
 export function translate(text: string, language: Language): string {
-  return language === "hi" ? (HINDI[text] ?? text) : text;
+  if (language !== "hi") return text;
+  return HINDI[text] ?? toHindi(text);
 }

@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, TextInput, View } from "react-native";
+import { Text } from "@/components/text";
+import { useT } from "@/context/language";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Haptics from "expo-haptics";
 import { router, useLocalSearchParams } from "expo-router";
@@ -37,6 +39,7 @@ function Stepper({ item, onChange }: { item: InventoryItem; onChange: (q: number
 
 export default function InventoryScreen() {
   const colors = useColors();
+  const t = useT();
   const styles = useStyles();
   const { stationId } = useStation();
   const { focus } = useLocalSearchParams<{ focus?: string }>();
@@ -66,7 +69,7 @@ export default function InventoryScreen() {
       <View style={styles.searchRow}>
         <View style={styles.search}>
           <Ionicons name="search" size={16} color={colors.muted} />
-          <TextInput value={query} onChangeText={setQuery} placeholder="Search stores" placeholderTextColor={colors.muted} style={styles.searchInput} />
+          <TextInput value={query} onChangeText={setQuery} placeholder={t("Search stores")} placeholderTextColor={colors.muted} style={styles.searchInput} />
           {query.length > 0 && (
             <Pressable onPress={() => setQuery("")} accessibilityLabel="Clear search" hitSlop={8}>
               <Ionicons name="close-circle" size={18} color={colors.muted} />

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, TextInput, View } from "react-native";
+import { Text } from "@/components/text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Muted } from "@/components/ui";
 import { useLanguage } from "@/context/language";

@@ -1,4 +1,5 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import { Text } from "@/components/text";
 import { Screen } from "@/components/chrome";
 import { FieldTripCard } from "@/components/field-trip-card";
 import { Gauge } from "@/components/graphics";

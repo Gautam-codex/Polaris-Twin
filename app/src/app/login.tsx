@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { KeyboardAvoidingView, Platform, Text, TextInput, View } from "react-native";
+import { KeyboardAvoidingView, Platform, TextInput, View } from "react-native";
+import { Text } from "@/components/text";
 import { Redirect } from "expo-router";
 import Svg, { Circle, Path, Rect } from "react-native-svg";
 import { Body, Button, Card, ErrorText, Muted } from "@/components/ui";
