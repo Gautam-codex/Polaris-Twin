@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
-import * as Haptics from "expo-haptics";
 import { AlertRow } from "@/components/alert-row";
 import { Screen } from "@/components/chrome";
 import { Chip, Empty, ErrorText, Loading } from "@/components/ui";
@@ -27,7 +26,7 @@ function matches(alert: Alert, filter: Filter): boolean {
 
 export default function AlertsScreen() {
   const { stationId } = useStation();
-  const { items, loading, error, reload, acknowledge } = useAlerts(stationId);
+  const { items, loading, error, reload } = useAlerts(stationId);
   const { snapshot } = useStationSnapshot(stationId);
   const [filter, setFilter] = useState<Filter>("open");
   const [refreshing, setRefreshing] = useState(false);
@@ -52,21 +51,14 @@ export default function AlertsScreen() {
       {loading && items.length === 0 ? (
         <Loading label="Loading alerts…" />
       ) : live.length + stored.length === 0 ? (
-        <Empty title="No alerts here" body={filter === "open" ? "Everything has been acknowledged." : "Nothing matches this filter."} />
+        <Empty title="No alerts here" body={filter === "open" ? "No open alerts. The control room acknowledges alerts from the website." : "Nothing matches this filter."} />
       ) : (
         <View style={{ gap: space.sm }}>
           {live.map((a) => (
             <AlertRow key={a.id} alert={a} live />
           ))}
           {stored.map((a) => (
-            <AlertRow
-              key={a.id}
-              alert={a}
-              onAcknowledge={() => {
-                void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                void acknowledge(a.id);
-              }}
-            />
+            <AlertRow key={a.id} alert={a} />
           ))}
         </View>
       )}

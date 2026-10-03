@@ -9,13 +9,12 @@ import { Switch } from "@/components/ui/switch";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { getSupabase } from "@/lib/supabase";
 import { STATION_IDS, STATIONS } from "@/shared/stations";
-import { EmergencyButton } from "@/components/emergency/emergency-button";
 import { DemoControls } from "./demo-controls";
 import { LanguageToggle, useT } from "@/components/language";
 import { ThemeToggle } from "@/components/theme";
 import { Logo } from "./logo";
 import { useOps } from "./ops-context";
-import { ModuleNavList, ModuleTabs } from "./module-nav";
+import { SidebarNav } from "./sidebar";
 import { Clocks, SimulatedBadge, SyncPill } from "./status-bits";
 import { useStation } from "./station-context";
 
@@ -66,7 +65,7 @@ function MobileNav() {
             <Logo />
           </SheetTitle>
         </SheetHeader>
-        <ModuleNavList onNavigate={() => setOpen(false)} />
+        <SidebarNav onNavigate={() => setOpen(false)} />
       </SheetContent>
     </Sheet>
   );
@@ -95,14 +94,12 @@ export function TopBar() {
         <div className="ml-auto flex items-center gap-2">
           {demoMode && <DemoControls />}
           <StationSwitcher />
-          <EmergencyButton />
           <ThemeToggle />
           <Button variant="ghost" size="icon" onClick={() => void signOut()} aria-label="Sign out">
             <LogOut />
           </Button>
         </div>
       </div>
-      <ModuleTabs />
     </header>
   );
 }

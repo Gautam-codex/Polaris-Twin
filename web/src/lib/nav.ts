@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  BellRing,
   Boxes,
   CloudSnow,
   FileCheck2,
@@ -20,6 +21,7 @@ export interface NavItem {
 
 export const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Overview", description: "Station health at a glance", icon: LayoutDashboard },
+  { href: "/dashboard/alerts", label: "Alerts", description: "Every station alert, unacknowledged and acknowledged", icon: BellRing },
   { href: "/dashboard/twin", label: "Digital Twin", description: "3D model of the station with live building health", icon: Boxes },
   { href: "/dashboard/energy", label: "Energy", description: "Generators, renewables, battery and heating load", icon: Zap },
   { href: "/dashboard/logistics", label: "Logistics", description: "Fuel runway, inventory and the next resupply", icon: BarChart3 },

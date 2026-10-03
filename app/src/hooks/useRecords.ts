@@ -17,7 +17,6 @@ function message(e: unknown): string {
 
 /** Station alerts from Supabase; new alerts arrive in realtime with vibration and a notification. */
 export function useAlerts(stationId: StationId, { notifyOnInsert = false } = {}) {
-  const { submit } = useSync();
   const [state, setState] = useState<ListState<Alert>>({ items: [], loading: true, error: null });
 
   const load = useCallback(async () => {
@@ -40,15 +39,7 @@ export function useAlerts(stationId: StationId, { notifyOnInsert = false } = {})
     });
   }, [stationId, load, notifyOnInsert]);
 
-  const acknowledge = useCallback(
-    async (id: string) => {
-      setState((prev) => ({ ...prev, items: prev.items.map((a) => (a.id === id ? { ...a, acknowledged: true } : a)) }));
-      await submit({ kind: "ackAlert", id });
-    },
-    [submit],
-  );
-
-  return { ...state, reload: load, acknowledge };
+  return { ...state, reload: load };
 }
 
 /** Station inventory with queued quantity edits. */

@@ -16,21 +16,21 @@ function message(e: unknown): string {
   return e instanceof Error ? e.message : "Something went wrong";
 }
 
-/** Stored alerts for a station, kept live with Supabase realtime. */
-export function useAlerts(stationId: StationId) {
+/** Stored alerts for a station (newest `limit`), kept live with Supabase realtime. */
+export function useAlerts(stationId: StationId, limit = 20) {
   const { runOrQueue } = useOps();
   const [state, setState] = useState<ListState<Alert>>({ items: [], loading: isSupabaseConfigured, error: null });
 
   useEffect(() => {
     if (!isSupabaseConfigured) return;
     let active = true;
-    getAlerts(stationId, 20)
+    getAlerts(stationId, limit)
       .then((items) => active && setState({ items, loading: false, error: null }))
       .catch((e: unknown) => active && setState({ items: [], loading: false, error: message(e) }));
     const unsubscribe = subscribeToAlerts((alert) => {
       setState((prev) => {
         const rest = prev.items.filter((a) => a.id !== alert.id);
-        const items = [alert, ...rest].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 20);
+        const items = [alert, ...rest].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, limit);
         return { ...prev, items };
       });
     }, stationId);
@@ -38,7 +38,7 @@ export function useAlerts(stationId: StationId) {
       active = false;
       unsubscribe();
     };
-  }, [stationId]);
+  }, [stationId, limit]);
 
   const acknowledge = useCallback(async (id: string) => {
     setState((prev) => ({ ...prev, items: prev.items.map((a) => (a.id === id ? { ...a, acknowledged: true } : a)) }));

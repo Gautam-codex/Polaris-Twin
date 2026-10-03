@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Body, Button, Muted, Tag } from "@/components/ui";
+import { Body, Muted, Tag } from "@/components/ui";
 import { severityColor, space } from "@/lib/theme";
 import type { Alert } from "@shared/types";
 import { useColors, themedStyles } from "@/context/theme";
@@ -13,8 +13,8 @@ export function timeAgo(iso: string): string {
   return `${Math.round(hours / 24)} days ago`;
 }
 
-/** One alert with a severity stripe; stored alerts can be acknowledged. */
-export function AlertRow({ alert, live, onAcknowledge }: { alert: Alert; live?: boolean; onAcknowledge?: () => void }) {
+/** One alert with a severity stripe. Only the NCPOR control room (website) acknowledges alerts; the app shows the status. */
+export function AlertRow({ alert, live }: { alert: Alert; live?: boolean }) {
   const colors = useColors();
   const styles = useStyles();
   const color = severityColor[alert.severity];
@@ -26,10 +26,11 @@ export function AlertRow({ alert, live, onAcknowledge }: { alert: Alert; live?: 
       </View>
       <Body style={{ fontWeight: "600", marginTop: 6 }}>{alert.title}</Body>
       <Muted style={{ marginTop: 2 }}>{alert.message}</Muted>
-      {onAcknowledge && !alert.acknowledged && (
-        <Button label="Acknowledge" variant="outline" onPress={onAcknowledge} style={{ marginTop: space.sm, alignSelf: "flex-start", minHeight: 36 }} />
+      {!live && (
+        <Muted style={{ marginTop: space.sm, fontSize: 12, color: alert.acknowledged ? colors.success : colors.muted }}>
+          {alert.acknowledged ? "✓ Acknowledged by the NCPOR control room" : "Waiting for the control room"}
+        </Muted>
       )}
-      {alert.acknowledged && <Muted style={{ marginTop: 6, color: colors.success }}>Acknowledged</Muted>}
     </View>
   );
 }
