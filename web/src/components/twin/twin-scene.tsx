@@ -40,7 +40,7 @@ export interface TwinSceneProps {
   resetKey?: number;
 }
 
-/** Low-poly 3D station: buildings coloured by health, snow and wind, orbit camera. */
+/** 3D station modelled on the real Maitri / Bharati layouts: buildings coloured by health, live wind and snow, orbit camera. */
 export default function TwinScene({ snapshot, selectedId = null, onSelect, mode = "full", resetKey = 0 }: TwinSceneProps) {
   const controls = useRef<OrbitControlsImpl>(null);
   const [hovered, setHovered] = useState<string | null>(null);
@@ -67,7 +67,7 @@ export default function TwinScene({ snapshot, selectedId = null, onSelect, mode 
     >
       <ScenePaletteContext.Provider value={palette}>
       <color attach="background" args={[palette.background]} />
-      <fog attach="fog" args={[palette.background, 130, 280]} />
+      <fog attach="fog" args={[palette.background, 150, 320]} />
       <ambientLight intensity={palette.ambient} />
       <hemisphereLight args={[palette.hemiSky, palette.hemiGround, 0.8]} />
       <directionalLight
@@ -81,18 +81,12 @@ export default function TwinScene({ snapshot, selectedId = null, onSelect, mode 
         shadow-camera-bottom={-40}
       />
 
-      {/* Unlit white snow, with shadows drawn on a transparent layer just above it. */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[110, 48]} />
-        <meshBasicMaterial color={palette.ground} />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
+      {/* Ground comes from the station site; shadows are drawn on a transparent layer just above it. */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]} receiveShadow>
         <circleGeometry args={[60, 48]} />
         <shadowMaterial opacity={palette.shadow} />
       </mesh>
-      <gridHelper key={palette.gridMajor} args={[60, 12, palette.gridMajor, palette.gridMinor]} position={[0, 0.02, 0]} />
-
-      <SiteProps stationId={snapshot.stationId} buildings={snapshot.buildings} />
+      <SiteProps stationId={snapshot.stationId} buildings={snapshot.buildings} windKph={snapshot.weather.windKph} />
 
       {snapshot.buildings.map((b) => (
         <BuildingMesh

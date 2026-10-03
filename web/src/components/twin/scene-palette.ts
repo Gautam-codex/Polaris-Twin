@@ -21,6 +21,17 @@ export interface ScenePalette {
   rock: string;
   hill: string;
   walkway: string;
+  /** Ice-free rock of the oasis / headland. */
+  oasis: string;
+  lake: string;
+  lakeEdge: string;
+  sea: string;
+  ice: string;
+  iceFace: string;
+  /** Bharati's aluminium skin and Maitri's panel cladding. */
+  aluminium: string;
+  panel: string;
+  solar: string;
 }
 
 export const LIGHT_SCENE: ScenePalette = {
@@ -43,6 +54,15 @@ export const LIGHT_SCENE: ScenePalette = {
   rock: "#9AA5B2",
   hill: "#EDF2F8",
   walkway: "#D3DCE7",
+  oasis: "#B7BCC3",
+  lake: "#BFDDF3",
+  lakeEdge: "#9CC4E4",
+  sea: "#5E8DB8",
+  ice: "#F7FAFD",
+  iceFace: "#D6E6F5",
+  aluminium: "#D5DCE4",
+  panel: "#E9EEF3",
+  solar: "#27456B",
 };
 
 /** Polar night: dark sky, moonlit blue snow, softer light. */
@@ -66,6 +86,15 @@ export const DARK_SCENE: ScenePalette = {
   rock: "#4E5B6B",
   hill: "#1A2A40",
   walkway: "#3A4D66",
+  oasis: "#2E3B4D",
+  lake: "#3B5F86",
+  lakeEdge: "#4D76A1",
+  sea: "#0F2238",
+  ice: "#2A3D57",
+  iceFace: "#33496A",
+  aluminium: "#8E9BAD",
+  panel: "#A9B6C6",
+  solar: "#1B2F4C",
 };
 
 export const ScenePaletteContext = createContext<ScenePalette>(LIGHT_SCENE);

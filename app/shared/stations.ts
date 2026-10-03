@@ -32,28 +32,29 @@ export const STATION_IDS: StationId[] = ["maitri", "bharati"];
 
 type BuildingSeed = Omit<Building, "stationId" | "health">;
 
-// Layout on a local grid in metres, x and z between -20 and 20.
+// Layout on a local grid in metres (x east, z towards the water), within about ±24 m.
+// Maitri: long main building on steel stilts, Priyadarshini Lake in front (+z), ice sheet behind (-z).
 const MAITRI_BUILDINGS: BuildingSeed[] = [
-  { id: "maitri-main", name: "Main Living Block", type: "living", position: [0, 0, 0], size: [16, 6, 10] },
-  { id: "maitri-power", name: "Power House", type: "power", position: [-14, 0, -8], size: [8, 5, 6] },
-  { id: "maitri-lab", name: "Science Lab", type: "lab", position: [12, 0, -10], size: [8, 4, 6] },
-  { id: "maitri-water", name: "Lake Pump House", type: "water", position: [-14, 0, 10], size: [6, 4, 6] },
-  { id: "maitri-storage", name: "Fuel Farm & Stores", type: "storage", position: [14, 0, 10], size: [10, 5, 8] },
-  { id: "maitri-comms", name: "Satellite Comms Mast", type: "comms", position: [0, 0, -18], size: [3, 10, 3] },
-  { id: "maitri-medical", name: "Medical Unit", type: "medical", position: [2, 0, 14], size: [6, 4, 5] },
-  { id: "maitri-waste", name: "Waste Incinerator", type: "waste", position: [17, 0, -3], size: [4, 3, 4] },
+  { id: "maitri-main", name: "Main Living Block", type: "living", position: [0, 0, -1], size: [24, 7, 8] },
+  { id: "maitri-power", name: "Power House", type: "power", position: [-18, 0, -11], size: [8, 5, 6] },
+  { id: "maitri-lab", name: "Science Lab", type: "lab", position: [15, 0, -11], size: [8, 4, 6] },
+  { id: "maitri-water", name: "Lake Pump House", type: "water", position: [-10, 0, 13], size: [5, 3.5, 5] },
+  { id: "maitri-storage", name: "Fuel Farm & Stores", type: "storage", position: [17, 0, 9], size: [9, 4, 6] },
+  { id: "maitri-comms", name: "Satellite Comms Mast", type: "comms", position: [-2, 0, -16], size: [3, 10, 3] },
+  { id: "maitri-medical", name: "Medical Unit", type: "medical", position: [5, 0, 11], size: [6, 4, 5] },
+  { id: "maitri-waste", name: "Waste Incinerator", type: "waste", position: [-20, 0, 6], size: [4, 3, 4] },
 ];
 
-// Bharati's main building is one large container block.
+// Bharati: three-storey block of 134 shipping containers in an aluminium skin, on a headland by the sea (+z).
 const BHARATI_BUILDINGS: BuildingSeed[] = [
-  { id: "bharati-main", name: "Main Container Block", type: "living", position: [0, 0, 0], size: [30, 8, 12] },
-  { id: "bharati-power", name: "Power House", type: "power", position: [-14, 0, -14], size: [8, 5, 6] },
-  { id: "bharati-lab", name: "Science Lab", type: "lab", position: [6, 0, -14], size: [8, 4, 6] },
-  { id: "bharati-water", name: "Water Treatment", type: "water", position: [-14, 0, 13], size: [6, 4, 5] },
-  { id: "bharati-storage", name: "Fuel Farm & Stores", type: "storage", position: [6, 0, 14], size: [10, 5, 7] },
-  { id: "bharati-comms", name: "Satellite Comms Mast", type: "comms", position: [17, 0, -14], size: [3, 12, 3] },
-  { id: "bharati-medical", name: "Medical Unit", type: "medical", position: [-4, 0, 14], size: [6, 4, 5] },
-  { id: "bharati-waste", name: "Waste Incinerator", type: "waste", position: [17, 0, 12], size: [4, 3, 4] },
+  { id: "bharati-main", name: "Main Container Block", type: "living", position: [0, 0, 0], size: [30, 9.5, 12] },
+  { id: "bharati-power", name: "Power House", type: "power", position: [-15, 0, -14], size: [8, 5, 6] },
+  { id: "bharati-lab", name: "Science Lab", type: "lab", position: [9, 0, -14], size: [8, 4, 6] },
+  { id: "bharati-water", name: "Sea Water Pump House", type: "water", position: [-18, 0, 12], size: [5, 3.5, 5] },
+  { id: "bharati-storage", name: "Fuel Farm & Stores", type: "storage", position: [17, 0, 12], size: [9, 4, 6] },
+  { id: "bharati-comms", name: "Satellite Comms Mast", type: "comms", position: [21, 0, -11], size: [3, 12, 3] },
+  { id: "bharati-medical", name: "Medical Unit", type: "medical", position: [1, 0, 14], size: [6, 4, 5] },
+  { id: "bharati-waste", name: "Waste Incinerator", type: "waste", position: [22, 0, 1], size: [3.5, 3, 3.5] },
 ];
 
 function withStation(stationId: StationId, seeds: BuildingSeed[]): Building[] {

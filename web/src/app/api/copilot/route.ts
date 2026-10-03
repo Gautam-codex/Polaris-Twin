@@ -1,13 +1,65 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { fallbackAnswer } from "@/lib/copilot-fallback";
 import { SOPS } from "@/lib/sops";
 import { STATIONS } from "@/shared/stations";
 import type { CopilotRequest, CopilotResponse, StationSnapshot } from "@/shared/types";
 
-// gemini-2.0-flash has been retired; GEMINI_MODEL overrides the first choice.
-const MODELS = [process.env.GEMINI_MODEL, "gemini-3.5-flash", "gemini-flash-latest"].filter(
-  (m): m is string => typeof m === "string" && m.length > 0,
-);
-const TIMEOUT_MS = 20_000;
+export const maxDuration = 30;
+
+/**
+ * Tried in order, each with its own time limit, so one slow or overloaded model
+ * cannot use up the whole budget. GEMINI_MODEL (optional) is tried first.
+ * `noThinking` turns off the slow "thinking" step on models that support it.
+ */
+const MODELS: { name: string; timeoutMs: number; noThinking?: boolean }[] = [
+  ...(process.env.GEMINI_MODEL ? [{ name: process.env.GEMINI_MODEL, timeoutMs: 9_000 }] : []),
+  { name: "gemini-flash-latest", timeoutMs: 9_000, noThinking: true },
+  { name: "gemini-3.5-flash-lite", timeoutMs: 6_000 },
+  { name: "gemini-flash-lite-latest", timeoutMs: 6_000 },
+  { name: "gemini-3.8-flash", timeoutMs: 8_000 },
+];
+const BUDGET_MS = 25_000;
+const API = "https://generativelanguage.googleapis.com/v1beta/models";
+
+/** Hindi when asked in Devanagari, whatever the language switch says. */
+function answerLanguage(req: CopilotRequest): "en" | "hi" {
+  return /[ऀ-ॿ]/.test(req.question) ? "hi" : req.language;
+}
+
+interface GeminiReply {
+  candidates?: { content?: { parts?: { text?: string; thought?: boolean }[] }; finishReason?: string }[];
+  error?: { message?: string };
+}
+
+async function callGemini(
+  model: (typeof MODELS)[number],
+  apiKey: string,
+  system: string,
+  contents: { role: string; parts: { text: string }[] }[],
+  timeoutMs: number,
+): Promise<string> {
+  const res = await fetch(`${API}/${model.name}:generateContent`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: system }] },
+      contents,
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 1024,
+        ...(model.noThinking ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+      },
+    }),
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  const data = (await res.json()) as GeminiReply;
+  if (!res.ok) throw new Error(data.error?.message ?? `HTTP ${res.status}`);
+  const parts = data.candidates?.[0]?.content?.parts ?? [];
+  return parts
+    .filter((p) => !p.thought)
+    .map((p) => p.text ?? "")
+    .join("")
+    .trim();
+}
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -40,7 +92,7 @@ function compactSnapshot(s: StationSnapshot) {
   };
 }
 
-function systemPrompt(req: CopilotRequest): string {
+function systemPrompt(req: CopilotRequest, language: "en" | "hi"): string {
   const station = STATIONS[req.stationId];
   const data = {
     station: { name: station.name, region: station.region, lat: station.lat, lon: station.lon },
@@ -59,7 +111,7 @@ function systemPrompt(req: CopilotRequest): string {
     `- If the data below does not contain what is needed, say "I don't have that data" instead of guessing.`,
     "- The data comes from a simulated sensor feed for a hackathon demo, not real NCPOR data. Mention this only if asked where the data comes from.",
     "- Follow the SOPs below when recommending actions, and name the SOP section you used.",
-    req.language === "hi"
+    language === "hi"
       ? "- Answer in Hindi (Devanagari script). Keep numbers and units in digits."
       : "- Answer in English.",
     "",
@@ -89,9 +141,6 @@ function isValid(body: unknown): body is CopilotRequest {
 }
 
 export async function POST(request: Request): Promise<Response> {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return reply({ answer: "", error: "The copilot is not configured yet (GEMINI_API_KEY is missing)." }, 503);
-
   let body: unknown;
   try {
     body = await request.json();
@@ -100,35 +149,28 @@ export async function POST(request: Request): Promise<Response> {
   }
   if (!isValid(body)) return reply({ answer: "", error: "Invalid request: missing station data or question." }, 400);
 
-  const genAI = new GoogleGenerativeAI(apiKey);
+  const language = answerLanguage(body);
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return reply({ answer: fallbackAnswer(body, language), model: "station-data" });
+  const system = systemPrompt(body, language);
   const contents = [
     ...(body.history ?? []).slice(-6).map((t) => ({ role: t.role === "assistant" ? "model" : "user", parts: [{ text: t.text }] })),
     { role: "user", parts: [{ text: body.question.trim() }] },
   ];
 
-  // One 20 s budget shared across the primary model and its fallback.
-  const deadline = Date.now() + TIMEOUT_MS;
-  for (const modelName of MODELS) {
+  const deadline = Date.now() + BUDGET_MS;
+  for (const model of MODELS) {
     const remaining = deadline - Date.now();
-    if (remaining < 3_000) break;
+    if (remaining < 2_500) break;
     try {
-      const model = genAI.getGenerativeModel(
-        { model: modelName, systemInstruction: systemPrompt(body), generationConfig: { temperature: 0.3, maxOutputTokens: 4096 } },
-        { timeout: remaining },
-      );
-      const result = await model.generateContent({ contents });
-      const answer = result.response.text().trim();
-      const finish = result.response.candidates?.[0]?.finishReason;
-      if (finish && finish !== "STOP") console.warn(`copilot: ${modelName} finished with ${finish}`);
-      if (answer) return reply({ answer, model: modelName });
+      const answer = await callGemini(model, apiKey, system, contents, Math.min(model.timeoutMs, remaining));
+      if (answer) return reply({ answer, model: model.name });
     } catch (e) {
-      console.error(`copilot: ${modelName} failed:`, e instanceof Error ? e.message : e);
+      console.error(`copilot: ${model.name} failed:`, e instanceof Error ? e.message : e);
     }
   }
-  return reply(
-    { answer: "", error: "Polaris couldn't reach the AI service just now. Please try again in a moment." },
-    502,
-  );
+  // Every model was slow or overloaded: answer from the station data instead of failing.
+  return reply({ answer: fallbackAnswer(body, language), model: "station-data" });
 }
 
 export function OPTIONS(): Response {

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useStation } from "@/components/dashboard/station-context";
-import { useT } from "@/components/language";
+import { useLanguage, useT } from "@/components/language";
 import { useCopilotContext } from "@/hooks/useCopilotContext";
 import type { CopilotLanguage, CopilotResponse, CopilotTurn, StationId } from "@/shared/types";
 import { ChatBubble, TypingIndicator, type ChatMessage } from "./chat-message";
@@ -38,7 +38,10 @@ export function AskPolaris() {
   const context = useCopilotContext();
   const t = useT();
   const [open, setOpen] = useState(false);
-  const [language, setLanguage] = useState<CopilotLanguage>("en");
+  const { language: siteLanguage } = useLanguage();
+  // Follows the site language until the user picks one in the chat.
+  const [chosen, setLanguage] = useState<CopilotLanguage | null>(null);
+  const language = chosen ?? siteLanguage;
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);

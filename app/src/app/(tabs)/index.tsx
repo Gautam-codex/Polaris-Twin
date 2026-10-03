@@ -6,7 +6,10 @@ import { Screen } from "@/components/chrome";
 import { SiteMap } from "@/components/graphics";
 import { BuildingReadings, HealthHeader, StatGrid } from "@/components/home-panels";
 import { AlertRow } from "@/components/alert-row";
-import { Big, Button, Card, CardTitle, Empty, Loading, Muted } from "@/components/ui";
+import { Big, Button, Card, CardTitle, Chip, Empty, Loading, Muted } from "@/components/ui";
+import { Twin3D } from "@/components/twin-3d";
+import { useSync } from "@/context/sync";
+import { API_BASE } from "@/lib/supabase";
 import { useStation } from "@/context/station";
 import { useFuelRunway } from "@/hooks/useDerived";
 import { useAlerts } from "@/hooks/useRecords";
@@ -25,6 +28,12 @@ export default function HomeScreen() {
   const alerts = useAlerts(stationId);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const { online } = useSync();
+  const [view, setView] = useState<"3d" | "map">("3d");
+  const [failed3d, setFailed3d] = useState(false);
+  // The 3D model is streamed from the website, so it needs a connection; the 2D map always works.
+  const can3d = online && Boolean(API_BASE) && !failed3d;
+  const show3d = view === "3d" && can3d;
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -52,8 +61,22 @@ export default function HomeScreen() {
     <Screen onRefresh={() => void onRefresh()} refreshing={refreshing}>
       <Card>
         <HealthHeader snapshot={snapshot} />
-        <SiteMap buildings={snapshot.buildings} selectedId={selectedId} onSelect={(id) => setSelectedId((cur) => (cur === id ? null : id))} />
-        {selected ? <BuildingReadings building={selected} snapshot={snapshot} /> : <Muted style={{ marginTop: space.sm }}>Tap a building for its readings.</Muted>}
+        <View style={{ flexDirection: "row", gap: space.sm, marginTop: space.sm }}>
+          <Chip label="3D model" active={show3d} onPress={() => (can3d ? setView("3d") : setFailed3d(false))} />
+          <Chip label="Map" active={!show3d} onPress={() => setView("map")} />
+        </View>
+        {show3d ? (
+          <Twin3D stationId={stationId} onSelect={setSelectedId} onFail={() => setFailed3d(true)} />
+        ) : (
+          <SiteMap buildings={snapshot.buildings} selectedId={selectedId} onSelect={(id) => setSelectedId((cur) => (cur === id ? null : id))} />
+        )}
+        {selected ? (
+          <BuildingReadings building={selected} snapshot={snapshot} />
+        ) : (
+          <Muted style={{ marginTop: space.sm }}>
+            {show3d ? "Drag to rotate, pinch to zoom, tap a building for its readings." : view === "3d" && !online ? "Offline: showing the map. The 3D model returns when you reconnect." : "Tap a building for its readings."}
+          </Muted>
+        )}
       </Card>
 
       <StatGrid snapshot={snapshot} runway={runway} />

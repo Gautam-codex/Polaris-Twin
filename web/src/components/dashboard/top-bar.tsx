@@ -15,7 +15,7 @@ import { LanguageToggle, useT } from "@/components/language";
 import { ThemeToggle } from "@/components/theme";
 import { Logo } from "./logo";
 import { useOps } from "./ops-context";
-import { SidebarNav } from "./sidebar";
+import { ModuleNavList, ModuleTabs } from "./module-nav";
 import { Clocks, SimulatedBadge, SyncPill } from "./status-bits";
 import { useStation } from "./station-context";
 
@@ -66,7 +66,7 @@ function MobileNav() {
             <Logo />
           </SheetTitle>
         </SheetHeader>
-        <SidebarNav onNavigate={() => setOpen(false)} />
+        <ModuleNavList onNavigate={() => setOpen(false)} />
       </SheetContent>
     </Sheet>
   );
@@ -102,6 +102,7 @@ export function TopBar() {
           </Button>
         </div>
       </div>
+      <ModuleTabs />
     </header>
   );
 }
